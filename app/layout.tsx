@@ -56,6 +56,18 @@ export const metadata: Metadata = {
   verification: {
     google: '',
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  themeColor: '#dc2626',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Chicken1of1',
+  },
 }
 
 const organizationSchema = {

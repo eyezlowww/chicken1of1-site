@@ -1,7 +1,11 @@
 [
   {
     "question": "What is a card break?",
-    "answer": "A card break is a group buy where boxes or cases of trading cards are opened live on stream. Participants buy spots (teams, divisions, or hits) and receive the cards that correspond to their purchase. It's a fun way to get cards from expensive products at a fraction of the cost."
+    "answer": "A card break or unboxing is where boxes or cases of trading cards are opened live on stream. Participants buy spots (teams, divisions, serial #, or players) and receive the cards that correspond to their purchase. Breaking is a FUN way to grow your collection, but it isn't the financially smartest way to grow your collection."
+  },
+  {
+    "question": "Chicken, what words of wisdom do you have for a collector that's new to the hobby?",
+    "answer": "To get familiar with how the collecting world works, start very small and very focused. Choose a player that you love, bonus points if it's someone whose cards you can purchase for cheap. Research how to comp (check current price) cards, by using 130point.com or cardladder.com.\n\nLearn how to read a product checklist, practice with mmarookies.com or checklistinsider.com.\n\nLearn how to properly topload and store your cards. Find best practices for shipping your cards.\n\nSet a budget! Spending more doesn't equate to more fun or a better collection. Avoid FOMO."
   },
   {
     "question": "What's the difference between Random Team and Pick Your Team (PYT)?",
@@ -9,7 +13,7 @@
   },
   {
     "question": "How long does shipping take?",
-    "answer": "We typically ship cards within 3-5 business days after a break is completed. Standard shipping takes 3-7 business days within the US. International shipping is available and takes 7-21 business days depending on the destination."
+    "answer": "We typically ship cards within 2 business days after a break is completed. Standard shipping takes 3-7 business days within the US. International shipping is available and takes 7-21 business days depending on the destination."
   },
   {
     "question": "Do you ship internationally?",
@@ -46,5 +50,9 @@
   {
     "question": "Can I request specific products to break?",
     "answer": "Absolutely! We love hearing from our community about which products you'd like to see broken. Send us a DM on Instagram or contact us directly with your requests. Popular requests often influence our break schedule."
+  },
+  {
+    "question": "What does Bauk Bauk Baby mean?",
+    "answer": "It's what a Chicken says when they are excited."
   }
 ]

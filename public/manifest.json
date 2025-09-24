@@ -1,0 +1,50 @@
+{
+  "name": "Chicken1of1 - UFC Sports Cards & Live Breaks",
+  "short_name": "Chicken1of1",
+  "description": "Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Live rips, clean hits, zero fluff.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#dc2626",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo-chicken1of1.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["sports", "entertainment", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Watch Live",
+      "short_name": "Live",
+      "description": "Watch live UFC card breaks",
+      "url": "/live",
+      "icons": [
+        {
+          "src": "/logo-chicken1of1.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Gallery",
+      "short_name": "Gallery",
+      "description": "View recent big hits",
+      "url": "/gallery",
+      "icons": [
+        {
+          "src": "/logo-chicken1of1.svg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

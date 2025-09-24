@@ -23,28 +23,17 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Our Mission
+              About Us
             </h2>
             <div className="space-y-4 text-gray-300 leading-relaxed">
               <p>
-                Chicken1of1 runs UFC and entertainment card breaks with one
-                simple goal: authentic, transparent breaks that deliver real
-                value to collectors. We stream live on Whatnot and Fanatics
-                Live, posting our biggest hits on Instagram while building a
-                community around the hobby.
+                Chicken1of1 started in 2021 with streaming UFC breaks to an audience of 12 people. Since then the Chicken1of1 channel has grown to several sports card loving friends running UFC and entertainment card breaks with one simple goal: have fun while being generous and trustworthy.
               </p>
               <p>
-                Our approach is straightforward - fair breaks, good vibes, and
-                real pulls. We&apos;re here for collectors who want honest
-                breaking without the gimmicks. Every break is recorded live for
-                complete transparency, and we ship quickly with secure
-                packaging.
+                We stream live on Whatnot and Fanatics Live, with a focus on niche sports and segments like UFC, Wrestling, Disney, Marvel, and other non major sport categories. Our approach is straightforward - fair breaks, quick and secure shipping, and lots of Bauking.
               </p>
               <p>
-                Whether you&apos;re new to the hobby or a seasoned collector,
-                we provide education, entertainment, and authentic breaking
-                experiences. No guaranteed hits, no false promises - just real
-                cards, real breaks, and real community.
+                Loitering is welcomed and encouraged in our streams, you do not need to spend to be welcomed or have fun. Every break is recorded live for complete transparency, and we ship quickly with secure packaging.
               </p>
             </div>
           </div>
