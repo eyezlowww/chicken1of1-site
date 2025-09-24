@@ -11,18 +11,6 @@ export const metadata: Metadata = {
 
 const linkCards = [
   {
-    title: 'MMA Rookies',
-    description: 'Latest UFC news, fighter profiles, and fight analysis',
-    url: process.env.NEXT_PUBLIC_MMAROOKIES_URL || 'https://www.mmarookies.com',
-    buttonText: 'Visit MMA Rookies',
-    icon: (
-      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-      </svg>
-    ),
-    color: 'bg-blue-600 hover:bg-blue-700',
-  },
-  {
     title: 'Whatnot Profile',
     description: 'Watch live UFC card breaks and join the community',
     url:
@@ -35,6 +23,57 @@ const linkCards = [
       </svg>
     ),
     color: 'bg-purple-600 hover:bg-purple-700',
+  },
+  {
+    title: 'Fanatics Live Shop',
+    description: 'Browse our Fanatics Live shop for exclusive breaks',
+    url:
+      process.env.NEXT_PUBLIC_FANATICS_URL ||
+      'https://www.fanatics.live/shops/chicken1of1',
+    buttonText: 'Shop Fanatics Live',
+    icon: (
+      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z" />
+        <path d="M9 8V17H11V8H9ZM13 8V17H15V8H13Z" />
+      </svg>
+    ),
+    color: 'bg-green-600 hover:bg-green-700',
+  },
+  {
+    title: '130point',
+    description: 'Sports card pricing and market data for collectors',
+    url: 'https://www.130point.com',
+    buttonText: 'Visit 130point',
+    icon: (
+      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z" />
+      </svg>
+    ),
+    color: 'bg-orange-600 hover:bg-orange-700',
+  },
+  {
+    title: 'Checklist Insider',
+    description: 'Comprehensive sports card checklists and set information',
+    url: 'https://www.checklistinsider.com',
+    buttonText: 'Visit Checklist Insider',
+    icon: (
+      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
+      </svg>
+    ),
+    color: 'bg-teal-600 hover:bg-teal-700',
+  },
+  {
+    title: 'Card Ladder',
+    description: 'Card price tracking and portfolio management tools',
+    url: 'https://www.cardladder.com',
+    buttonText: 'Visit Card Ladder',
+    icon: (
+      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z" />
+      </svg>
+    ),
+    color: 'bg-indigo-600 hover:bg-indigo-700',
   },
   {
     title: 'Instagram',
@@ -61,19 +100,16 @@ const linkCards = [
     color: 'bg-pink-600 hover:bg-pink-700',
   },
   {
-    title: 'Fanatics Live Shop',
-    description: 'Browse our Fanatics Live shop for exclusive breaks',
-    url:
-      process.env.NEXT_PUBLIC_FANATICS_URL ||
-      'https://www.fanatics.live/shops/chicken1of1',
-    buttonText: 'Shop Fanatics Live',
+    title: 'MMA Rookies',
+    description: 'Latest UFC news, fighter profiles, and fight analysis',
+    url: process.env.NEXT_PUBLIC_MMAROOKIES_URL || 'https://www.mmarookies.com',
+    buttonText: 'Visit MMA Rookies',
     icon: (
       <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z" />
-        <path d="M9 8V17H11V8H9ZM13 8V17H15V8H13Z" />
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
       </svg>
     ),
-    color: 'bg-green-600 hover:bg-green-700',
+    color: 'bg-blue-600 hover:bg-blue-700',
   },
 ]
 
