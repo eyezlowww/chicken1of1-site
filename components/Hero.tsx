@@ -13,8 +13,8 @@ interface HeroProps {
 
 export default function Hero({
   title = 'Chicken1of1',
-  subtitle = 'UFC Sports Cards & Live Breaks',
-  description = 'Bauk Bauk Baby. Live rips, clean hits, zero fluff.',
+  subtitle = 'Sports Cards & Live Breaks',
+  description = 'Thank you for stopping by. Take a look around and let us know if you have any questions? BAUK BAUK BABY!',
   showCTA = true,
   backgroundImage,
 }: HeroProps) {
