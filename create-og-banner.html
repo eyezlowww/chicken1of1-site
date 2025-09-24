@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicken1of1 Open Graph Banner Creator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        #banner {
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 80px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle pattern overlay */
+        #banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.02) 2%, transparent 2%),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.02) 2%, transparent 2%);
+            background-size: 60px 60px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .logo-circle {
+            width: 320px;
+            height: 320px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+        }
+
+        .chicken-logo {
+            width: 240px;
+            height: 240px;
+            position: relative;
+        }
+
+        /* Chicken body */
+        .chicken-body {
+            width: 140px;
+            height: 100px;
+            background-color: #000000;
+            border-radius: 50px;
+            position: absolute;
+            top: 70px;
+            left: 50px;
+        }
+
+        /* Chicken head */
+        .chicken-head {
+            width: 80px;
+            height: 80px;
+            background-color: #000000;
+            border-radius: 50%;
+            position: absolute;
+            top: 30px;
+            left: 30px;
+        }
+
+        /* Chicken eye */
+        .chicken-eye {
+            width: 20px;
+            height: 20px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+            right: 20px;
+        }
+
+        /* Chicken comb */
+        .chicken-comb {
+            width: 30px;
+            height: 25px;
+            background-color: #dc2626;
+            position: absolute;
+            top: 10px;
+            left: 25px;
+            border-radius: 0 15px 15px 0;
+        }
+
+        /* Chicken wattle */
+        .chicken-wattle {
+            width: 15px;
+            height: 20px;
+            background-color: #dc2626;
+            border-radius: 50%;
+            position: absolute;
+            top: 55px;
+            right: 5px;
+        }
+
+        /* "1 of 1" text on chicken */
+        .one-of-one {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #dc2626;
+            font-weight: bold;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .text-section {
+            color: #ffffff;
+            text-align: left;
+            z-index: 2;
+            max-width: 550px;
+        }
+
+        .main-title {
+            font-size: 72px;
+            font-weight: bold;
+            margin: 0 0 20px 0;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 42px;
+            margin: 0 0 25px 0;
+            color: #e5e5e5;
+            font-weight: 600;
+        }
+
+        .tagline {
+            font-size: 48px;
+            margin: 0;
+            color: #dc2626;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* UFC accent */
+        .ufc-accent {
+            position: absolute;
+            bottom: 30px;
+            right: 80px;
+            color: #666;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .download-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .download-btn {
+            background-color: #dc2626;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .download-btn:hover {
+            background-color: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <div id="banner">
+        <div class="logo-section">
+            <div class="logo-circle">
+                <div class="chicken-logo">
+                    <div class="chicken-body"></div>
+                    <div class="chicken-head">
+                        <div class="chicken-eye"></div>
+                        <div class="chicken-comb"></div>
+                        <div class="chicken-wattle"></div>
+                    </div>
+                    <div class="one-of-one">1<br>OF<br>1</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-section">
+            <h1 class="main-title">Chicken1of1</h1>
+            <h2 class="subtitle">UFC Sports Cards & Live Breaks</h2>
+            <h3 class="tagline">Bauk Bauk Baby</h3>
+        </div>
+
+        <div class="ufc-accent">Live on Whatnot & Fanatics Live</div>
+    </div>
+
+    <div class="download-section">
+        <button class="download-btn" onclick="downloadBanner()">Download as PNG (1200x630)</button>
+        <button class="download-btn" onclick="downloadBanner('jpg')">Download as JPG (1200x630)</button>
+    </div>
+
+    <script>
+        function downloadBanner(format = 'png') {
+            const banner = document.getElementById('banner');
+
+            // Use html2canvas library for better rendering
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+            document.head.appendChild(script);
+
+            script.onload = function() {
+                html2canvas(banner, {
+                    width: 1200,
+                    height: 630,
+                    scale: 1,
+                    backgroundColor: '#000000'
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `chicken1of1-og-banner.${format}`;
+
+                    if (format === 'jpg') {
+                        link.href = canvas.toDataURL('image/jpeg', 0.9);
+                    } else {
+                        link.href = canvas.toDataURL('image/png');
+                    }
+
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+            };
+        }
+    </script>
+</body>
+</html>
