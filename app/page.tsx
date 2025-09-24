@@ -54,11 +54,10 @@ export default function HomePage() {
       <Section id="big-hits" background="darker">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Recent Big Hits
+            Recent Hits to Bauk About
           </h2>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Check out some of the amazing cards we&apos;ve pulled in recent
-            breaks. Every break is recorded live for transparency.
+            Check out some of the cards we have pulled in our breaks.
           </p>
         </div>
         <GalleryGrid items={bigHits} />
@@ -121,7 +120,7 @@ export default function HomePage() {
       <Section id="testimonials" background="darker">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            What Breakers Say
+            What Our Community Members Say
           </h2>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             Real feedback from our community of card breakers and collectors.
@@ -163,11 +162,10 @@ export default function HomePage() {
       <Section id="cta">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Break Some Cards?
+            Ready to Bauk With Us?
           </h2>
           <p className="text-lg text-gray-400 mb-8">
-            Join us live for authentic UFC card breaks. No BS, just clean rips
-            and epic hits. Bauk Bauk Baby!
+            Join us live on Whatnot & Fanatics Live to watch or participate in card breaks.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
