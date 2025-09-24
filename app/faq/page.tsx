@@ -43,12 +43,7 @@ export default function FAQPage() {
 
       <Section>
         <div className="max-w-4xl mx-auto">
-          <div className="mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
-              Break Formats & Procedures
-            </h2>
-            <FAQAccordion items={faqData} />
-          </div>
+          <FAQAccordion items={faqData} />
         </div>
       </Section>
 
