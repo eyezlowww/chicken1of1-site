@@ -41,9 +41,7 @@ export default function Footer() {
                 </span>
               </Link>
               <p className="text-gray-400 mb-6 max-w-md">
-                Bauk Bauk Baby — UFC & Entertainment Card Breaks. Live rips,
-                clean hits, zero fluff. Join us for authentic breaks and epic
-                pulls.
+                Bauk Bauk Baby — UFC & Entertainment Card Breaks. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience.
               </p>
               <SocialBar />
             </div>

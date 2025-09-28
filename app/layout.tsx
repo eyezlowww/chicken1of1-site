@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: '%s | Chicken1of1',
   },
   description:
-    'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Live rips, clean hits, zero fluff. Watch live on Whatnot and Fanatics Live.',
+    'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience. Watch live on Whatnot and Fanatics Live.',
   keywords: [
     'UFC cards',
     'sports cards',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: 'Chicken1of1',
     title: 'Chicken1of1 – UFC Sports Cards & Live Breaks',
     description:
-      'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Live rips, clean hits, zero fluff.',
+      'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience.',
     images: [
       {
         url: '/og-image.png',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Chicken1of1 – UFC Sports Cards & Live Breaks',
     description:
-      'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Live rips, clean hits, zero fluff.',
+      'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience.',
     images: ['/og-image.png'],
   },
   verification: {
@@ -75,7 +75,7 @@ const organizationSchema = {
   '@type': 'Organization',
   name: 'Chicken1of1',
   description:
-    'UFC & Entertainment Card Breaks - Live rips, clean hits, zero fluff',
+    'UFC & Entertainment Card Breaks - Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
   logo: `${
     process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'
@@ -96,7 +96,7 @@ const websiteSchema = {
   name: 'Chicken1of1',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
   description:
-    'UFC & Entertainment Card Breaks - Live rips, clean hits, zero fluff',
+    'UFC & Entertainment Card Breaks - Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience',
   publisher: {
     '@type': 'Organization',
     name: 'Chicken1of1',
