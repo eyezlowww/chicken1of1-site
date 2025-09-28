@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import FAQAccordion from './FAQAccordion'
+import { FAQSkeleton } from './SkeletonLoader'
 
 interface FAQItem {
   question: string
@@ -14,6 +15,7 @@ interface SearchableFAQProps {
 
 export default function SearchableFAQ({ items }: SearchableFAQProps) {
   const [searchQuery, setSearchQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
 
   // Filter FAQ items based on search query
   const filteredItems = useMemo(() => {
@@ -28,6 +30,17 @@ export default function SearchableFAQ({ items }: SearchableFAQProps) {
         item.answer.toLowerCase().includes(query)
     )
   }, [items, searchQuery])
+
+  // Simulate search delay for better UX (show loading state briefly)
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      setIsSearching(true)
+      const timer = setTimeout(() => setIsSearching(false), 300)
+      return () => clearTimeout(timer)
+    } else {
+      setIsSearching(false)
+    }
+  }, [searchQuery])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
@@ -112,7 +125,9 @@ export default function SearchableFAQ({ items }: SearchableFAQProps) {
       </div>
 
       {/* FAQ Results */}
-      {filteredItems.length === 0 && searchQuery ? (
+      {isSearching ? (
+        <FAQSkeleton count={3} />
+      ) : filteredItems.length === 0 && searchQuery ? (
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-dark-700 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
@@ -125,7 +140,7 @@ export default function SearchableFAQ({ items }: SearchableFAQProps) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0120 12a8 8 0 11-16 0 8 8 0 016.291 3.348z"
+                d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0720 12a8 8 0 11-16 0 8 8 0 016.291 3.348z"
               />
             </svg>
           </div>
@@ -137,13 +152,15 @@ export default function SearchableFAQ({ items }: SearchableFAQProps) {
           </p>
           <button
             onClick={clearSearch}
-            className="text-primary-400 hover:text-primary-300 underline"
+            className="text-primary-400 hover:text-primary-300 underline transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-950 rounded"
           >
             Show all questions
           </button>
         </div>
       ) : (
-        <FAQAccordion items={filteredItems} />
+        <div className={`transition-opacity duration-300 ${isSearching ? 'opacity-50' : 'opacity-100'}`}>
+          <FAQAccordion items={filteredItems} />
+        </div>
       )}
 
       {/* Quick Search Suggestions */}

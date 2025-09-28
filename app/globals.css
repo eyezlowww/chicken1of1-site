@@ -46,7 +46,7 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-950;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold transition-all duration-200 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-950 hover:scale-105 active:scale-95;
   }
 
   .btn-primary {
@@ -70,11 +70,30 @@
   }
 
   .card {
-    @apply bg-dark-800 rounded-xl border border-dark-700 p-6;
+    @apply bg-dark-800 rounded-xl border border-dark-700 p-6 transition-all duration-200 hover:border-dark-600 hover:shadow-lg hover:shadow-primary-500/10;
   }
 
   .gradient-text {
     @apply bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent;
+  }
+
+  /* Enhanced form inputs */
+  .input {
+    @apply w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent hover:border-dark-500;
+  }
+
+  /* Enhanced interaction states */
+  .interactive {
+    @apply transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-200 hover:-translate-y-1;
+  }
+
+  /* Smooth page transitions */
+  .page-transition {
+    @apply transition-opacity duration-300 ease-in-out;
   }
 }
 
@@ -86,6 +105,36 @@
   .glass {
     @apply bg-dark-800/50 backdrop-blur-sm border border-dark-700/50;
   }
+
+  /* Loading spinner animation */
+  .loading-shimmer {
+    @apply animate-pulse bg-gradient-to-r from-dark-700 via-dark-600 to-dark-700 bg-[length:200%_100%];
+    animation: shimmer 2s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
