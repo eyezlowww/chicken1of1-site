@@ -11,7 +11,7 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   experimental: {
-    optimizeCss: true,
+    // optimizeCss: true, // Temporarily disabled due to Vercel build issues
   },
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
