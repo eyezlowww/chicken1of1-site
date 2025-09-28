@@ -306,6 +306,7 @@ export default function RootLayout({
         {chatProvider === 'crisp' && crispWebsiteId && (
           <Script id="crisp-chat" strategy="afterInteractive">
             {`
+              console.log('Crisp loading with ID:', '${crispWebsiteId}');
               window.$crisp=[];
               window.CRISP_WEBSITE_ID="${crispWebsiteId}";
               (function(){
@@ -313,6 +314,12 @@ export default function RootLayout({
                 s=d.createElement("script");
                 s.src="https://client.crisp.chat/l.js";
                 s.async=1;
+                s.onload = function() {
+                  console.log('Crisp script loaded successfully');
+                };
+                s.onerror = function() {
+                  console.error('Failed to load Crisp script');
+                };
                 d.getElementsByTagName("head")[0].appendChild(s);
               })();
             `}
