@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Hero from '@/components/Hero'
 import Section from '@/components/Section'
+import VideoPlayer from '@/components/VideoPlayer'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
@@ -39,12 +40,10 @@ export default function AboutPage() {
           </div>
           <div className="relative">
             <div className="aspect-square relative overflow-hidden rounded-xl bg-dark-800 border border-dark-700">
-              <Image
-                src="/gallery/about-hero.jpg"
-                alt="Chicken1of1 breaking cards live"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
+              <VideoPlayer
+                src="/gallery/about-hero.mp4"
+                poster="/gallery/about-hero-poster.jpg"
+                alt="Chicken1of1 breaking cards live - compilation of Instagram reels"
               />
             </div>
           </div>
