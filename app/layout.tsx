@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
   verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION || '',
+    google: process.env.GOOGLE_SITE_VERIFICATION || '', // Google Search Console verification
     other: {
       'facebook-domain-verification': process.env.FACEBOOK_DOMAIN_VERIFICATION || '',
       'instagram-domain-verification': process.env.INSTAGRAM_DOMAIN_VERIFICATION || '',
