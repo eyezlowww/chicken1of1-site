@@ -9,9 +9,9 @@ import testimonialsData from '@/content/testimonials.json'
 const bigHits = [
   {
     image: '/gallery/hit-1.jpg',
-    alt: 'UFC Rookie Card Pull',
-    title: 'Rookie Card Hit',
-    description: 'Major UFC rookie card pull',
+    alt: 'Jake Paul 1 of 1 Superfractor Auto',
+    title: 'Jake Paul 1/1 Superfractor Auto',
+    description: 'Jake Paul\'s first ever boxing card - a 1 of 1 Superfractor Autograph from 2025 Topps Chrome Boxing. Historic pull from Topps\' first boxing product in 74 years, pulled live on Chicken1of1 Whatnot!',
   },
   {
     image: '/gallery/hit-2.jpg',
