@@ -55,7 +55,13 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
   verification: {
-    google: '',
+    google: process.env.GOOGLE_SITE_VERIFICATION || '',
+    other: {
+      'facebook-domain-verification': process.env.FACEBOOK_DOMAIN_VERIFICATION || '',
+      'instagram-domain-verification': process.env.INSTAGRAM_DOMAIN_VERIFICATION || '',
+      'youtube-channel-verification': process.env.YOUTUBE_CHANNEL_VERIFICATION || '',
+      'tiktok-domain-verification': process.env.TIKTOK_DOMAIN_VERIFICATION || '',
+    },
   },
   manifest: '/manifest.json',
   appleWebApp: {
