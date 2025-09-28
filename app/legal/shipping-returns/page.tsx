@@ -33,7 +33,7 @@ export default function ShippingReturnsPage() {
                 1.1 Processing Time
               </h3>
               <p>
-                Cards are typically shipped within 3-5 business days after a
+                Cards are typically shipped within 2 business days after a
                 break is completed. Processing may take longer during peak
                 periods or holidays.
               </p>
@@ -66,42 +66,13 @@ export default function ShippingReturnsPage() {
               </ul>
             </div>
 
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-4">
-                2. What's Included
-              </h2>
-              <h3 className="text-lg font-semibold text-white mb-2">
-                2.1 Base Cards
-              </h3>
-              <p>
-                Base cards are included unless specifically labeled as "hits
-                only" breaks. Base cards help complete sets and add value to
-                your break.
-              </p>
-
-              <h3 className="text-lg font-semibold text-white mb-2 mt-4">
-                2.2 Inserts and Parallels
-              </h3>
-              <p>
-                All inserts, parallels, and special cards pulled for your team
-                or slot are included in your shipment.
-              </p>
-
-              <h3 className="text-lg font-semibold text-white mb-2 mt-4">
-                2.3 Documentation
-              </h3>
-              <p>
-                Each shipment includes a break summary showing which cards were
-                pulled from which packs/boxes.
-              </p>
-            </div>
 
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                3. International Shipping
+                2. International Shipping
               </h2>
               <h3 className="text-lg font-semibold text-white mb-2">
-                3.1 Available Countries
+                2.1 Available Countries
               </h3>
               <p>
                 We ship internationally to most countries. Some restrictions may
@@ -109,7 +80,7 @@ export default function ShippingReturnsPage() {
               </p>
 
               <h3 className="text-lg font-semibold text-white mb-2 mt-4">
-                3.2 Customs and Duties
+                2.2 Customs and Duties
               </h3>
               <ul className="list-disc list-inside space-y-1">
                 <li>Buyers are responsible for all customs duties and taxes</li>
@@ -119,7 +90,7 @@ export default function ShippingReturnsPage() {
               </ul>
 
               <h3 className="text-lg font-semibold text-white mb-2 mt-4">
-                3.3 International Shipping Costs
+                2.3 International Shipping Costs
               </h3>
               <p>
                 International shipping costs are calculated based on weight,
@@ -130,10 +101,10 @@ export default function ShippingReturnsPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                4. Damaged Items
+                3. Damaged Items
               </h2>
               <h3 className="text-lg font-semibold text-white mb-2">
-                4.1 Reporting Damage
+                3.1 Reporting Damage
               </h3>
               <p>
                 If your cards arrive damaged, please contact us within 48 hours
@@ -141,22 +112,22 @@ export default function ShippingReturnsPage() {
               </p>
 
               <h3 className="text-lg font-semibold text-white mb-2 mt-4">
-                4.2 Our Response
+                3.2 Our Response
               </h3>
               <ul className="list-disc list-inside space-y-1">
                 <li>We will investigate all damage claims promptly</li>
                 <li>Replacement cards may be provided when available</li>
-                <li>Insurance claims will be filed for high-value items</li>
+                <li>Insurance is available depending on platform purchased from</li>
                 <li>We work with carriers to prevent future damage</li>
               </ul>
             </div>
 
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                5. Returns Policy
+                4. Returns Policy
               </h2>
               <h3 className="text-lg font-semibold text-white mb-2">
-                5.1 Break Participation
+                4.1 Break Participation
               </h3>
               <p>
                 <strong>All sales are final once a break has started.</strong>{' '}
@@ -165,7 +136,7 @@ export default function ShippingReturnsPage() {
               </p>
 
               <h3 className="text-lg font-semibold text-white mb-2 mt-4">
-                5.2 Pre-Break Cancellations
+                4.2 Pre-Break Cancellations
               </h3>
               <p>
                 Cancellations may be accepted before a break begins, subject to
@@ -173,7 +144,7 @@ export default function ShippingReturnsPage() {
               </p>
 
               <h3 className="text-lg font-semibold text-white mb-2 mt-4">
-                5.3 Mistake Resolution
+                4.3 Mistake Resolution
               </h3>
               <p>
                 If we make an error in card allocation or shipping, we will work
@@ -181,36 +152,13 @@ export default function ShippingReturnsPage() {
               </p>
             </div>
 
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-4">
-                6. Preorders
-              </h2>
-              <h3 className="text-lg font-semibold text-white mb-2">
-                6.1 Preorder Terms
-              </h3>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Preorders are accepted for upcoming product releases</li>
-                <li>Payment is typically required in full at time of preorder</li>
-                <li>Release dates are estimates and may change</li>
-                <li>Preorders may be cancelled before product receipt</li>
-              </ul>
-
-              <h3 className="text-lg font-semibold text-white mb-2 mt-4">
-                6.2 Preorder Delays
-              </h3>
-              <p>
-                If a preordered product is significantly delayed or cancelled by
-                the manufacturer, we will provide a full refund or product
-                substitution option.
-              </p>
-            </div>
 
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                7. Giveaways and Free Items
+                5. Giveaways and Free Items
               </h2>
               <h3 className="text-lg font-semibold text-white mb-2">
-                7.1 No Purchase Necessary
+                5.1 No Purchase Necessary
               </h3>
               <p>
                 Giveaways are free to enter and no purchase is necessary unless
@@ -218,7 +166,7 @@ export default function ShippingReturnsPage() {
               </p>
 
               <h3 className="text-lg font-semibold text-White mb-2 mt-4">
-                7.2 Giveaway Shipping
+                5.2 Giveaway Shipping
               </h3>
               <ul className="list-disc list-inside space-y-1">
                 <li>Free shipping is provided for giveaway items</li>
@@ -230,10 +178,10 @@ export default function ShippingReturnsPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                8. Break Participation Terms
+                6. Break Participation Terms
               </h2>
               <h3 className="text-lg font-semibold text-white mb-2">
-                8.1 Recording Consent
+                6.1 Recording Consent
               </h3>
               <p>
                 All breaks are recorded for transparency and security. By
@@ -242,7 +190,7 @@ export default function ShippingReturnsPage() {
               </p>
 
               <h3 className="text-lg font-semibold text-white mb-2 mt-4">
-                8.2 Break Formats
+                6.2 Break Formats
               </h3>
               <p>
                 Break format rules will be clearly explained before each break.
@@ -253,7 +201,7 @@ export default function ShippingReturnsPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                9. Contact Information
+                7. Contact Information
               </h2>
               <p>
                 For shipping questions, damage reports, or other concerns:
