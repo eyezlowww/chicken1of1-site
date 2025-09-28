@@ -222,9 +222,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const chatProvider = process.env.NEXT_PUBLIC_CHAT_PROVIDER
-  const crispWebsiteId = process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID
-  const tidioKey = process.env.NEXT_PUBLIC_TIDIO_PUBLISHABLE_KEY
   const ga4Id = process.env.NEXT_PUBLIC_GA4_ID
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 
@@ -302,37 +299,8 @@ export default function RootLayout({
           </Script>
         )}
 
-        {/* Crisp Chat */}
-        {chatProvider === 'crisp' && crispWebsiteId && (
-          <Script id="crisp-chat" strategy="afterInteractive">
-            {`
-              console.log('Crisp loading with ID:', '${crispWebsiteId}');
-              window.$crisp=[];
-              window.CRISP_WEBSITE_ID="${crispWebsiteId}";
-              (function(){
-                d=document;
-                s=d.createElement("script");
-                s.src="https://client.crisp.chat/l.js";
-                s.async=1;
-                s.onload = function() {
-                  console.log('Crisp script loaded successfully');
-                };
-                s.onerror = function() {
-                  console.error('Failed to load Crisp script');
-                };
-                d.getElementsByTagName("head")[0].appendChild(s);
-              })();
-            `}
-          </Script>
-        )}
-
-        {/* Tidio Chat */}
-        {chatProvider === 'tidio' && tidioKey && (
-          <Script
-            src={`//code.tidio.co/${tidioKey}.js`}
-            strategy="afterInteractive"
-          />
-        )}
+        {/* Chat Widget Placeholder - Ready for integration */}
+        {/* Add your preferred chat widget integration here */}
       </head>
       <body>
         {/* Google Tag Manager (noscript) */}
