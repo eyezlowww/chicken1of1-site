@@ -16,7 +16,7 @@ export default function AboutPage() {
       <Hero
         title="About Chicken1of1"
         subtitle="The Story Behind Bauk Bauk Baby"
-        description="Authentic UFC card breaks with integrity and transparency"
+        description="Live UFC card breaks that make you go Bauk Bauk Baby"
         showCTA={false}
       />
 
