@@ -215,7 +215,7 @@ export default function PrivacyPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                9. Children's Privacy
+                9. Children&apos;s Privacy
               </h2>
               <p>
                 Our services are not directed to children under 18. We do not

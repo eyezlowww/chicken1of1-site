@@ -8,6 +8,7 @@ import Script from 'next/script'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'),
   title: {
     default: 'Chicken1of1 – UFC Sports Cards & Live Breaks',
     template: '%s | Chicken1of1',
@@ -56,18 +57,19 @@ export const metadata: Metadata = {
   verification: {
     google: '',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
-  themeColor: '#dc2626',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
     title: 'Chicken1of1',
   },
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: '#dc2626',
 }
 
 const organizationSchema = {
