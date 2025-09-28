@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Hero from '@/components/Hero'
 import Section from '@/components/Section'
-import FAQAccordion from '@/components/FAQAccordion'
+import SearchableFAQ from '@/components/SearchableFAQ'
 import Link from 'next/link'
 import faqData from '@/content/faq.json'
 
@@ -42,9 +42,7 @@ export default function FAQPage() {
       />
 
       <Section>
-        <div className="max-w-4xl mx-auto">
-          <FAQAccordion items={faqData} />
-        </div>
+        <SearchableFAQ items={faqData} />
       </Section>
 
       <Section background="darker">
