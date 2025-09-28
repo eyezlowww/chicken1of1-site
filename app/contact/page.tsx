@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Hero from '@/components/Hero'
 import Section from '@/components/Section'
+import ContactForm from '@/components/ContactForm'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -138,104 +139,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="card">
-              <h3 className="text-xl font-semibold text-white mb-4">
-                Quick Contact Form
-              </h3>
-              <p className="text-gray-400 text-sm mb-6">
-                Fill out this form and we&apos;ll get back to you within 24
-                hours.
-              </p>
-
-              <form
-                action="mailto:hello@chicken1of1.com"
-                method="get"
-                encType="text/plain"
-                className="space-y-4"
-              >
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    className="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    placeholder="Your name"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    placeholder="your@email.com"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Subject
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    className="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    required
-                  >
-                    <option value="">Select a topic</option>
-                    <option value="Break Inquiry">Break Inquiry</option>
-                    <option value="Product Request">Product Request</option>
-                    <option value="Partnership">Partnership</option>
-                    <option value="Technical Issue">Technical Issue</option>
-                    <option value="General Question">General Question</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="body"
-                    rows={4}
-                    className="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    placeholder="Tell us more about your inquiry..."
-                    required
-                  ></textarea>
-                </div>
-
-                <button type="submit" className="btn-primary w-full">
-                  Send Message
-                </button>
-              </form>
-
-              <p className="text-xs text-gray-500 mt-4">
-                This form opens your default email client. For fastest response,
-                DM us on Instagram.
-              </p>
-            </div>
+            <ContactForm />
           </div>
         </div>
       </Section>
