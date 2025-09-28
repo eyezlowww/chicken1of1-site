@@ -30,14 +30,14 @@ export default function Error({
         </h1>
 
         <p className="text-lg text-gray-400 mb-6">
-          Something went wrong on our end. Don't worry, we're working on fixing it
+          Something went wrong on our end. Don&apos;t worry, we&apos;re working on fixing it
           faster than a Jon Jones takedown!
         </p>
 
         {/* UFC-themed Error Message */}
         <div className="bg-dark-800 border border-dark-700 rounded-lg p-4 mb-8">
           <p className="text-gray-300 text-sm">
-            "The referee has stopped the fight due to technical difficulties."
+            &ldquo;The referee has stopped the fight due to technical difficulties.&rdquo;
           </p>
           <p className="text-xs text-gray-500 mt-2">
             - Our Development Team

@@ -31,8 +31,8 @@ export default function GlobalError({
           </h1>
 
           <p className="text-lg text-gray-400 mb-8">
-            Don't worry, even the best breakers hit a snag sometimes.
-            Let's get you back to the action!
+            Don&apos;t worry, even the best breakers hit a snag sometimes.
+            Let&apos;s get you back to the action!
           </p>
 
           {/* Error Details */}

@@ -35,13 +35,13 @@ export default function NotFound() {
 
         <p className="text-lg text-gray-400 mb-8">
           Looks like this page went missing faster than a 1/1 card in a break!
-          Don't worry though, we've got plenty more action waiting for you.
+          Don&apos;t worry though, we&apos;ve got plenty more action waiting for you.
         </p>
 
         {/* Humorous UFC Reference */}
         <div className="bg-dark-800 border border-dark-700 rounded-lg p-6 mb-8">
           <p className="text-gray-300 italic">
-            "This page got submitted faster than a first-round RNC!"
+            &ldquo;This page got submitted faster than a first-round RNC!&rdquo;
           </p>
           <p className="text-sm text-gray-500 mt-2">
             - Chicken1of1 Commentary Team
@@ -116,7 +116,7 @@ export default function NotFound() {
         {/* Contact Info */}
         <div className="mt-8 pt-6 border-t border-dark-700">
           <p className="text-sm text-gray-500 mb-2">
-            Still can't find what you're looking for?
+            Still can&apos;t find what you&apos;re looking for?
           </p>
           <a
             href="mailto:hello@chicken1of1.com"
