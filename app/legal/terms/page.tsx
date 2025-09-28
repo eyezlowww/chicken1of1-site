@@ -183,10 +183,10 @@ export default function TermsPage() {
               <p>
                 If you have questions about these terms, please contact us at{' '}
                 <a
-                  href="mailto:legal@chicken1of1.com"
+                  href="mailto:hello@chicken1of1.com"
                   className="text-primary-400 hover:text-primary-300"
                 >
-                  legal@chicken1of1.com
+                  hello@chicken1of1.com
                 </a>
                 .
               </p>

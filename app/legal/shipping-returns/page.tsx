@@ -210,10 +210,10 @@ export default function ShippingReturnsPage() {
                 <li>
                   Email:{' '}
                   <a
-                    href="mailto:shipping@chicken1of1.com"
+                    href="mailto:hello@chicken1of1.com"
                     className="text-primary-400 hover:text-primary-300"
                   >
-                    shipping@chicken1of1.com
+                    hello@chicken1of1.com
                   </a>
                 </li>
                 <li>

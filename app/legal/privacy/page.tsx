@@ -177,10 +177,10 @@ export default function PrivacyPage() {
               <p className="mt-4">
                 To exercise these rights, contact us at{' '}
                 <a
-                  href="mailto:privacy@chicken1of1.com"
+                  href="mailto:hello@chicken1of1.com"
                   className="text-primary-400 hover:text-primary-300"
                 >
-                  privacy@chicken1of1.com
+                  hello@chicken1of1.com
                 </a>
                 .
               </p>
@@ -247,10 +247,10 @@ export default function PrivacyPage() {
                 <li>
                   Email:{' '}
                   <a
-                    href="mailto:privacy@chicken1of1.com"
+                    href="mailto:hello@chicken1of1.com"
                     className="text-primary-400 hover:text-primary-300"
                   >
-                    privacy@chicken1of1.com
+                    hello@chicken1of1.com
                   </a>
                 </li>
                 <li>
