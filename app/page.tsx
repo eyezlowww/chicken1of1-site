@@ -27,21 +27,21 @@ const bigHits = [
   },
   {
     image: '/gallery/hit-4.jpg',
-    alt: 'Championship Card',
-    title: 'Championship Card',
-    description: 'Title fight commemorative',
+    alt: 'Max Holloway Sapphire Selections Orange',
+    title: 'Max Holloway Sapphire Selections Orange /25',
+    description: 'Max Holloway\'s 2025 Topps Chrome Sapphire Selections Orange numbered to 25. The first UFC Sapphire Selections insert - the most loved insert among all Sapphire products. A beautiful card featuring one of the legends of the UFC, pulled live on Chicken1of1\'s Whatnot or Fanatics Live channel!',
   },
   {
     image: '/gallery/hit-5.jpg',
-    alt: 'Parallel Card',
-    title: 'Rare Parallel',
-    description: 'Low-numbered parallel',
+    alt: 'Jon Jones Rookie Auto Blue Ink',
+    title: 'Jon Jones Rookie Auto Blue Ink',
+    description: 'Jon Jones\' first ever rookie autograph from 2009 Topps Round 2 - the 2nd ever Topps UFC product. The blue ink is the base auto, with red ink versions /25 and patch autos /25 being his only other rookie autos that exist. Historic piece from the UFC GOAT, pulled live on Chicken1of1\'s Whatnot or Fanatics Live channel!',
   },
   {
     image: '/gallery/hit-6.jpg',
-    alt: 'Base Card',
-    title: 'Base Hit',
-    description: 'Clean base card pull',
+    alt: 'Anderson Silva Blue Ink Auto',
+    title: 'Anderson Silva Blue Ink Auto',
+    description: 'Anderson Silva\'s Blue Ink Auto from 2009 Topps Round 1 - the first ever licensed Topps UFC product where everyone is an official Topps UFC rookie. Rumored to only have 500 cases made, making any blue ink or red ink /25 auto a huge deal, especially with so few unopened boxes remaining. Historic rookie from the debut set, pulled live on Chicken1of1\'s Whatnot or Fanatics Live channel!',
   },
 ]
 
