@@ -74,14 +74,38 @@ export const viewport = {
 
 const organizationSchema = {
   '@context': 'https://schema.org',
-  '@type': 'Organization',
+  '@type': ['Organization', 'LocalBusiness'],
   name: 'Chicken1of1',
+  alternateName: 'Chicken1of1 Card Breaks',
   description:
     'UFC & Entertainment Card Breaks - Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
   logo: `${
     process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'
   }/logo-chicken1of1.svg`,
+  image: `${
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'
+  }/og-image.png`,
+  founder: {
+    '@type': 'Person',
+    name: 'Chicken1of1',
+  },
+  foundingDate: '2021',
+  slogan: 'Bauk Bauk Baby',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    email: 'hello@chicken1of1.com',
+    availableLanguage: 'English',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'US',
+  },
+  serviceArea: {
+    '@type': 'Country',
+    name: 'United States',
+  },
   sameAs: [
     process.env.NEXT_PUBLIC_INSTAGRAM_URL ||
       'https://www.instagram.com/chicken1of1',
@@ -90,6 +114,39 @@ const organizationSchema = {
     process.env.NEXT_PUBLIC_FANATICS_URL ||
       'https://www.fanatics.live/shops/chicken1of1',
   ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'UFC Card Breaking Services',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Random Team UFC Card Breaks',
+          description: 'Live UFC card breaks with random team assignments',
+          category: 'Sports Card Breaking',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Pick Your Team (PYT) UFC Card Breaks',
+          description: 'Live UFC card breaks where you choose your team',
+          category: 'Sports Card Breaking',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Hit Draft UFC Card Breaks',
+          description: 'UFC card breaks with draft-style hit selection',
+          category: 'Sports Card Breaking',
+        },
+      },
+    ],
+  },
 }
 
 const websiteSchema = {
@@ -102,6 +159,44 @@ const websiteSchema = {
   publisher: {
     '@type': 'Organization',
     name: 'Chicken1of1',
+  },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/faq/?search={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+  mainEntity: {
+    '@type': 'ItemList',
+    name: 'Main Navigation',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Live Breaks',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/live`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Gallery',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/gallery`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'About',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/about`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 4,
+        name: 'FAQ',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/faq`,
+      },
+    ],
   },
 }
 
@@ -119,6 +214,33 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <head>
+        {/* Preload critical resources */}
+        <link
+          rel="preload"
+          href="/logo-chicken1of1.svg"
+          as="image"
+          type="image/svg+xml"
+        />
+        <link
+          rel="preload"
+          href="/og-image.png"
+          as="image"
+          type="image/png"
+        />
+
+        {/* DNS prefetch for external domains */}
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="//www.google-analytics.com" />
+        <link rel="dns-prefetch" href="//client.crisp.chat" />
+        <link rel="dns-prefetch" href="//code.tidio.co" />
+        <link rel="dns-prefetch" href="//www.instagram.com" />
+        <link rel="dns-prefetch" href="//www.whatnot.com" />
+        <link rel="dns-prefetch" href="//www.fanatics.live" />
+
+        {/* Preconnect for critical third party domains */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

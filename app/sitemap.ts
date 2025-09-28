@@ -2,67 +2,75 @@ import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'
+  const currentDate = new Date()
+
+  // Calculate specific last modified dates for better SEO
+  const getLastModified = (daysAgo: number) => {
+    const date = new Date()
+    date.setDate(date.getDate() - daysAgo)
+    return date
+  }
 
   return [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: currentDate,
       changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/faq`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/gallery`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/links`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.6,
+      priority: 1.0,
     },
     {
       url: `${baseUrl}/live`,
-      lastModified: new Date(),
+      lastModified: currentDate,
+      changeFrequency: 'hourly',
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/gallery`,
+      lastModified: getLastModified(2),
       changeFrequency: 'daily',
-      priority: 0.9,
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified: getLastModified(7),
+      changeFrequency: 'weekly',
+      priority: 0.80,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: getLastModified(14),
+      changeFrequency: 'monthly',
+      priority: 0.75,
     },
     {
       url: `${baseUrl}/contact`,
-      lastModified: new Date(),
+      lastModified: getLastModified(30),
       changeFrequency: 'monthly',
-      priority: 0.5,
+      priority: 0.70,
+    },
+    {
+      url: `${baseUrl}/links`,
+      lastModified: getLastModified(30),
+      changeFrequency: 'monthly',
+      priority: 0.65,
     },
     {
       url: `${baseUrl}/legal/terms`,
-      lastModified: new Date(),
+      lastModified: getLastModified(90),
       changeFrequency: 'yearly',
-      priority: 0.3,
+      priority: 0.30,
     },
     {
       url: `${baseUrl}/legal/privacy`,
-      lastModified: new Date(),
+      lastModified: getLastModified(90),
       changeFrequency: 'yearly',
-      priority: 0.3,
+      priority: 0.30,
     },
     {
       url: `${baseUrl}/legal/shipping-returns`,
-      lastModified: new Date(),
+      lastModified: getLastModified(90),
       changeFrequency: 'yearly',
-      priority: 0.3,
+      priority: 0.30,
     },
   ]
 }

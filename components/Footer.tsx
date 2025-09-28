@@ -23,15 +23,19 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-dark-900 border-t border-dark-700">
+    <footer className="bg-dark-900 border-t border-dark-700" role="contentinfo">
       <Container>
         <div className="py-12 md:py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
-              <Link href="/" className="flex items-center space-x-3 mb-4">
+              <Link
+                href="/"
+                className="flex items-center space-x-3 mb-4"
+                aria-label="Chicken1of1 - Go to homepage"
+              >
                 <Image
                   src="/logo-chicken1of1.svg"
-                  alt="Chicken1of1"
+                  alt="Chicken1of1 logo"
                   width={32}
                   height={32}
                   className="h-8 w-8"
@@ -46,45 +50,51 @@ export default function Footer() {
               <SocialBar />
             </div>
 
-            <div>
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+            <nav aria-labelledby="footer-navigation">
+              <h3
+                id="footer-navigation"
+                className="text-sm font-semibold text-white uppercase tracking-wider mb-4"
+              >
                 Navigation
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-3" role="list">
                 {navigation.main.map((item) => (
                   <li key={item.name}>
                     <Link
                       href={item.href}
-                      className="text-gray-400 hover:text-white transition-colors duration-200"
+                      className="text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-900 rounded"
                     >
                       {item.name}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
 
-            <div>
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+            <nav aria-labelledby="footer-legal">
+              <h3
+                id="footer-legal"
+                className="text-sm font-semibold text-white uppercase tracking-wider mb-4"
+              >
                 Legal
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-3" role="list">
                 {navigation.legal.map((item) => (
                   <li key={item.name}>
                     <Link
                       href={item.href}
-                      className="text-gray-400 hover:text-white transition-colors duration-200"
+                      className="text-gray-400 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-900 rounded"
                     >
                       {item.name}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
           </div>
 
           <div className="mt-8 pt-8 border-t border-dark-700 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-400 text-sm" role="contentinfo">
               © {currentYear} Chicken1of1. All rights reserved.
             </p>
             <p className="text-gray-500 text-xs mt-2 md:mt-0">
