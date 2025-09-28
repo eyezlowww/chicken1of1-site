@@ -122,11 +122,6 @@ export default function TestimonialScreenshots() {
               height={800}
               className="max-w-full max-h-full object-contain rounded-lg"
             />
-            <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-4 rounded-b-lg">
-              <h3 className="text-white font-semibold text-center">
-                Real Reviews from Our Whatnot Community
-              </h3>
-            </div>
           </div>
         </div>
       )}
