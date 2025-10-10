@@ -49,11 +49,11 @@ export default function Header() {
 
           <div className="flex items-center space-x-4">
             <Link
-              href="/live"
-              className="hidden sm:inline-flex btn-primary text-sm"
-              aria-label="Watch live UFC card breaks"
+              href="/sell-to-us"
+              className="hidden sm:inline-flex btn-primary text-sm bg-yellow-400 text-black hover:bg-yellow-300"
+              aria-label="Sell your UFC sealed boxes"
             >
-              Watch Live
+              💰 Sell To Us
             </Link>
 
             <button
@@ -111,13 +111,13 @@ export default function Header() {
                 </Link>
               ))}
               <Link
-                href="/live"
-                className="block px-3 py-2 text-base font-medium text-primary-400 hover:text-white hover:bg-dark-700 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-950"
+                href="/sell-to-us"
+                className="block px-3 py-2 text-base font-medium bg-yellow-400 text-black hover:bg-yellow-300 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-950"
                 onClick={() => setMobileMenuOpen(false)}
                 role="menuitem"
-                aria-label="Watch live UFC card breaks"
+                aria-label="Sell your UFC sealed boxes"
               >
-                Watch Live
+                💰 Sell To Us
               </Link>
             </div>
           </nav>
