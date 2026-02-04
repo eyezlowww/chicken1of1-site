@@ -42,7 +42,7 @@ Time: ${new Date().toLocaleString()}
 
     await resend.emails.send({
       from: 'Contact Form <noreply@chicken1of1.com>',
-      to: ['hello@chicken1of1.com'],
+      to: ['chicken1of1info@gmail.com'],
       subject: `[Contact Form] ${subject}`,
       text: emailContent,
       replyTo: email,

@@ -59,7 +59,7 @@ Time: ${new Date().toLocaleString()}
 
     await resend.emails.send({
       from: 'Sell Submission <noreply@chicken1of1.com>',
-      to: ['hello@chicken1of1.com'],
+      to: ['chicken1of1info@gmail.com'],
       subject: `[Sell Submission] ${name} - ${products.length} product(s)`,
       text: emailContent,
       replyTo: email,
