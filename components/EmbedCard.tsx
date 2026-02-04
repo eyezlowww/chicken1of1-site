@@ -56,21 +56,20 @@ export default function EmbedCard({
 
     if (!embedUrl) {
       return (
-        <div className="relative w-full h-full group">
+        <div className="flex flex-col w-full h-full bg-white rounded-lg overflow-hidden">
           {previewImage ? (
-            <>
+            <div className="relative flex-1 min-h-0">
               <Image
                 src={previewImage}
                 alt={title}
                 fill
-                className="object-cover object-top"
+                className="object-contain object-top"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-            </>
+            </div>
           ) : (
-            <div className="absolute inset-0 bg-dark-800" />
+            <div className="flex-1 bg-dark-800" />
           )}
-          <div className="absolute inset-0 flex flex-col items-center justify-end pb-10 text-center p-6">
+          <div className="bg-dark-900 py-4 px-6 flex justify-center">
             <Link
               href={fallbackUrl}
               target="_blank"
