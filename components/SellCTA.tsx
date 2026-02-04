@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
 import Container from './Container'
 import RotatingText from './RotatingText'
+import PulsatingButton from './PulsatingButton'
 
 export default function SellCTA() {
   return (
@@ -31,9 +31,14 @@ export default function SellCTA() {
           <p className="text-lg text-cage-300 mb-8">
             We buy sealed UFC, wrestling, and combat sports product. Get a fair offer with no games.
           </p>
-          <Link href="/sell-to-us" className="btn-primary text-lg px-10 py-4 animate-cta-pulse">
+          <PulsatingButton
+            href="/sell-to-us"
+            pulseColor="185, 28, 28"
+            duration="1.5s"
+            className="btn-primary text-lg px-10 py-4"
+          >
             Sell Us Your Wax
-          </Link>
+          </PulsatingButton>
         </div>
       </Container>
     </section>

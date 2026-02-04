@@ -91,6 +91,15 @@ const config: Config = {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         heading: ['Oswald', 'sans-serif'],
       },
+      animation: {
+        'btn-pulse': 'btn-pulse var(--duration) ease-out infinite',
+      },
+      keyframes: {
+        'btn-pulse': {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(var(--pulse-color), 0.5)' },
+          '50%': { boxShadow: '0 0 0 8px rgba(var(--pulse-color), 0)' },
+        },
+      },
     },
   },
   plugins: [],
