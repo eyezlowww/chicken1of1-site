@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Container from '@/components/Container'
 import Section from '@/components/Section'
-import SearchableFAQ from '@/components/SearchableFAQ'
+import FAQWithImage from '@/components/FAQWithImage'
 import Link from 'next/link'
 import faqData from '@/content/faq.json'
 
@@ -48,7 +48,7 @@ export default function FAQPage() {
       </section>
 
       <Section>
-        <SearchableFAQ items={faqData} />
+        <FAQWithImage items={faqData} />
       </Section>
 
       <section className="relative py-16 md:py-24 bg-[#0a0a0a] overflow-hidden">
