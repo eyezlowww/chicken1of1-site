@@ -1,6 +1,9 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import Container from './Container'
+import GradientText from './GradientText'
 
 export default function HeroFight() {
   return (
@@ -27,9 +30,17 @@ export default function HeroFight() {
             />
           </div>
 
-          <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-4 uppercase tracking-tight animate-fade-in-up animation-delay-200">
-            Bauk Bauk Baby
-          </h1>
+          <div className="animate-fade-in-up animation-delay-200">
+            <GradientText
+              colors={['#b91c1c', '#eab308', '#ffffff', '#eab308', '#b91c1c']}
+              animationSpeed={7}
+              direction="horizontal"
+              className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold uppercase tracking-tight mb-4"
+            >
+              Bauk Bauk Baby!
+            </GradientText>
+          </div>
+
           <p className="text-xl md:text-2xl text-cage-300 mb-2 font-medium animate-fade-in-up animation-delay-300">
             Sports Cards & Live Breaks
           </p>

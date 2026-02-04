@@ -80,7 +80,7 @@ async function generateOGImage() {
     ctx.font = '500 18px Arial';
     ctx.fillStyle = '#666666';
     ctx.textAlign = 'right';
-    ctx.fillText('Live on Whatnot & Fanatics Live', 1120, 580);
+    ctx.fillText('Live on Whatnot', 1120, 580);
 
     // Save the image
     const buffer = canvas.toBuffer('image/png');

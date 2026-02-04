@@ -130,9 +130,6 @@ export default function PrivacyPage() {
                 <li>
                   <strong>Whatnot:</strong> Live breaking platform
                 </li>
-                <li>
-                  <strong>Fanatics Live:</strong> Alternative streaming platform
-                </li>
               </ul>
             </div>
 
