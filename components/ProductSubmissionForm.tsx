@@ -1,12 +1,22 @@
 'use client'
 
-import { useState } from 'react'
-import ufcProducts from '@/content/ufc-products.json'
+import { useState, useMemo } from 'react'
+import mmaProducts from '@/content/mma-products.json'
+
+const FORMATS = [
+  { value: 'hobby-box', label: 'Hobby Box' },
+  { value: 'retail', label: 'Retail' },
+  { value: 'blaster', label: 'Blaster' },
+  { value: 'mega', label: 'Mega' },
+  { value: 'case', label: 'Case' },
+]
 
 interface ProductItem {
+  year: string
   product: string
   format: string
   quantity: number
+  boxesPerCase: number | null
 }
 
 interface FormData {
@@ -21,13 +31,15 @@ interface FormData {
   instagram: string
 }
 
+const EMPTY_PRODUCT: ProductItem = { year: '', product: '', format: 'hobby-box', quantity: 1, boxesPerCase: null }
+
 export default function ProductSubmissionForm() {
   const [step, setStep] = useState(1)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
   const [formData, setFormData] = useState<FormData>({
-    products: [{ product: '', format: 'hobby', quantity: 1 }],
+    products: [{ ...EMPTY_PRODUCT }],
     condition: 'factory-sealed',
     priceExpectation: '',
     notes: '',
@@ -38,10 +50,22 @@ export default function ProductSubmissionForm() {
     instagram: '',
   })
 
+  // Get unique years sorted descending (newest first)
+  const years = useMemo(() => {
+    const uniqueYears = Array.from(new Set(mmaProducts.products.map((p) => p.year)))
+    return uniqueYears.sort((a, b) => b - a)
+  }, [])
+
+  // Get products filtered by selected year
+  const getProductsForYear = (year: string) => {
+    if (!year) return []
+    return mmaProducts.products.filter((p) => p.year === parseInt(year))
+  }
+
   const addProduct = () => {
     setFormData({
       ...formData,
-      products: [...formData.products, { product: '', format: 'hobby', quantity: 1 }],
+      products: [...formData.products, { ...EMPTY_PRODUCT }],
     })
   }
 
@@ -52,9 +76,21 @@ export default function ProductSubmissionForm() {
     })
   }
 
-  const updateProduct = (index: number, field: keyof ProductItem, value: string | number) => {
+  const updateProduct = (index: number, field: keyof ProductItem, value: string | number | null) => {
     const updated = [...formData.products]
-    updated[index] = { ...updated[index], [field]: value }
+    if (field === 'year') {
+      // Reset product when year changes
+      updated[index] = { ...updated[index], year: value as string, product: '' }
+    } else if (field === 'format') {
+      // Reset boxesPerCase when format changes away from case
+      updated[index] = {
+        ...updated[index],
+        format: value as string,
+        boxesPerCase: value === 'case' ? updated[index].boxesPerCase : null,
+      }
+    } else {
+      updated[index] = { ...updated[index], [field]: value }
+    }
     setFormData({ ...formData, products: updated })
   }
 
@@ -94,7 +130,7 @@ export default function ProductSubmissionForm() {
             setSubmitted(false)
             setStep(1)
             setFormData({
-              products: [{ product: '', format: 'hobby', quantity: 1 }],
+              products: [{ ...EMPTY_PRODUCT }],
               condition: 'factory-sealed',
               priceExpectation: '',
               notes: '',
@@ -144,22 +180,42 @@ export default function ProductSubmissionForm() {
           {formData.products.map((item, index) => (
             <div key={index} className="mb-4 p-4 bg-dark-900 rounded-lg border border-cage-700">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                <div className="md:col-span-5">
+                {/* Year Dropdown */}
+                <div className="md:col-span-2">
+                  <label className="block text-xs text-cage-400 mb-1">Year</label>
+                  <select
+                    value={item.year}
+                    onChange={(e) => updateProduct(index, 'year', e.target.value)}
+                    className="input"
+                    aria-label={`Year for product ${index + 1}`}
+                  >
+                    <option value="">Year...</option>
+                    {years.map((y) => (
+                      <option key={y} value={y}>{y}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Product Dropdown (filtered by year) */}
+                <div className="md:col-span-4">
                   <label className="block text-xs text-cage-400 mb-1">Product</label>
                   <select
                     value={item.product}
                     onChange={(e) => updateProduct(index, 'product', e.target.value)}
                     className="input"
+                    disabled={!item.year}
                     aria-label={`Product ${index + 1}`}
                   >
-                    <option value="">Select a product...</option>
-                    {ufcProducts.products.map((p) => (
-                      <option key={p.id} value={p.name}>{p.name}</option>
+                    <option value="">{item.year ? 'Select a product...' : 'Select year first...'}</option>
+                    {getProductsForYear(item.year).map((p) => (
+                      <option key={p.name} value={p.name}>{p.name}</option>
                     ))}
                     <option value="other">Other (describe in notes)</option>
                   </select>
                 </div>
-                <div className="md:col-span-3">
+
+                {/* Format Dropdown */}
+                <div className="md:col-span-2">
                   <label className="block text-xs text-cage-400 mb-1">Format</label>
                   <select
                     value={item.format}
@@ -167,11 +223,13 @@ export default function ProductSubmissionForm() {
                     className="input"
                     aria-label={`Format for product ${index + 1}`}
                   >
-                    {ufcProducts.formats.map((f) => (
-                      <option key={f} value={f}>{f.charAt(0).toUpperCase() + f.slice(1)}</option>
+                    {FORMATS.map((f) => (
+                      <option key={f.value} value={f.value}>{f.label}</option>
                     ))}
                   </select>
                 </div>
+
+                {/* Quantity */}
                 <div className="md:col-span-2">
                   <label className="block text-xs text-cage-400 mb-1">Qty</label>
                   <input
@@ -183,6 +241,8 @@ export default function ProductSubmissionForm() {
                     aria-label={`Quantity for product ${index + 1}`}
                   />
                 </div>
+
+                {/* Remove Button */}
                 <div className="md:col-span-2 flex items-end">
                   {formData.products.length > 1 && (
                     <button
@@ -195,6 +255,24 @@ export default function ProductSubmissionForm() {
                   )}
                 </div>
               </div>
+
+              {/* Boxes Per Case popup (inline) */}
+              {item.format === 'case' && (
+                <div className="mt-3 p-3 bg-gold-500/5 border border-gold-500/20 rounded-lg">
+                  <label className="block text-xs text-gold-400 mb-1 font-medium">
+                    How many boxes per case?
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={item.boxesPerCase || ''}
+                    onChange={(e) => updateProduct(index, 'boxesPerCase', parseInt(e.target.value) || null)}
+                    placeholder="e.g. 12"
+                    className="input w-32"
+                    aria-label={`Boxes per case for product ${index + 1}`}
+                  />
+                </div>
+              )}
             </div>
           ))}
           <button onClick={addProduct} className="btn-outline text-sm mb-8">
