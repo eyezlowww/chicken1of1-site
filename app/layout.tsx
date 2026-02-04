@@ -304,10 +304,10 @@ export default function RootLayout({
         )}
 
         {/* Ahrefs Web Analytics */}
-        <Script
+        <script
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="t6KLl6dX4C8OrSdwWkxegg"
-          strategy="afterInteractive"
+          async
         />
       </head>
       <body>
