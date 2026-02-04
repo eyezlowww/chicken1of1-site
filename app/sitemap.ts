@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'
   const currentDate = new Date()
 
   // Calculate specific last modified dates for better SEO
@@ -47,6 +47,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: getLastModified(30),
       changeFrequency: 'monthly',
       priority: 0.70,
+    },
+    {
+      url: `${baseUrl}/sell-to-us`,
+      lastModified: getLastModified(7),
+      changeFrequency: 'weekly',
+      priority: 0.80,
     },
     {
       url: `${baseUrl}/links`,
