@@ -20,7 +20,7 @@ export default function PulsatingButton({
   className = '',
   external = false,
 }: PulsatingButtonProps) {
-  const baseClasses = `relative flex cursor-pointer items-center justify-center rounded-lg px-4 py-2 text-center ${className}`
+  const baseClasses = `relative inline-flex cursor-pointer items-center justify-center rounded-lg px-4 py-2 text-center ${className}`
 
   const style = {
     '--pulse-color': pulseColor,

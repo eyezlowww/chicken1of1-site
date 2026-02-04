@@ -33,9 +33,9 @@ export default function SellCTA() {
           </p>
           <PulsatingButton
             href="/sell-to-us"
-            pulseColor="185, 28, 28"
+            pulseColor="245, 158, 11"
             duration="1.5s"
-            className="btn-primary text-lg px-10 py-4"
+            className="bg-blood-600 hover:bg-blood-700 text-white font-heading font-bold uppercase tracking-wide text-lg px-10 py-4 rounded-lg transition-colors"
           >
             Sell Us Your Wax
           </PulsatingButton>
