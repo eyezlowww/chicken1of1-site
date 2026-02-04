@@ -18,14 +18,6 @@ export default function Section({
   padding = 'lg',
   maxWidth = '7xl',
 }: SectionProps) {
-  // Unified dark background - no more alternating navy/dark sections
-  // All variants now use the same base color for cohesive flow
-  const backgroundClasses = {
-    default: 'bg-[#0a0a0a]',
-    darker: 'bg-[#0a0a0a]',
-    gradient: 'bg-[#0a0a0a]',
-  }
-
   const paddingClasses = {
     sm: 'py-8 md:py-12',
     md: 'py-12 md:py-16',
@@ -36,9 +28,10 @@ export default function Section({
   return (
     <section
       id={id}
-      className={`${backgroundClasses[background]} ${paddingClasses[padding]} ${className}`}
+      className={`relative bg-[#0a0a0a] overflow-hidden ${paddingClasses[padding]} ${className}`}
     >
-      <Container maxWidth={maxWidth}>{children}</Container>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-blood-700/8 rounded-full blur-[120px] pointer-events-none" />
+      <Container maxWidth={maxWidth} className="relative z-10">{children}</Container>
     </section>
   )
 }
