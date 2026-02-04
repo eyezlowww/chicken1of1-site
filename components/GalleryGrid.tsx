@@ -30,18 +30,19 @@ export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
         {items.map((item, index) => (
           <div
             key={index}
-            className="group cursor-pointer"
+            className="group cursor-pointer bg-black rounded-xl border border-cage-700/50 overflow-hidden hover:border-gold-500/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)]"
             onClick={() => setSelectedImage(item)}
           >
-            <div className="relative aspect-square overflow-hidden rounded-xl bg-dark-800 border border-dark-700 group-hover:border-gold-500/50 transition-colors duration-200">
+            {/* Card Image */}
+            <div className="relative aspect-square overflow-hidden">
               <Image
                 src={item.image}
                 alt={item.alt}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-200"
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <svg
                   className="w-8 h-8 text-white"
                   fill="none"
@@ -57,13 +58,15 @@ export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
                 </svg>
               </div>
             </div>
+
+            {/* Card Content */}
             {item.title && (
-              <div className="mt-3">
-                <h3 className="text-sm font-medium text-white">
+              <div className="p-5">
+                <h3 className="font-heading text-base font-bold text-white uppercase tracking-wide mb-2">
                   {item.title}
                 </h3>
                 {item.description && (
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-sm text-cage-400 leading-relaxed">
                     {item.description}
                   </p>
                 )}
@@ -73,6 +76,7 @@ export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
         ))}
       </div>
 
+      {/* Lightbox Modal */}
       {selectedImage && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
@@ -94,12 +98,12 @@ export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
               className="max-w-full max-h-full object-contain rounded-lg"
             />
             {selectedImage.title && (
-              <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-4 rounded-b-lg">
-                <h3 className="text-white font-semibold">
+              <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-4 rounded-b-lg">
+                <h3 className="text-white font-heading font-bold uppercase tracking-wide">
                   {selectedImage.title}
                 </h3>
                 {selectedImage.description && (
-                  <p className="text-gray-300 text-sm mt-1">
+                  <p className="text-cage-300 text-sm mt-1">
                     {selectedImage.description}
                   </p>
                 )}
