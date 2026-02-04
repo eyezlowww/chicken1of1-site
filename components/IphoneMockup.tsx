@@ -17,10 +17,12 @@ const RADIUS_V = (SCREEN_RADIUS / SCREEN_HEIGHT) * 100
 
 export interface IphoneMockupProps extends HTMLAttributes<HTMLDivElement> {
   src?: string
+  objectPosition?: string
 }
 
 export default function IphoneMockup({
   src,
+  objectPosition = 'top',
   className = '',
   style,
   ...props
@@ -50,7 +52,8 @@ export default function IphoneMockup({
           <img
             src={src}
             alt=""
-            className="block size-full object-cover object-top"
+            className="block size-full object-cover"
+            style={{ objectPosition }}
           />
         </div>
       )}
