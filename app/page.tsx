@@ -51,6 +51,8 @@ export default function HomePage() {
     <>
       <HeroFight />
 
+      <SellCTA />
+
       {/* Featured Hits */}
       <Section id="big-hits">
         <div className="text-center mb-12 scroll-animate">
@@ -74,7 +76,6 @@ export default function HomePage() {
 
       <SectionDivider variant="octagon-line" className="max-w-4xl mx-auto" />
 
-      <SellCTA />
       <CommunityHub />
 
       {/* Bottom CTA */}

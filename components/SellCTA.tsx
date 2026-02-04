@@ -32,7 +32,7 @@ export default function SellCTA() {
             We buy sealed UFC, wrestling, and combat sports product. Get a fair offer with no games.
           </p>
           <Link href="/sell-to-us" className="btn-primary text-lg px-10 py-4 animate-cta-pulse">
-            Sell Your Boxes
+            Sell Us Your Wax
           </Link>
         </div>
       </Container>

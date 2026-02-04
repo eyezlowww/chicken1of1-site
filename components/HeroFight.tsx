@@ -48,7 +48,7 @@ export default function HeroFight() {
             Thank you for stopping by. Take a look around and let us know if you have any questions. BAUK BAUK BABY!
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-500">
+          <div className="flex justify-center items-center animate-fade-in-up animation-delay-500">
             <Link
               href={process.env.NEXT_PUBLIC_WHATNOT_URL || 'https://www.whatnot.com/s/muoENH2W'}
               target="_blank"
@@ -56,9 +56,6 @@ export default function HeroFight() {
               className="btn-primary text-center min-w-[200px] animate-cta-pulse"
             >
               Watch Live
-            </Link>
-            <Link href="/sell-to-us" className="btn-outline text-center min-w-[200px]">
-              Sell Your Boxes
             </Link>
           </div>
         </div>
