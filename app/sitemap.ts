@@ -72,11 +72,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.30,
     },
-    {
-      url: `${baseUrl}/legal/shipping-returns`,
-      lastModified: getLastModified(90),
-      changeFrequency: 'yearly',
-      priority: 0.30,
-    },
   ]
 }
