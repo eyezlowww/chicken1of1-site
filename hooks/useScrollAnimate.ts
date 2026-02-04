@@ -1,13 +1,16 @@
 'use client'
 
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 /**
  * Hook that observes elements with .scroll-animate class
  * and adds .is-visible when they enter the viewport.
- * Uses IntersectionObserver for performance.
+ * Re-runs on route changes to catch new elements after client-side navigation.
  */
 export function useScrollAnimate() {
+  const pathname = usePathname()
+
   useEffect(() => {
     if (typeof window === 'undefined') return
 
@@ -26,9 +29,15 @@ export function useScrollAnimate() {
       }
     )
 
-    const elements = document.querySelectorAll('.scroll-animate')
-    elements.forEach((el) => observer.observe(el))
+    // Small delay to let the new page DOM render before scanning
+    const timer = setTimeout(() => {
+      const elements = document.querySelectorAll('.scroll-animate:not(.is-visible)')
+      elements.forEach((el) => observer.observe(el))
+    }, 50)
 
-    return () => observer.disconnect()
-  }, [])
+    return () => {
+      clearTimeout(timer)
+      observer.disconnect()
+    }
+  }, [pathname])
 }
