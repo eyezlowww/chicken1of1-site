@@ -231,8 +231,8 @@ export default function ContactForm() {
               Sending...
             </span>
           ) : (
-            <>
-              <span>Send Message</span>
+            <span className="inline-flex items-center">
+              Send Message
               <svg
                 className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1"
                 fill="none"
@@ -243,10 +243,10 @@ export default function ContactForm() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
                 />
               </svg>
-            </>
+            </span>
           )}
         </button>
       </form>

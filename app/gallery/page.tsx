@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Hero from '@/components/Hero'
+import Container from '@/components/Container'
 import Section from '@/components/Section'
 import GalleryGrid from '@/components/GalleryGrid'
 
@@ -20,86 +20,56 @@ const galleryItems = [
     image: '/gallery/hit-2.jpg',
     alt: 'The Rock Finest Masters Inscription Auto',
     title: 'The Rock Finest Masters Inscription Auto 1/25',
-    description: 'The Rock\'s 2025 Topps Finest WWE Finest Masters Inscription Auto numbered to 25. Features his most memorable catchphrase inscribed on the card. One of the featured cards from this set, pulled live on Chicken1of1\'s Whatnot or Fanatics Live channel!',
+    description: 'The Rock\'s 2025 Topps Finest WWE Finest Masters Inscription Auto numbered to 25. Features his most memorable catchphrase inscribed on the card. One of the featured cards from this set, pulled live on Chicken1of1\'s Whatnot channel!',
   },
   {
     image: '/gallery/hit-3.jpg',
     alt: 'Payton Talbott 1/1 Padparadscha Auto',
     title: 'Payton Talbott 1/1 Padparadscha Auto',
-    description: 'Payton Talbott\'s 2025 Topps Chrome Sapphire 1/1 Padparadscha Auto from the debut UFC Sapphire set. One of the biggest rookies in the current class with an on-card auto featuring a penguin he drew. Collectors love the Padparadscha 1/1s from this premium product, pulled live on Chicken1of1\'s Whatnot or Fanatics Live channel!',
+    description: 'Payton Talbott\'s 2025 Topps Chrome Sapphire 1/1 Padparadscha Auto from the debut UFC Sapphire set. One of the biggest rookies in the current class with an on-card auto featuring a penguin he drew. Collectors love the Padparadscha 1/1s from this premium product, pulled live on Chicken1of1\'s Whatnot channel!',
   },
   {
     image: '/gallery/hit-4.jpg',
     alt: 'Max Holloway Sapphire Selections Orange',
     title: 'Max Holloway Sapphire Selections Orange /25',
-    description: 'Max Holloway\'s 2025 Topps Chrome Sapphire Selections Orange numbered to 25. The first UFC Sapphire Selections insert - the most loved insert among all Sapphire products. A beautiful card featuring one of the legends of the UFC, pulled live on Chicken1of1\'s Whatnot or Fanatics Live channel!',
+    description: 'Max Holloway\'s 2025 Topps Chrome Sapphire Selections Orange numbered to 25. The first UFC Sapphire Selections insert - the most loved insert among all Sapphire products. A beautiful card featuring one of the legends of the UFC, pulled live on Chicken1of1\'s Whatnot channel!',
   },
   {
     image: '/gallery/hit-5.jpg',
     alt: 'Jon Jones Rookie Auto Blue Ink',
     title: 'Jon Jones Rookie Auto Blue Ink',
-    description: 'Jon Jones\' first ever rookie autograph from 2009 Topps Round 2 - the 2nd ever Topps UFC product. The blue ink is the base auto, with red ink versions /25 and patch autos /25 being his only other rookie autos that exist. Historic piece from the UFC GOAT, pulled live on Chicken1of1\'s Whatnot or Fanatics Live channel!',
+    description: 'Jon Jones\' first ever rookie autograph from 2009 Topps Round 2 - the 2nd ever Topps UFC product. The blue ink is the base auto, with red ink versions /25 and patch autos /25 being his only other rookie autos that exist. Historic piece from the UFC GOAT, pulled live on Chicken1of1\'s Whatnot channel!',
   },
   {
     image: '/gallery/hit-6.jpg',
     alt: 'Anderson Silva Blue Ink Auto',
     title: 'Anderson Silva Blue Ink Auto',
-    description: 'Anderson Silva\'s Blue Ink Auto from 2009 Topps Round 1 - the first ever licensed Topps UFC product where everyone is an official Topps UFC rookie. Rumored to only have 500 cases made, making any blue ink or red ink /25 auto a huge deal, especially with so few unopened boxes remaining. Historic rookie from the debut set, pulled live on Chicken1of1\'s Whatnot or Fanatics Live channel!',
-  },
-  {
-    image: '/gallery/hit-7.jpg',
-    alt: 'Insert Card',
-    title: 'Special Insert',
-    description: 'Rare insert from premium set',
-  },
-  {
-    image: '/gallery/hit-8.jpg',
-    alt: 'Numbered Card',
-    title: 'Numbered Hit',
-    description: 'Serial numbered card /99',
-  },
-  {
-    image: '/gallery/hit-9.jpg',
-    alt: 'Prizm Card',
-    title: 'Prizm Refractor',
-    description: 'Silver prizm refractor',
-  },
-  {
-    image: '/gallery/hit-10.jpg',
-    alt: 'Topps Chrome',
-    title: 'Chrome Hit',
-    description: 'Topps Chrome UFC card',
-  },
-  {
-    image: '/gallery/hit-11.jpg',
-    alt: 'Panini Card',
-    title: 'Panini Special',
-    description: 'Panini exclusive design',
-  },
-  {
-    image: '/gallery/hit-12.jpg',
-    alt: 'Dual Auto',
-    title: 'Dual Autograph',
-    description: 'Two-fighter autograph card',
+    description: 'Anderson Silva\'s Blue Ink Auto from 2009 Topps Round 1 - the first ever licensed Topps UFC product where everyone is an official Topps UFC rookie. Rumored to only have 500 cases made, making any blue ink or red ink /25 auto a huge deal, especially with so few unopened boxes remaining. Historic rookie from the debut set, pulled live on Chicken1of1\'s Whatnot channel!',
   },
 ]
 
 export default function GalleryPage() {
   return (
     <>
-      <Hero
-        title="Big Hits Gallery"
-        subtitle="Epic Pulls from Recent Breaks"
-        description="Check out the amazing cards we've pulled in our live UFC breaks"
-        showCTA={false}
-      />
+      <section className="relative py-20 md:py-28 overflow-hidden bg-[#0a0a0a]">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blood-700/15 rounded-full blur-[120px]" />
+        <div className="absolute inset-0 cage-pattern opacity-20" />
+        <Container className="relative z-10">
+          <div className="text-center max-w-3xl mx-auto animate-fade-in-up">
+            <h1 className="font-heading text-4xl md:text-6xl font-bold text-white uppercase tracking-tight mb-4">
+              Big Hits Gallery
+            </h1>
+            <p className="text-xl text-cage-300">Epic Pulls from Recent Breaks</p>
+          </div>
+        </Container>
+      </section>
 
       <Section>
-        <div className="mb-12 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+        <div className="mb-12 text-center scroll-animate">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white uppercase tracking-tight mb-4">
             Recent Pulls
           </h2>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-cage-400 max-w-2xl mx-auto">
             Every card shown here was pulled live on stream with full
             transparency. No staged pulls, just authentic breaking action.
           </p>
@@ -107,21 +77,18 @@ export default function GalleryPage() {
 
         <GalleryGrid items={galleryItems} columns={3} />
 
-        <div className="mt-16 text-center">
+        <div className="mt-16 text-center scroll-animate">
           <div className="card max-w-2xl mx-auto">
-            <h3 className="text-xl font-semibold text-white mb-4">
+            <h3 className="text-xl font-heading font-semibold text-white uppercase tracking-wide mb-4">
               Want to See These Pulls Live?
             </h3>
-            <p className="text-gray-300 mb-6">
-              Join us on Whatnot and Fanatics Live for authentic UFC card breaks.
+            <p className="text-cage-300 mb-6">
+              Join us on Whatnot for authentic UFC card breaks.
               Every break is streamed live with full transparency.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href={
-                  process.env.NEXT_PUBLIC_WHATNOT_URL ||
-                  'https://www.whatnot.com/s/muoENH2W'
-                }
+                href={process.env.NEXT_PUBLIC_WHATNOT_URL || 'https://www.whatnot.com/s/muoENH2W'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"
@@ -129,35 +96,29 @@ export default function GalleryPage() {
                 Watch on Whatnot
               </a>
               <a
-                href={
-                  process.env.NEXT_PUBLIC_FANATICS_URL ||
-                  'https://www.fanatics.live/shops/chicken1of1'
-                }
+                href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/chicken1of1'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-outline"
               >
-                Fanatics Live
+                Follow on Instagram
               </a>
             </div>
           </div>
         </div>
       </Section>
 
-      <Section background="darker">
-        <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+      <Section>
+        <div className="text-center max-w-3xl mx-auto scroll-animate">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-tight mb-4">
             Follow for Daily Hits
           </h2>
-          <p className="text-lg text-gray-400 mb-8">
+          <p className="text-lg text-cage-400 mb-8">
             Get daily updates on our biggest pulls and break announcements on
             Instagram. Don&apos;t miss the next epic hit!
           </p>
           <a
-            href={
-              process.env.NEXT_PUBLIC_INSTAGRAM_URL ||
-              'https://www.instagram.com/chicken1of1'
-            }
+            href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/chicken1of1'}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary inline-flex items-center space-x-2"

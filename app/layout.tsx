@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Oswald } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import ScrollAnimateProvider from '@/components/ScrollAnimateProvider'
 import Script from 'next/script'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald' })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'),
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
     template: '%s | Chicken1of1',
   },
   description:
-    'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience. Watch live on Whatnot and Fanatics Live.',
+    'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience. Watch live on Whatnot.',
   keywords: [
     'UFC cards',
     'sports cards',
@@ -24,7 +26,6 @@ export const metadata: Metadata = {
     'Bauk Bauk Baby',
     'UFC sports cards',
     'Whatnot',
-    'Fanatics Live',
   ],
   authors: [{ name: 'Chicken1of1' }],
   creator: 'Chicken1of1',
@@ -86,7 +87,7 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  themeColor: '#dc2626',
+  themeColor: '#f59e0b',
 }
 
 const organizationSchema = {
@@ -94,8 +95,9 @@ const organizationSchema = {
   '@type': ['Organization', 'LocalBusiness'],
   name: 'Chicken1of1',
   alternateName: 'Chicken1of1 Card Breaks',
+  additionalType: 'BuyingService',
   description:
-    'UFC & Entertainment Card Breaks - Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience',
+    'UFC & Entertainment Card Breaks and Sealed Product Buying Service - Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience. We also buy sealed UFC product.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
   logo: `${
     process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'
@@ -128,8 +130,6 @@ const organizationSchema = {
       'https://www.instagram.com/chicken1of1',
     process.env.NEXT_PUBLIC_WHATNOT_URL ||
       'https://www.whatnot.com/s/muoENH2W',
-    process.env.NEXT_PUBLIC_FANATICS_URL ||
-      'https://www.fanatics.live/shops/chicken1of1',
   ],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
@@ -213,6 +213,12 @@ const websiteSchema = {
         name: 'FAQ',
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/faq`,
       },
+      {
+        '@type': 'ListItem',
+        position: 5,
+        name: 'Sell To Us',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/sell-to-us`,
+      },
     ],
   },
 }
@@ -226,7 +232,7 @@ export default function RootLayout({
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={`${inter.variable} ${oswald.variable} font-sans`}>
       <head>
         {/* Preload critical resources */}
         <link
@@ -245,11 +251,9 @@ export default function RootLayout({
         {/* DNS prefetch for external domains */}
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
-        <link rel="dns-prefetch" href="//client.crisp.chat" />
-        <link rel="dns-prefetch" href="//code.tidio.co" />
         <link rel="dns-prefetch" href="//www.instagram.com" />
         <link rel="dns-prefetch" href="//www.whatnot.com" />
-        <link rel="dns-prefetch" href="//www.fanatics.live" />
+        <link rel="dns-prefetch" href="//analytics.ahrefs.com" />
 
         {/* Preconnect for critical third party domains */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
@@ -299,8 +303,12 @@ export default function RootLayout({
           </Script>
         )}
 
-        {/* Chat Widget Placeholder - Ready for integration */}
-        {/* Add your preferred chat widget integration here */}
+        {/* Ahrefs Web Analytics */}
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="t6KLl6dX4C8OrSdwWkxegg"
+          strategy="afterInteractive"
+        />
       </head>
       <body>
         {/* Google Tag Manager (noscript) */}
@@ -315,6 +323,7 @@ export default function RootLayout({
           </noscript>
         )}
 
+        <ScrollAnimateProvider />
         <Header />
         <main>{children}</main>
         <Footer />

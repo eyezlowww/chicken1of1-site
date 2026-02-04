@@ -18,10 +18,12 @@ export default function Section({
   padding = 'lg',
   maxWidth = '7xl',
 }: SectionProps) {
+  // Unified dark background - no more alternating navy/dark sections
+  // All variants now use the same base color for cohesive flow
   const backgroundClasses = {
-    default: 'bg-dark-950',
-    darker: 'bg-dark-900',
-    gradient: 'bg-gradient-to-b from-dark-950 to-dark-900',
+    default: 'bg-[#0a0a0a]',
+    darker: 'bg-[#0a0a0a]',
+    gradient: 'bg-[#0a0a0a]',
   }
 
   const paddingClasses = {

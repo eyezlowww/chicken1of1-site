@@ -1,253 +1,42 @@
 {
+  "manufacturers": [
+    { "id": "topps", "name": "Topps", "active": true },
+    { "id": "panini", "name": "Panini", "active": false, "note": "Legacy products - UFC license moved to Topps" }
+  ],
+  "productLines": [
+    { "id": "topps-chrome", "name": "Topps Chrome UFC", "manufacturer": "topps", "tier": "mid" },
+    { "id": "topps-chrome-sapphire", "name": "Topps Chrome Sapphire UFC", "manufacturer": "topps", "tier": "premium" },
+    { "id": "topps-finest", "name": "Topps Finest UFC", "manufacturer": "topps", "tier": "premium" },
+    { "id": "topps-knockout", "name": "Topps Knockout", "manufacturer": "topps", "tier": "high" },
+    { "id": "topps-chrome-boxing", "name": "Topps Chrome Boxing", "manufacturer": "topps", "tier": "mid" },
+    { "id": "panini-prizm", "name": "Panini Prizm UFC", "manufacturer": "panini", "tier": "mid" },
+    { "id": "panini-select", "name": "Panini Select UFC", "manufacturer": "panini", "tier": "mid" },
+    { "id": "panini-chronicles", "name": "Panini Chronicles UFC", "manufacturer": "panini", "tier": "entry" },
+    { "id": "panini-immaculate", "name": "Panini Immaculate UFC", "manufacturer": "panini", "tier": "ultra-premium" },
+    { "id": "panini-national-treasures", "name": "Panini National Treasures UFC", "manufacturer": "panini", "tier": "ultra-premium" },
+    { "id": "panini-donruss", "name": "Panini Donruss UFC", "manufacturer": "panini", "tier": "entry" },
+    { "id": "panini-obsidian", "name": "Panini Obsidian UFC", "manufacturer": "panini", "tier": "high" }
+  ],
   "products": [
-    {
-      "id": "prizm-2023-hobby",
-      "name": "2023 Panini Prizm UFC Hobby Box",
-      "category": "Prizm",
-      "year": 2023,
-      "marketPrice": 350,
-      "buyPrice": 280,
-      "buyPriceCredit": 315,
-      "inStock": true,
-      "image": "/products/prizm-2023.jpg"
-    },
-    {
-      "id": "select-2023-hobby",
-      "name": "2023 Panini Select UFC Hobby Box",
-      "category": "Select",
-      "year": 2023,
-      "marketPrice": 400,
-      "buyPrice": 320,
-      "buyPriceCredit": 360,
-      "inStock": true,
-      "image": "/products/select-2023.jpg"
-    },
-    {
-      "id": "chronicles-2023-hobby",
-      "name": "2023 Panini Chronicles UFC Hobby Box",
-      "category": "Chronicles",
-      "year": 2023,
-      "marketPrice": 225,
-      "buyPrice": 180,
-      "buyPriceCredit": 200,
-      "inStock": true,
-      "image": "/products/chronicles-2023.jpg"
-    },
-    {
-      "id": "immaculate-2023-hobby",
-      "name": "2023 Panini Immaculate UFC Hobby Box",
-      "category": "Immaculate",
-      "year": 2023,
-      "marketPrice": 1200,
-      "buyPrice": 960,
-      "buyPriceCredit": 1080,
-      "inStock": true,
-      "image": "/products/immaculate-2023.jpg"
-    },
-    {
-      "id": "donruss-2023-hobby",
-      "name": "2023 Panini Donruss UFC Hobby Box",
-      "category": "Donruss",
-      "year": 2023,
-      "marketPrice": 150,
-      "buyPrice": 105,
-      "buyPriceCredit": 120,
-      "inStock": true,
-      "image": "/products/donruss-2023.jpg"
-    },
-    {
-      "id": "prizm-2022-hobby",
-      "name": "2022 Panini Prizm UFC Hobby Box",
-      "category": "Prizm",
-      "year": 2022,
-      "marketPrice": 300,
-      "buyPrice": 240,
-      "buyPriceCredit": 270,
-      "inStock": true,
-      "image": "/products/prizm-2022.jpg"
-    },
-    {
-      "id": "select-2022-hobby",
-      "name": "2022 Panini Select UFC Hobby Box",
-      "category": "Select",
-      "year": 2022,
-      "marketPrice": 350,
-      "buyPrice": 280,
-      "buyPriceCredit": 315,
-      "inStock": true,
-      "image": "/products/select-2022.jpg"
-    },
-    {
-      "id": "chronicles-2022-hobby",
-      "name": "2022 Panini Chronicles UFC Hobby Box",
-      "category": "Chronicles",
-      "year": 2022,
-      "marketPrice": 200,
-      "buyPrice": 160,
-      "buyPriceCredit": 180,
-      "inStock": true,
-      "image": "/products/chronicles-2022.jpg"
-    },
-    {
-      "id": "obsidian-2022-hobby",
-      "name": "2022 Panini Obsidian UFC Hobby Box",
-      "category": "Obsidian",
-      "year": 2022,
-      "marketPrice": 450,
-      "buyPrice": 360,
-      "buyPriceCredit": 405,
-      "inStock": true,
-      "image": "/products/obsidian-2022.jpg"
-    },
-    {
-      "id": "national-treasures-2022",
-      "name": "2022 Panini National Treasures UFC Hobby Box",
-      "category": "National Treasures",
-      "year": 2022,
-      "marketPrice": 2500,
-      "buyPrice": 2000,
-      "buyPriceCredit": 2250,
-      "inStock": true,
-      "image": "/products/national-treasures-2022.jpg"
-    },
-    {
-      "id": "prizm-2021-hobby",
-      "name": "2021 Panini Prizm UFC Hobby Box",
-      "category": "Prizm",
-      "year": 2021,
-      "marketPrice": 450,
-      "buyPrice": 360,
-      "buyPriceCredit": 405,
-      "inStock": true,
-      "image": "/products/prizm-2021.jpg"
-    },
-    {
-      "id": "select-2021-hobby",
-      "name": "2021 Panini Select UFC Hobby Box",
-      "category": "Select",
-      "year": 2021,
-      "marketPrice": 500,
-      "buyPrice": 400,
-      "buyPriceCredit": 450,
-      "inStock": true,
-      "image": "/products/select-2021.jpg"
-    },
-    {
-      "id": "chronicles-2021-hobby",
-      "name": "2021 Panini Chronicles UFC Hobby Box",
-      "category": "Chronicles",
-      "year": 2021,
-      "marketPrice": 275,
-      "buyPrice": 220,
-      "buyPriceCredit": 248,
-      "inStock": true,
-      "image": "/products/chronicles-2021.jpg"
-    },
-    {
-      "id": "topps-chrome-2023",
-      "name": "2023 Topps Chrome UFC Hobby Box",
-      "category": "Topps Chrome",
-      "year": 2023,
-      "marketPrice": 200,
-      "buyPrice": 160,
-      "buyPriceCredit": 180,
-      "inStock": true,
-      "image": "/products/topps-chrome-2023.jpg"
-    },
-    {
-      "id": "topps-knockout-2023",
-      "name": "2023 Topps Knockout UFC Hobby Box",
-      "category": "Topps Knockout",
-      "year": 2023,
-      "marketPrice": 375,
-      "buyPrice": 300,
-      "buyPriceCredit": 338,
-      "inStock": true,
-      "image": "/products/topps-knockout-2023.jpg"
-    },
-    {
-      "id": "prizm-blaster-2023",
-      "name": "2023 Panini Prizm UFC Blaster Box",
-      "category": "Prizm",
-      "year": 2023,
-      "marketPrice": 40,
-      "buyPrice": 28,
-      "buyPriceCredit": 32,
-      "inStock": true,
-      "image": "/products/prizm-blaster-2023.jpg"
-    },
-    {
-      "id": "select-blaster-2023",
-      "name": "2023 Panini Select UFC Blaster Box",
-      "category": "Select",
-      "year": 2023,
-      "marketPrice": 45,
-      "buyPrice": 32,
-      "buyPriceCredit": 36,
-      "inStock": true,
-      "image": "/products/select-blaster-2023.jpg"
-    },
-    {
-      "id": "chronicles-blaster-2023",
-      "name": "2023 Panini Chronicles UFC Blaster Box",
-      "category": "Chronicles",
-      "year": 2023,
-      "marketPrice": 30,
-      "buyPrice": 21,
-      "buyPriceCredit": 24,
-      "inStock": true,
-      "image": "/products/chronicles-blaster-2023.jpg"
-    },
-    {
-      "id": "prizm-retail-2023",
-      "name": "2023 Panini Prizm UFC Retail Box",
-      "category": "Prizm",
-      "year": 2023,
-      "marketPrice": 180,
-      "buyPrice": 144,
-      "buyPriceCredit": 162,
-      "inStock": true,
-      "image": "/products/prizm-retail-2023.jpg"
-    },
-    {
-      "id": "select-retail-2023",
-      "name": "2023 Panini Select UFC Retail Box",
-      "category": "Select",
-      "year": 2023,
-      "marketPrice": 200,
-      "buyPrice": 160,
-      "buyPriceCredit": 180,
-      "inStock": true,
-      "image": "/products/select-retail-2023.jpg"
-    }
+    { "id": "topps-chrome-ufc-2024-hobby", "productLine": "topps-chrome", "year": 2024, "name": "2024 Topps Chrome UFC Hobby Box", "format": "hobby", "manufacturer": "topps" },
+    { "id": "topps-chrome-ufc-2023-hobby", "productLine": "topps-chrome", "year": 2023, "name": "2023 Topps Chrome UFC Hobby Box", "format": "hobby", "manufacturer": "topps" },
+    { "id": "topps-chrome-sapphire-ufc-2025", "productLine": "topps-chrome-sapphire", "year": 2025, "name": "2025 Topps Chrome Sapphire UFC Hobby Box", "format": "hobby", "manufacturer": "topps" },
+    { "id": "topps-finest-ufc-2025-hobby", "productLine": "topps-finest", "year": 2025, "name": "2025 Topps Finest UFC Hobby Box", "format": "hobby", "manufacturer": "topps" },
+    { "id": "topps-knockout-2023-hobby", "productLine": "topps-knockout", "year": 2023, "name": "2023 Topps Knockout UFC Hobby Box", "format": "hobby", "manufacturer": "topps" },
+    { "id": "topps-chrome-boxing-2024-hobby", "productLine": "topps-chrome-boxing", "year": 2024, "name": "2024 Topps Chrome Boxing Hobby Box", "format": "hobby", "manufacturer": "topps" },
+    { "id": "prizm-2023-hobby", "productLine": "panini-prizm", "year": 2023, "name": "2023 Panini Prizm UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "prizm-2023-blaster", "productLine": "panini-prizm", "year": 2023, "name": "2023 Panini Prizm UFC Blaster Box", "format": "blaster", "manufacturer": "panini" },
+    { "id": "prizm-2022-hobby", "productLine": "panini-prizm", "year": 2022, "name": "2022 Panini Prizm UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "prizm-2021-hobby", "productLine": "panini-prizm", "year": 2021, "name": "2021 Panini Prizm UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "select-2023-hobby", "productLine": "panini-select", "year": 2023, "name": "2023 Panini Select UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "select-2022-hobby", "productLine": "panini-select", "year": 2022, "name": "2022 Panini Select UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "select-2021-hobby", "productLine": "panini-select", "year": 2021, "name": "2021 Panini Select UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "chronicles-2023-hobby", "productLine": "panini-chronicles", "year": 2023, "name": "2023 Panini Chronicles UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "chronicles-2022-hobby", "productLine": "panini-chronicles", "year": 2022, "name": "2022 Panini Chronicles UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "immaculate-2023-hobby", "productLine": "panini-immaculate", "year": 2023, "name": "2023 Panini Immaculate UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "national-treasures-2022", "productLine": "panini-national-treasures", "year": 2022, "name": "2022 Panini National Treasures UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "donruss-2023-hobby", "productLine": "panini-donruss", "year": 2023, "name": "2023 Panini Donruss UFC Hobby Box", "format": "hobby", "manufacturer": "panini" },
+    { "id": "obsidian-2022-hobby", "productLine": "panini-obsidian", "year": 2022, "name": "2022 Panini Obsidian UFC Hobby Box", "format": "hobby", "manufacturer": "panini" }
   ],
-  "categories": [
-    "Prizm",
-    "Select",
-    "Chronicles",
-    "Immaculate",
-    "Donruss",
-    "Obsidian",
-    "National Treasures",
-    "Topps Chrome",
-    "Topps Knockout"
-  ],
-  "years": [2023, 2022, 2021, 2020, 2019],
-  "bulkBonuses": [
-    {
-      "min": 1000,
-      "max": 4999,
-      "bonus": 5
-    },
-    {
-      "min": 5000,
-      "max": 9999,
-      "bonus": 7
-    },
-    {
-      "min": 10000,
-      "max": null,
-      "bonus": 10
-    }
-  ]
+  "formats": ["hobby", "retail", "blaster", "mega", "case", "cello", "hanger"]
 }

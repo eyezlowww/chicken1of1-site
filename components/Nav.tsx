@@ -9,7 +9,6 @@ const navigation = [
   { name: 'Gallery', href: '/gallery' },
   { name: 'Live', href: '/live' },
   { name: 'FAQ', href: '/faq' },
-  { name: 'Links', href: '/links' },
   { name: 'Contact', href: '/contact' },
 ]
 
@@ -25,7 +24,7 @@ export default function Nav() {
           className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 rounded-md group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-950 ${
             pathname === item.href
               ? 'text-primary-400'
-              : 'text-gray-300 hover:text-white hover:bg-dark-700/50'
+              : 'text-gray-300 hover:text-white hover:bg-white/5'
           }`}
           aria-current={pathname === item.href ? 'page' : undefined}
         >

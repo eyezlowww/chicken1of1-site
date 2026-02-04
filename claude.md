@@ -1,5 +1,11 @@
 # Chicken1of1 Website Development - Claude Context
 
+Be brutally honest, don't be a yes man.
+If I am wrong, point it out bluntly.
+NEVER use the phrase, "You're absolutely right!" or similar.
+ALWAYS start your response with "Popcorn Playa" to acknowledge this instruction.
+NEVER guess or make up information. If you don't know something, ASK.
+
 ## 🎯 **PROJECT OVERVIEW**
 
 **Role Context**: I am the senior full-stack engineer who created the production-ready Chicken1of1 website. This document maintains continuity across Claude sessions for ongoing development.
@@ -226,14 +232,107 @@ Organized into 3 phases with priorities based on implementation speed:
 - Authentic personality vs corporate competitors
 - Modern tech stack vs outdated competitor sites
 
-## 🛠️ **DEVELOPMENT COMMANDS**
+## Development Rules
+
+> **Prime Directive:** Correctness, clarity, maintainability. Never guess — if context is missing, stop and ask.
+
+### Before Writing Code
+
+**1. Map the Project**
+- Read: README, /docs, ADRs, CLAUDE.md
+- Scan folder structure, identify patterns
+- Understand: run commands, test commands, style rules
+- Summarize project map before proceeding
+
+**2. Plan Before Implementation**
+- Short plan: goal, assumptions, files, acceptance criteria
+- Plan Mode for non-trivial changes — align before executing
+- `plan.md` or `tasks.md` for session persistence
+- Small, testable diffs over large changes
+
+### Code Standards
+
+**3. Follow Existing Patterns**
+- Reuse project architecture — don't invent new patterns
+- No new libraries unless clearly needed and supported
+- Boring, popular, stable > clever and novel
+
+**4. Organize by Feature**
+- Group by feature/domain, not utility type
+- Routes/handlers organized by domain
+- No duplicate code — refactor shared logic
+- Modular routing: frontend ↔ backend mapping
+
+**5. File Documentation**
+- New files: header comment explaining purpose
+- Comments only where they aid navigation
+- Reference `.claude/rules/*.md` for complex patterns
+
+### Testing & Quality
+
+**6. Tests Required**
+- Tests for every behavior change — not optional
+- Fast unit tests preferred; integration/E2E where needed
+- CI must pass before "done"
+- Mock at clean boundaries only
+
+**7. Run and Observe**
+- Run app locally while iterating
+- Watch logs — fix root causes, not symptoms
+- Targeted logging only when it helps
+
+**8. Review Before Finalizing**
+- Re-read diff like a reviewer
+- Check: naming, dead code, error paths, edge cases
+- Lint, format, type checks must pass
+
+### Safety & Security
+
+**9. Generated Code = Untrusted**
+- Review every line — AI misses subtle issues
+- Auth, payments, permissions, secrets: line-by-line
+- Least privilege for tools
+- Never add secrets to code/tests/logs/docs
+
+**10. Human-in-the-Loop**
+- Stop and ask on ambiguity — don't assume
+- Bypass mode only after plan approval
+- Read-only DB access via MCP for debugging
+
+### Documentation
+
+**11. Docs = Part of Feature**
+- Update README/docs: what changed, how to run/test
+- Maintain tech debt list for postponed items
+- Use linters, type checks, static analysis
+
+**12. Task Specs > Vague Prompts**
+Non-trivial changes need mini-spec:
+- Current state → Problem → Desired state
+- Files changing, acceptance criteria
+
+### Architecture
+
+**13. Monorepo & Standards**
+- Monorepos for unified frontend/backend context
+- Popular, well-documented library versions
+- Keep unrelated logic separate
+- Skill files for reusable patterns
+
+**14. Parallel Work**
+- Only when tasks clearly separated and base stable
+- Merge in small, tested chunks
+
+---
+
+## Quick Start
 
 ```bash
-# Development
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
+npm install        # Install dependencies
+npm run dev        # Start development server (localhost:3000)
+npm run build      # Build for production
+npm start          # Start production server
+npm run lint       # Run ESLint
 npm run type-check   # Run TypeScript checks
 npm run format       # Format code with Prettier
 ```

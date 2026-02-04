@@ -16,6 +16,15 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
   },
+  async redirects() {
+    return [
+      {
+        source: '/links',
+        destination: '/',
+        permanent: true,
+      },
+    ]
+  },
   async headers() {
     return [
       {

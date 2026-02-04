@@ -33,7 +33,7 @@ export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
             className="group cursor-pointer"
             onClick={() => setSelectedImage(item)}
           >
-            <div className="relative aspect-square overflow-hidden rounded-xl bg-dark-800 border border-dark-700 group-hover:border-primary-500 transition-colors duration-200">
+            <div className="relative aspect-square overflow-hidden rounded-xl bg-dark-800 border border-dark-700 group-hover:border-gold-500/50 transition-colors duration-200">
               <Image
                 src={item.image}
                 alt={item.alt}

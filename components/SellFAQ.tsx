@@ -1,119 +1,101 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
+import { useState } from 'react'
 
 export default function SellFAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const faqs = [
     {
-      question: 'How do you determine your buying prices?',
-      answer: 'We base our prices on current market values from eBay sold listings, COMC, and other major marketplaces. We typically offer 70-85% of market value for cash and up to 90% for store credit. Our prices update daily to reflect market changes.',
+      question: 'What types of products do you buy?',
+      answer: 'We buy sealed UFC, MMA, boxing, wrestling, and combat sports boxes and cases. This includes Topps Chrome, Topps Finest, Topps Sapphire, Panini Prizm, Select, Chronicles, and more. We also consider entertainment products (Disney, Marvel) on a case-by-case basis.',
+    },
+    {
+      question: 'How do you determine your offer?',
+      answer: 'We base offers on current market values from eBay sold listings and other major marketplaces. We typically pay 70-85% of market value depending on the product, quantity, and condition. We are upfront about our pricing - no hidden fees or bait-and-switch.',
     },
     {
       question: 'What condition do the boxes need to be in?',
-      answer: 'We prefer factory-sealed boxes in mint condition, but we also buy boxes with minor wear. Mint condition gets full price, near-mint gets 90% of quoted price, and boxes with minor damage get 80%. We do not buy opened boxes or boxes with significant damage.',
+      answer: 'We prefer factory-sealed boxes in good condition. Boxes with minor shelf wear are fine. We can still make offers on boxes with some damage, but the offer will reflect the condition. We do not buy opened or searched product.',
     },
     {
       question: 'How quickly will I get paid?',
-      answer: 'Once we receive and verify your boxes (typically same day), payment is sent within 24 hours. PayPal and Zelle are instant, checks take 3-5 business days to arrive. We pride ourselves on fast payment!',
+      answer: 'Once we receive and verify your boxes, payment is typically sent within 24-48 hours via PayPal, Zelle, or Venmo. We will agree on payment method before you ship.',
     },
     {
-      question: 'Do you buy single cards or only sealed boxes?',
-      answer: 'Currently, we focus exclusively on factory-sealed boxes, cases, and retail products (blasters, megas, hangers). We do not buy single cards at this time, but we can recommend trusted partners who do.',
+      question: 'Who pays for shipping?',
+      answer: 'For larger deals we can provide a shipping label. For smaller submissions, the seller typically covers shipping. We will work out the details when we make our offer.',
     },
     {
-      question: 'Is shipping insured and who pays for it?',
-      answer: "Shipping is 100% FREE for you! We provide a prepaid, fully insured shipping label. All packages are insured up to the full value of your quote. You're protected from the moment you ship until we confirm receipt.",
-    },
-    {
-      question: 'What UFC/MMA products do you buy?',
-      answer: 'We buy all major UFC releases including Panini Prizm, Select, Chronicles, Donruss, Immaculate, National Treasures, Obsidian, and Topps Chrome/Knockout. We also buy ONE Championship and PFL products.',
-    },
-    {
-      question: 'Can I get a higher price if I wait?',
-      answer: 'Our quotes are valid for 48 hours and reflect current market conditions. While prices can go up, they can also go down. We recommend accepting quotes promptly if you\'re happy with the offer. The UFC market can be volatile!',
-    },
-    {
-      question: 'What if I have a large collection to sell?',
-      answer: 'We love large collections! Collections over $1,000 get automatic bulk bonuses: 5% extra for $1-5K, 7% for $5-10K, and 10% for $10K+. For collections over $25K, we can arrange in-person pickup in select cities.',
+      question: 'Do you buy single cards?',
+      answer: 'Currently we focus on sealed product only - boxes, cases, and retail formats. We do not buy single cards, but we can point you to trusted buyers if needed.',
     },
     {
       question: 'Do you buy from outside the United States?',
-      answer: 'Currently, we only buy from sellers within the United States (including Alaska and Hawaii). International shipping and customs make it difficult to offer competitive prices for international sellers.',
+      answer: 'Currently we only buy from sellers within the United States. International shipping and customs complications make it difficult to offer fair prices for international sellers.',
     },
     {
-      question: 'What happens if my boxes are damaged in shipping?',
-      answer: "Don't worry - you're fully covered! Our insurance covers the full quoted value. If anything happens during shipping, we handle the insurance claim and you still get paid your full quote amount.",
+      question: 'What if I have a large collection?',
+      answer: 'We love large collections. Submit through the form with all your products listed and we will put together a comprehensive offer. Larger collections often get better per-unit pricing.',
     },
-  ];
+  ]
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-4">
+      <h2 className="font-heading text-3xl md:text-4xl font-bold text-white text-center uppercase tracking-tight mb-4">
         Frequently Asked Questions
       </h2>
-      <p className="text-gray-400 text-center mb-12">
-        Everything you need to know about selling your UFC sealed boxes to us
+      <p className="text-cage-400 text-center mb-12">
+        Common questions about selling your sealed product to us
       </p>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {faqs.map((faq, index) => (
           <div
             key={index}
-            className="bg-gray-900 rounded-lg overflow-hidden border border-gray-800 hover:border-yellow-400 transition-colors"
+            className="bg-dark-800 rounded-lg overflow-hidden border border-cage-700 hover:border-gold-500/30 transition-colors"
           >
             <button
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-800 transition-colors"
+              className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-dark-700/50 transition-colors"
+              aria-expanded={openIndex === index}
             >
               <span className="font-semibold text-white">{faq.question}</span>
               <svg
-                className={`w-5 h-5 text-yellow-400 transition-transform ${
+                className={`w-5 h-5 text-gold-400 transition-transform flex-shrink-0 ml-4 ${
                   openIndex === index ? 'rotate-180' : ''
                 }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
             {openIndex === index && (
               <div className="px-6 pb-4">
-                <p className="text-gray-300">{faq.answer}</p>
+                <p className="text-cage-300">{faq.answer}</p>
               </div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Contact CTA */}
-      <div className="mt-12 p-6 bg-gray-900 rounded-lg text-center">
-        <h3 className="text-xl font-bold text-white mb-3">Still Have Questions?</h3>
-        <p className="text-gray-400 mb-4">
-          Our team is here to help! Reach out anytime for personalized assistance.
+      <div className="mt-12 p-6 bg-dark-800 rounded-lg border border-cage-700 text-center">
+        <h3 className="font-heading text-xl font-bold text-white uppercase mb-3">Still Have Questions?</h3>
+        <p className="text-cage-400 mb-4">
+          Reach out anytime. We are happy to help.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="mailto:hello@chicken1of1.com"
-            className="inline-flex items-center justify-center px-6 py-3 bg-yellow-400 text-black rounded-lg font-semibold hover:bg-yellow-300 transition-colors"
-          >
-            📧 Email Us
+          <a href="mailto:hello@chicken1of1.com" className="btn-primary">
+            Email Us
           </a>
-          <a
-            href="/contact"
-            className="inline-flex items-center justify-center px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600 transition-colors"
-          >
-            💬 Contact Form
+          <a href="/contact" className="btn-outline">
+            Contact Form
           </a>
         </div>
       </div>
     </div>
-  );
+  )
 }

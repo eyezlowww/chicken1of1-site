@@ -44,7 +44,7 @@ export default function TestimonialScreenshots() {
             className="group cursor-pointer hover-lift"
             onClick={() => setSelectedImage(screenshot)}
           >
-            <div className="card border-2 border-dark-600 hover:border-primary-500 transition-colors">
+            <div className="card border-2 border-dark-600 hover:border-gold-500/30 transition-colors">
               <div className="relative aspect-video overflow-hidden rounded-lg mb-3">
                 <Image
                   src={screenshot.image}

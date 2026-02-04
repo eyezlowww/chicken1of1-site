@@ -17,14 +17,6 @@ const buttons = [
     primary: false,
     external: true,
   },
-  {
-    text: 'Fanatics Live Shop',
-    href:
-      process.env.NEXT_PUBLIC_FANATICS_URL ||
-      'https://www.fanatics.live/shops/chicken1of1',
-    primary: false,
-    external: true,
-  },
 ]
 
 export default function CTAButtons() {

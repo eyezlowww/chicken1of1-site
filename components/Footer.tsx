@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Container from './Container'
 import SocialBar from './SocialBar'
+import FooterFireBackground from './FooterFireBackground'
 
 const navigation = {
   main: [
@@ -9,8 +10,8 @@ const navigation = {
     { name: 'Gallery', href: '/gallery' },
     { name: 'Live', href: '/live' },
     { name: 'FAQ', href: '/faq' },
-    { name: 'Links', href: '/links' },
     { name: 'Contact', href: '/contact' },
+    { name: 'Sell To Us', href: '/sell-to-us' },
   ],
   legal: [
     { name: 'Terms of Service', href: '/legal/terms' },
@@ -23,8 +24,11 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-dark-900 border-t border-dark-700" role="contentinfo">
-      <Container>
+    <footer className="relative bg-[#0a0a0a] border-t border-white/10 overflow-hidden" role="contentinfo">
+      {/* Animated fire/sparks shader background */}
+      <FooterFireBackground />
+
+      <Container className="relative z-10">
         <div className="py-12 md:py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
@@ -41,12 +45,13 @@ export default function Footer() {
                   className="h-8 w-8"
                 />
                 <span className="text-lg font-bold text-white">
-                  Chicken<span className="text-primary-400">1of1</span>
+                  Chicken<span className="text-gold-400">1of1</span>
                 </span>
               </Link>
               <p className="text-gray-400 mb-6 max-w-md">
                 Bauk Bauk Baby — UFC & Entertainment Card Breaks. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience.
               </p>
+              <p className="text-xs text-cage-500 mt-2 font-heading uppercase tracking-wider">UFC Card Authority Since 2021</p>
               <SocialBar />
             </div>
 
@@ -93,7 +98,7 @@ export default function Footer() {
             </nav>
           </div>
 
-          <div className="mt-8 pt-8 border-t border-dark-700 flex flex-col md:flex-row justify-between items-center">
+          <div className="mt-8 pt-8 border-t border-gold-500/20 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm" role="contentinfo">
               © {currentYear} Chicken1of1. All rights reserved.
             </p>

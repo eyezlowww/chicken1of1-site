@@ -12,7 +12,7 @@
   }
 
   body {
-    @apply bg-dark-950 text-white font-sans antialiased;
+    @apply bg-[#0a0a0a] text-white font-sans antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -50,7 +50,7 @@
   }
 
   .btn-primary {
-    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+    @apply btn bg-gold-500 text-dark-950 hover:bg-gold-400 focus:ring-gold-500 font-bold;
   }
 
   .btn-secondary {
@@ -58,7 +58,11 @@
   }
 
   .btn-outline {
-    @apply btn border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white focus:ring-primary-500;
+    @apply btn border-2 border-gold-500 text-gold-400 hover:bg-gold-500 hover:text-dark-950 focus:ring-gold-500;
+  }
+
+  .btn-fight {
+    @apply btn bg-blood-600 text-white hover:bg-blood-500 focus:ring-blood-500 font-bold uppercase tracking-wide;
   }
 
   .section {
@@ -70,16 +74,20 @@
   }
 
   .card {
-    @apply bg-dark-800 rounded-xl border border-dark-700 p-6 transition-all duration-200 hover:border-dark-600 hover:shadow-lg hover:shadow-primary-500/10;
+    @apply bg-dark-800/80 rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-lg hover:shadow-gold-500/5;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-gold-400 to-gold-600 bg-clip-text text-transparent;
+  }
+
+  .gradient-text-blood {
+    @apply bg-gradient-to-r from-blood-400 to-blood-600 bg-clip-text text-transparent;
   }
 
   /* Enhanced form inputs */
   .input {
-    @apply w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent hover:border-dark-500;
+    @apply w-full px-3 py-2 bg-dark-700 border border-cage-600 rounded-lg text-white placeholder-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent hover:border-dark-500;
   }
 
   /* Enhanced interaction states */
@@ -95,6 +103,37 @@
   .page-transition {
     @apply transition-opacity duration-300 ease-in-out;
   }
+
+  /* UFC-themed utilities */
+  .octagon-border {
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  }
+
+  .knockout-gradient {
+    @apply bg-gradient-to-r from-blood-600 via-blood-500 to-gold-500;
+  }
+
+  .section-heading {
+    @apply font-heading uppercase tracking-wider;
+  }
+
+  /* Red glow accent - placed behind sections for UFC arena feel */
+  .red-glow {
+    position: relative;
+  }
+
+  .red-glow::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 40%;
+    background: radial-gradient(ellipse, rgba(185, 28, 28, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
 }
 
 @layer utilities {
@@ -103,7 +142,7 @@
   }
 
   .glass {
-    @apply bg-dark-800/50 backdrop-blur-sm border border-dark-700/50;
+    @apply bg-dark-950/60 backdrop-blur-md border-b border-white/5;
   }
 
   /* Loading spinner animation */
@@ -111,31 +150,216 @@
     @apply animate-pulse bg-gradient-to-r from-dark-700 via-dark-600 to-dark-700 bg-[length:200%_100%];
     animation: shimmer 2s infinite;
   }
+
+  /* Cage wire pattern background */
+  .cage-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm1 1h38v38H1V1z' fill='%23ffffff' fill-opacity='0.03'/%3E%3C/svg%3E");
+  }
 }
 
+/* ===========================
+   Keyframe Animations
+   =========================== */
+
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @keyframes slide-in-right {
-  0% {
-    transform: translateX(100%);
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
     opacity: 0;
+    transform: translateY(24px);
   }
-  100% {
-    transform: translateX(0);
+  to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes ctaPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px rgba(245, 158, 11, 0.15);
+  }
+}
+
+/* ===========================
+   Animation Utility Classes
+   =========================== */
 
 .animate-slide-in-right {
   animation: slide-in-right 0.3s ease-out;
 }
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out both;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.6s ease-out both;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out both;
+}
+
+.animate-slide-in-right-soft {
+  animation: slideInRight 0.6s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out both;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-cta-pulse {
+  animation: ctaPulse 2.5s ease-in-out infinite;
+}
+
+/* Infinite horizontal scroll for review cards */
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scroll-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 40s linear infinite;
+}
+
+.animate-scroll-right {
+  animation: scroll-right 35s linear infinite;
+}
+
+/* Animation delay utilities */
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
+.animation-delay-600 { animation-delay: 600ms; }
+.animation-delay-700 { animation-delay: 700ms; }
+.animation-delay-800 { animation-delay: 800ms; }
+
+/* ===========================
+   Scroll-triggered animations via IntersectionObserver
+   Elements with .scroll-animate start invisible and animate in when visible
+   =========================== */
+
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-animate.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered children - add .stagger-children to parent */
+.stagger-children > .scroll-animate:nth-child(1) { transition-delay: 0ms; }
+.stagger-children > .scroll-animate:nth-child(2) { transition-delay: 100ms; }
+.stagger-children > .scroll-animate:nth-child(3) { transition-delay: 200ms; }
+.stagger-children > .scroll-animate:nth-child(4) { transition-delay: 300ms; }
+.stagger-children > .scroll-animate:nth-child(5) { transition-delay: 400ms; }
+.stagger-children > .scroll-animate:nth-child(6) { transition-delay: 500ms; }
+
+/* ===========================
+   Reduced Motion
+   =========================== */
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -146,5 +370,11 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .scroll-animate {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

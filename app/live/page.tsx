@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import type { Metadata } from 'next'
-import Hero from '@/components/Hero'
 import Section from '@/components/Section'
 import EmbedCard from '@/components/EmbedCard'
 
@@ -14,14 +12,6 @@ const tabs = [
     fallbackUrl:
       process.env.NEXT_PUBLIC_WHATNOT_URL ||
       'https://www.whatnot.com/s/muoENH2W',
-  },
-  {
-    id: 'fanatics',
-    name: 'Fanatics Live',
-    platform: 'fanatics' as const,
-    fallbackUrl:
-      process.env.NEXT_PUBLIC_FANATICS_URL ||
-      'https://www.fanatics.live/shops/chicken1of1',
   },
   {
     id: 'youtube',
@@ -44,16 +34,22 @@ export default function LivePage() {
 
   return (
     <>
-      <Hero
-        title="Watch Live Breaks"
-        subtitle="UFC Card Breaking Action"
-        description="Join us live for authentic UFC card breaks across multiple platforms"
-        showCTA={false}
-      />
+      <section className="relative py-20 md:py-28 overflow-hidden bg-[#0a0a0a]">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blood-700/15 rounded-full blur-[120px]" />
+        <div className="absolute inset-0 cage-pattern opacity-20" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto animate-fade-in-up">
+            <h1 className="font-heading text-4xl md:text-6xl font-bold text-white uppercase tracking-tight mb-4">
+              Watch Live Breaks
+            </h1>
+            <p className="text-xl text-cage-300">UFC Card Breaking Action</p>
+          </div>
+        </div>
+      </section>
 
       <Section>
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
+          <div className="mb-8 scroll-animate">
             <div className="flex flex-wrap justify-center gap-2 mb-8">
               {tabs.map((tab) => (
                 <button
@@ -61,8 +57,8 @@ export default function LivePage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 ${
                     activeTab === tab.id
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-dark-700 text-gray-300 hover:bg-dark-600 hover:text-white'
+                      ? 'bg-gold-500 text-dark-950'
+                      : 'bg-dark-800/80 text-cage-300 hover:bg-dark-700 hover:text-white'
                   }`}
                 >
                   {tab.name}
@@ -85,16 +81,16 @@ export default function LivePage() {
             ))}
           </div>
 
-          <div className="card">
-            <h3 className="text-xl font-semibold text-white mb-4">
+          <div className="card scroll-animate">
+            <h3 className="text-xl font-heading font-semibold text-white uppercase tracking-wide mb-4">
               Stream Not Loading?
             </h3>
-            <p className="text-gray-300 mb-4">
+            <p className="text-cage-300 mb-4">
               If the embedded player isn&apos;t working, you can open the stream
               directly in the platform&apos;s app or website for the best
               experience.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {tabs.map((tab) => (
                 <a
                   key={tab.id}
@@ -111,117 +107,58 @@ export default function LivePage() {
         </div>
       </Section>
 
-      {/* Custom Embed Example - Commented for Future Use */}
-      {/*
-      <Section background="darker">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">
-            Custom Stream Provider
-          </h2>
-          <EmbedCard
-            title="Custom Live Stream"
-            platform="custom"
-            fallbackUrl="https://example.com/live"
-            customEmbedCode={`
-              <!-- Custom provider embed code goes here -->
-              <iframe
-                src="https://custom-provider.com/embed/stream-id"
-                width="100%"
-                height="100%"
-                frameborder="0"
-                allowfullscreen>
-              </iframe>
-            `}
-          />
-        </div>
-      </Section>
-      */}
+      <section className="relative py-16 md:py-24 bg-[#0a0a0a] overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-blood-700/10 rounded-full blur-[100px]" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto scroll-animate">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-tight mb-4">
+              Join the Live Experience
+            </h2>
+            <p className="text-lg text-cage-400 mb-8">
+              Experience authentic UFC card breaking with full transparency. Every
+              break is live, every pull is real, and every stream is recorded for
+              your security.
+            </p>
 
-      <Section background="darker">
-        <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Join the Live Experience
-          </h2>
-          <p className="text-lg text-gray-400 mb-8">
-            Experience authentic UFC card breaking with full transparency. Every
-            break is live, every pull is real, and every stream is recorded for
-            your security.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 stagger-children">
+              <div className="text-center scroll-animate">
+                <div className="w-12 h-12 bg-dark-800/80 border border-gold-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3 className="font-heading font-semibold text-white mb-1">Live Breaking</h3>
+                <p className="text-sm text-cage-400">Real-time card breaking action</p>
               </div>
-              <h3 className="font-semibold text-white mb-1">Live Breaking</h3>
-              <p className="text-sm text-gray-400">
-                Real-time card breaking action
-              </p>
+
+              <div className="text-center scroll-animate">
+                <div className="w-12 h-12 bg-dark-800/80 border border-gold-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <h3 className="font-heading font-semibold text-white mb-1">Full Transparency</h3>
+                <p className="text-sm text-cage-400">Every break recorded for security</p>
+              </div>
+
+              <div className="text-center scroll-animate">
+                <div className="w-12 h-12 bg-dark-800/80 border border-gold-500/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-2-2v-1M15 10V6a2 2 0 00-2-2H7a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                  </svg>
+                </div>
+                <h3 className="font-heading font-semibold text-white mb-1">Interactive Chat</h3>
+                <p className="text-sm text-cage-400">Chat with breakers and community</p>
+              </div>
             </div>
 
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-white mb-1">Full Transparency</h3>
-              <p className="text-sm text-gray-400">
-                Every break recorded for security
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-2-2v-1M15 10V6a2 2 0 00-2-2H7a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
-                  />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-white mb-1">Interactive Chat</h3>
-              <p className="text-sm text-gray-400">
-                Chat with breakers and community
-              </p>
-            </div>
+            <p className="text-sm text-cage-500">
+              All breaks are for entertainment purposes. No guaranteed hits or
+              refunds on sealed product breaks.
+            </p>
           </div>
-
-          <p className="text-sm text-gray-500">
-            All breaks are for entertainment purposes. No guaranteed hits or
-            refunds on sealed product breaks.
-          </p>
         </div>
-      </Section>
+      </section>
     </>
   )
 }

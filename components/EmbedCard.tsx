@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 interface EmbedCardProps {
   title: string
-  platform: 'whatnot' | 'fanatics' | 'youtube' | 'twitch' | 'custom'
+  platform: 'whatnot' | 'youtube' | 'twitch' | 'custom'
   embedUrl?: string
   fallbackUrl: string
   customEmbedCode?: string

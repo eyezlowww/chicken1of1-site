@@ -1,129 +1,168 @@
-import { Metadata } from 'next';
-import SellToUsHero from '@/components/SellToUsHero';
-import QuoteCalculator from '@/components/QuoteCalculator';
-import PricingGrid from '@/components/PricingGrid';
-import HowItWorks from '@/components/HowItWorks';
-import SellerTestimonials from '@/components/SellerTestimonials';
-import SellFAQ from '@/components/SellFAQ';
+import { Metadata } from 'next'
+import Section from '@/components/Section'
+import ProductSubmissionForm from '@/components/ProductSubmissionForm'
+import HowItWorks from '@/components/HowItWorks'
+import SellFAQ from '@/components/SellFAQ'
+import Container from '@/components/Container'
+import SectionDivider from '@/components/ui/SectionDivider'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Sell Your UFC Boxes | Instant Cash Offers | Chicken1of1',
-  description: 'Get instant cash offers for your UFC sealed boxes. Top prices for Prizm, Chronicles, Select & more. 24-hour payouts. No fees. The #1 UFC box buyer.',
-  keywords: 'sell UFC boxes, UFC Prizm, UFC Chronicles, sell sealed boxes, UFC Select, instant cash offer, sports cards',
+  title: 'Sell Your UFC Boxes | Chicken1of1',
+  description:
+    'Sell your sealed UFC, MMA, and combat sports boxes to Chicken1of1. Fair offers, fast payment, no games. Submit your products and get an offer within 24 hours.',
+  keywords:
+    'sell UFC boxes, sell sealed boxes, UFC Prizm, Topps Chrome UFC, sell sports cards, Chicken1of1',
   openGraph: {
-    title: 'Sell Your UFC Sealed Boxes - Instant Cash Offers',
-    description: 'Top dollar for your UFC sealed boxes. Instant quotes, 24-hour payouts, no fees.',
+    title: 'Sell Your UFC Sealed Boxes - Chicken1of1',
+    description:
+      'Fair offers for your sealed UFC product. Submit what you have and we will make you an honest offer.',
     url: 'https://chicken1of1.com/sell-to-us',
     images: [
       {
         url: 'https://chicken1of1.com/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Sell Your UFC Boxes to Chicken1of1'
-      }
-    ]
-  }
-};
+        alt: 'Sell Your UFC Boxes to Chicken1of1',
+      },
+    ],
+  },
+}
 
 export default function SellToUsPage() {
   return (
-    <main className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <SellToUsHero />
-
-      {/* Live Pricing Grid */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-4">
-            Current Buy Prices
-          </h2>
-          <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
-            Live pricing updated daily. Prices shown are for factory sealed boxes in mint condition.
-          </p>
-          <PricingGrid />
-        </div>
+    <>
+      {/* Hero */}
+      <section className="relative py-20 md:py-28 overflow-hidden bg-[#0a0a0a]">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-gold-500/10 rounded-full blur-[100px]" />
+        <div className="absolute inset-0 cage-pattern opacity-20" />
+        <Container className="relative z-10">
+          <div className="text-center max-w-3xl mx-auto animate-fade-in-up">
+            <h1 className="font-heading text-4xl md:text-6xl font-bold text-white uppercase tracking-tight mb-4">
+              Sell Your UFC Boxes To Us
+            </h1>
+            <p className="text-lg text-cage-300 mb-4">
+              We buy sealed UFC, MMA, boxing, and combat sports product. Fair offers based on real market data, with no runaround.
+            </p>
+            <p className="text-cage-400">
+              Tell us what you have and we will make you an honest offer within 24 hours.
+            </p>
+          </div>
+        </Container>
       </section>
 
-      {/* Instant Quote Calculator */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-black">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-4">
-            Get Your Instant Quote
+      {/* General Guidelines */}
+      <Section>
+        <div className="max-w-3xl mx-auto scroll-animate">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white uppercase tracking-tight mb-6 text-center">
+            General Guidelines
           </h2>
-          <p className="text-gray-400 text-center mb-12">
-            Select your products and receive an instant cash offer
-          </p>
-          <QuoteCalculator />
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="card">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">What We Buy</h3>
+              <ul className="space-y-2 text-cage-300 text-sm">
+                <li>Factory sealed hobby boxes & cases</li>
+                <li>Retail, blaster, mega, and hanger boxes</li>
+                <li>UFC, MMA, Boxing, Wrestling products</li>
+                <li>Topps and Panini brands</li>
+              </ul>
+            </div>
+            <div className="card">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">What To Expect</h3>
+              <ul className="space-y-2 text-cage-300 text-sm">
+                <li>We typically pay 70-85% of market value</li>
+                <li>Offers based on current eBay sold comps</li>
+                <li>Larger lots often get better pricing</li>
+                <li>Payment via PayPal, Zelle, or Venmo</li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </section>
+      </Section>
+
+      {/* Submission Form */}
+      <Section>
+        <div className="max-w-3xl mx-auto scroll-animate">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white uppercase tracking-tight mb-8 text-center">
+            Submit Your Products
+          </h2>
+          <ProductSubmissionForm />
+        </div>
+      </Section>
+
+      <SectionDivider variant="octagon-line" className="max-w-4xl mx-auto" />
 
       {/* How It Works */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900">
-        <HowItWorks />
-      </section>
+      <Section>
+        <div className="scroll-animate">
+          <HowItWorks />
+        </div>
+      </Section>
 
       {/* Why Sell to Us */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-black">
+      <Section>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-12">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white text-center uppercase tracking-tight mb-12 scroll-animate">
             Why Sell to Chicken1of1?
           </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-gray-900 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-3">🥊 UFC Specialists</h3>
-              <p className="text-gray-300">
-                We focus exclusively on UFC/MMA products, which means we pay top dollar for what we know best.
+          <div className="grid md:grid-cols-2 gap-6 stagger-children">
+            <div className="card scroll-animate">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">UFC Specialists</h3>
+              <p className="text-cage-300">
+                We focus on UFC and combat sports products. We know the market, we know the products, and we pay accordingly.
               </p>
             </div>
-            <div className="bg-gray-900 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-3">💰 Best Prices</h3>
-              <p className="text-gray-300">
-                We offer 70-85% of market value - significantly more than most buyers who offer 50-60%.
+            <div className="card scroll-animate">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">Fair & Honest</h3>
+              <p className="text-cage-300">
+                No bait-and-switch. Our offers are based on real market data and we stand behind them.
               </p>
             </div>
-            <div className="bg-gray-900 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-3">⚡ Fast Payment</h3>
-              <p className="text-gray-300">
-                Get paid within 24 hours of us receiving your boxes. Choose PayPal, Zelle, or check.
+            <div className="card scroll-animate">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">Fast Payment</h3>
+              <p className="text-cage-300">
+                Get paid within 24-48 hours of us receiving your boxes. PayPal, Zelle, or Venmo.
               </p>
             </div>
-            <div className="bg-gray-900 rounded-lg p-6">
-              <h3 className="text-xl font-bold text-yellow-400 mb-3">✅ No Fees</h3>
-              <p className="text-gray-300">
-                Unlike consignment services that charge 20-30%, we buy directly with no hidden fees.
+            <div className="card scroll-animate">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">No Fees</h3>
+              <p className="text-cage-300">
+                Unlike consignment services that charge 20-30%, we buy directly. The offer you accept is what you get.
               </p>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900">
-        <SellerTestimonials />
-      </section>
+      </Section>
 
       {/* FAQ */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-black">
-        <SellFAQ />
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-yellow-600 to-yellow-500">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-black mb-4">
-            Ready to Sell Your UFC Boxes?
-          </h2>
-          <p className="text-black text-lg mb-8">
-            Get your instant quote now and receive payment within 24 hours!
-          </p>
-          <button
-            onClick={() => document.getElementById('quote-calculator')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-black text-yellow-400 px-8 py-4 rounded-lg text-lg font-bold hover:bg-gray-900 transition-colors"
-          >
-            Get Instant Quote →
-          </button>
+      <Section>
+        <div className="scroll-animate">
+          <SellFAQ />
         </div>
+      </Section>
+
+      {/* Bottom CTA */}
+      <section className="relative py-16 bg-[#0a0a0a] overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-gold-500/10 rounded-full blur-[100px]" />
+        <Container className="relative z-10">
+          <div className="text-center max-w-3xl mx-auto scroll-animate">
+            <h2 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-tight mb-4">
+              Ready to Sell?
+            </h2>
+            <p className="text-cage-300 text-lg mb-8">
+              Submit your products above or reach out directly. We respond within 24 hours.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="mailto:hello@chicken1of1.com" className="btn-primary">
+                Email Us Directly
+              </a>
+              <Link href="/contact" className="btn-outline">
+                Contact Form
+              </Link>
+            </div>
+          </div>
+        </Container>
       </section>
-    </main>
-  );
+    </>
+  )
 }

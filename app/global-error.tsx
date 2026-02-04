@@ -16,59 +16,84 @@ export default function GlobalError({
 
   return (
     <html>
-      <body className="min-h-screen bg-dark-900 flex items-center justify-center px-4">
-        <div className="text-center max-w-md mx-auto">
-          {/* Chicken Logo */}
+      <body
+        className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
+        style={{ backgroundColor: '#0a0a0a' }}
+      >
+        {/* Blood-red glow - inline style since global CSS may not load */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full blur-[120px]"
+          style={{ backgroundColor: 'rgba(185, 28, 28, 0.15)' }}
+        />
+
+        <div className="text-center max-w-lg mx-auto relative z-10">
+          {/* Chicken Fighter Image - use img tag since Next Image may not be available */}
           <div className="mb-8">
-            <div className="w-20 h-20 mx-auto bg-primary-500 rounded-full flex items-center justify-center text-4xl">
-              🐔
+            <div className="w-44 h-44 mx-auto flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/chicken-fighter-404.png"
+                alt="Chicken1of1 Fighter - Something Went Wrong"
+                width={176}
+                height={176}
+                style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 20px rgba(185, 28, 28, 0.3))' }}
+              />
             </div>
           </div>
 
           {/* Error Message */}
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Oops! Something Went Wrong
+          <h1
+            className="text-4xl md:text-5xl font-bold mb-4 uppercase tracking-tight"
+            style={{ color: '#ffffff', fontFamily: 'Oswald, sans-serif' }}
+          >
+            Technical Knockout!
           </h1>
 
-          <p className="text-lg text-gray-400 mb-8">
-            Don&apos;t worry, even the best breakers hit a snag sometimes.
-            Let&apos;s get you back to the action!
+          <p className="text-lg mb-6" style={{ color: '#9ca3af' }}>
+            Something went seriously wrong. Don&apos;t worry, even the best fighters
+            take a hit sometimes. Let&apos;s get you back in the octagon!
           </p>
 
           {/* Error Details */}
           {error.digest && (
-            <div className="bg-dark-800 border border-dark-700 rounded-lg p-4 mb-6">
-              <p className="text-sm text-gray-500">
-                Error ID: <span className="font-mono text-gray-400">{error.digest}</span>
+            <div
+              className="rounded-lg p-4 mb-6"
+              style={{ backgroundColor: '#111', border: '1px solid #374151' }}
+            >
+              <p className="text-sm" style={{ color: '#6b7280' }}>
+                Error ID: <span className="font-mono" style={{ color: '#9ca3af' }}>{error.digest}</span>
               </p>
             </div>
           )}
 
-          {/* Action Buttons */}
+          {/* Action Buttons - inline styles as fallback */}
           <div className="space-y-4">
             <button
               onClick={reset}
-              className="btn-primary w-full"
+              className="w-full py-3 px-6 rounded-lg font-bold uppercase tracking-wide"
+              style={{ backgroundColor: '#b91c1c', color: '#ffffff', fontFamily: 'Oswald, sans-serif' }}
             >
               Try Again
             </button>
 
             <Link
               href="/"
-              className="btn-outline w-full block"
+              className="w-full block py-3 px-6 rounded-lg font-bold uppercase tracking-wide text-center"
+              style={{ border: '1px solid #374151', color: '#ffffff', fontFamily: 'Oswald, sans-serif' }}
             >
               Back to Home
             </Link>
           </div>
 
           {/* Contact Info */}
-          <div className="mt-8 pt-6 border-t border-dark-700">
-            <p className="text-sm text-gray-500 mb-2">
-              Still having issues? Contact us:
+          <div className="mt-8 pt-6" style={{ borderTop: '1px solid #374151' }}>
+            <p className="text-sm mb-2" style={{ color: '#6b7280' }}>
+              Error persisting? Let us know:
             </p>
             <a
               href="mailto:hello@chicken1of1.com"
-              className="text-primary-400 hover:text-primary-300 transition-colors text-sm"
+              className="text-sm"
+              style={{ color: '#facc15' }}
             >
               hello@chicken1of1.com
             </a>
@@ -76,8 +101,8 @@ export default function GlobalError({
 
           {/* Branding */}
           <div className="mt-6">
-            <p className="text-xs text-gray-600">
-              Bauk Bauk Baby! 🐔
+            <p className="text-xs" style={{ color: '#4b5563' }}>
+              Bauk Bauk Baby!
             </p>
           </div>
         </div>
