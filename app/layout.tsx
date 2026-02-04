@@ -234,6 +234,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${oswald.variable} font-sans`}>
       <head>
+        {/* Ahrefs Site Verification */}
+        <meta name="ahrefs-site-verification" content="001a6b26b5cf995413693e209da203c733a30cf2c6b299bb83f1f0b95b432fc4" />
+
         {/* Preload critical resources */}
         <link
           rel="preload"
