@@ -58,8 +58,8 @@ export default function SellToUsPage() {
             General Guidelines
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="card">
-              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">What We Buy</h3>
+            <div className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)]">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-3">What We Buy</h3>
               <ul className="space-y-2 text-cage-300 text-sm">
                 <li>Factory sealed hobby boxes & cases</li>
                 <li>Retail, blaster, mega, and hanger boxes</li>
@@ -67,13 +67,13 @@ export default function SellToUsPage() {
                 <li>Topps and Panini brands</li>
               </ul>
             </div>
-            <div className="card">
-              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">What To Expect</h3>
+            <div className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)]">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-3">What To Expect</h3>
               <ul className="space-y-2 text-cage-300 text-sm">
                 <li>We typically pay 70-85% of market value</li>
                 <li>Offers based on current eBay sold comps</li>
                 <li>Larger lots often get better pricing</li>
-                <li>Payment via PayPal, Zelle, or Venmo</li>
+                <li>Payment via PayPal or Zelle</li>
               </ul>
             </div>
           </div>
@@ -106,26 +106,26 @@ export default function SellToUsPage() {
             Why Sell to Chicken1of1?
           </h2>
           <div className="grid md:grid-cols-2 gap-6 stagger-children">
-            <div className="card scroll-animate">
-              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">UFC Specialists</h3>
+            <div className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] scroll-animate">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-3">UFC Specialists</h3>
               <p className="text-cage-300">
                 We focus on UFC and combat sports products. We know the market, we know the products, and we pay accordingly.
               </p>
             </div>
-            <div className="card scroll-animate">
-              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">Fair & Honest</h3>
+            <div className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] scroll-animate">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-3">Fair & Honest</h3>
               <p className="text-cage-300">
                 No bait-and-switch. Our offers are based on real market data and we stand behind them.
               </p>
             </div>
-            <div className="card scroll-animate">
-              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">Fast Payment</h3>
+            <div className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] scroll-animate">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-3">Fast Payment</h3>
               <p className="text-cage-300">
-                Get paid within 24-48 hours of us receiving your boxes. PayPal, Zelle, or Venmo.
+                Get paid within 24-48 hours of us receiving your boxes. PayPal or Zelle.
               </p>
             </div>
-            <div className="card scroll-animate">
-              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-2">No Fees</h3>
+            <div className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] scroll-animate">
+              <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-3">No Fees</h3>
               <p className="text-cage-300">
                 Unlike consignment services that charge 20-30%, we buy directly. The offer you accept is what you get.
               </p>

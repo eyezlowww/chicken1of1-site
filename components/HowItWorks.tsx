@@ -21,7 +21,7 @@ const steps = [
   {
     number: 4,
     title: 'Get Paid',
-    description: 'Once we receive and verify your boxes, payment is sent via your preferred method. PayPal, Zelle, or Venmo.',
+    description: 'Once we receive and verify your boxes, payment is sent via your preferred method. PayPal or Zelle.',
   },
 ]
 
