@@ -9,6 +9,7 @@ const tabs = [
     id: 'whatnot',
     name: 'Whatnot',
     platform: 'whatnot' as const,
+    previewImage: '/whatnot-preview.jpg',
     fallbackUrl:
       process.env.NEXT_PUBLIC_WHATNOT_URL ||
       'https://www.whatnot.com/s/muoENH2W',
@@ -19,13 +20,6 @@ const tabs = [
     platform: 'youtube' as const,
     embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     fallbackUrl: 'https://www.youtube.com/@chicken1of1',
-  },
-  {
-    id: 'twitch',
-    name: 'Twitch',
-    platform: 'twitch' as const,
-    embedUrl: 'https://player.twitch.tv/?channel=chicken1of1&parent=chicken1of1.com',
-    fallbackUrl: 'https://www.twitch.tv/chicken1of1',
   },
 ]
 
@@ -76,6 +70,7 @@ export default function LivePage() {
                   platform={tab.platform}
                   embedUrl={tab.embedUrl}
                   fallbackUrl={tab.fallbackUrl}
+                  previewImage={tab.previewImage}
                 />
               </div>
             ))}
@@ -90,7 +85,7 @@ export default function LivePage() {
               directly in the platform&apos;s app or website for the best
               experience.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {tabs.map((tab) => (
                 <a
                   key={tab.id}

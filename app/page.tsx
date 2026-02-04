@@ -1,5 +1,4 @@
 import HeroFight from '@/components/HeroFight'
-import ValueProps from '@/components/ValueProps'
 import Section from '@/components/Section'
 import GalleryGrid from '@/components/GalleryGrid'
 import ReviewsSection from '@/components/ReviewsSection'
@@ -51,7 +50,6 @@ export default function HomePage() {
   return (
     <>
       <HeroFight />
-      <ValueProps />
 
       {/* Featured Hits */}
       <Section id="big-hits">
