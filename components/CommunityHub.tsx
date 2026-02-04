@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import Container from './Container'
+import IphoneMockup from './IphoneMockup'
 
 const platforms = [
   {
@@ -38,24 +39,46 @@ export default function CommunityHub() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto stagger-children">
-          {platforms.map((platform) => (
+        <div className="flex flex-col lg:flex-row items-center gap-12 max-w-5xl mx-auto">
+          {/* iPhone Mockup with Instagram */}
+          <div className="w-full lg:w-1/2 flex justify-center scroll-animate">
             <Link
-              key={platform.name}
-              href={platform.url}
+              href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/chicken1of1'}
               target="_blank"
               rel="noopener noreferrer"
-              className="group card hover:scale-[1.02] transition-all duration-300 scroll-animate"
+              className="w-[260px] md:w-[300px] block hover:scale-[1.02] transition-transform duration-300"
             >
-              <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${platform.color} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
-                {platform.icon}
-              </div>
-              <h3 className="font-heading text-lg font-bold text-white uppercase tracking-wide mb-1">
-                {platform.name}
-              </h3>
-              <p className="text-sm text-cage-400">{platform.description}</p>
+              <IphoneMockup src="/instagram-screenshot.jpg" />
+              <p className="text-center text-sm text-cage-400 mt-4">
+                Tap to visit <span className="text-gold-400 font-medium">@chicken1of1</span> on Instagram
+              </p>
             </Link>
-          ))}
+          </div>
+
+          {/* Platform Cards */}
+          <div className="w-full lg:w-1/2 space-y-6 stagger-children">
+            {platforms.map((platform) => (
+              <Link
+                key={platform.name}
+                href={platform.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block bg-black rounded-xl border border-cage-700/50 p-6 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] transition-all duration-300 scroll-animate"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${platform.color} flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform`}>
+                    {platform.icon}
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-lg font-bold text-white uppercase tracking-wide mb-1">
+                      {platform.name}
+                    </h3>
+                    <p className="text-sm text-cage-400">{platform.description}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </Container>
     </section>
