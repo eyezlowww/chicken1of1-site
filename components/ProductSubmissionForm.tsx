@@ -150,24 +150,40 @@ export default function ProductSubmissionForm() {
   }
 
   return (
-    <div className="bg-dark-800 rounded-xl border border-cage-700 p-6 md:p-8">
-      {/* Step Indicators */}
-      <div className="flex items-center justify-center gap-8 mb-8">
-        {[1, 2, 3].map((s) => (
-          <button
-            key={s}
-            onClick={() => s < step && setStep(s)}
-            className={`w-10 h-10 rounded-full flex items-center justify-center font-heading text-sm font-bold border-2 transition-all ${
-              s === step
-                ? 'bg-gold-500 text-dark-950 border-gold-400'
-                : s < step
-                ? 'bg-gold-500/20 text-gold-400 border-gold-500/50 cursor-pointer'
-                : 'bg-dark-700 text-cage-500 border-cage-600'
-            }`}
-            aria-label={`Step ${s}${s === step ? ' (current)' : s < step ? ' (completed)' : ''}`}
-          >
-            {s}
-          </button>
+    <div className="bg-black rounded-xl border border-cage-700/50 p-6 md:p-8 shadow-[0_0_30px_rgba(0,0,0,0.3)]">
+      {/* Step Indicators with Timeline */}
+      <div className="flex items-center justify-center mb-8">
+        {[1, 2, 3].map((s, i) => (
+          <div key={s} className="flex items-center">
+            <button
+              onClick={() => s < step && setStep(s)}
+              className={`w-10 h-10 rounded-full flex items-center justify-center font-heading text-sm font-bold border-2 transition-all duration-300 relative z-10 ${
+                s === step
+                  ? 'bg-gold-500 text-dark-950 border-gold-400 shadow-[0_0_15px_rgba(245,158,11,0.3)]'
+                  : s < step
+                  ? 'bg-gold-500/20 text-gold-400 border-gold-500/50 cursor-pointer'
+                  : 'bg-dark-700 text-cage-500 border-cage-600'
+              }`}
+              aria-label={`Step ${s}${s === step ? ' (current)' : s < step ? ' (completed)' : ''}`}
+            >
+              {s < step ? (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              ) : (
+                s
+              )}
+            </button>
+            {i < 2 && (
+              <div className="w-16 sm:w-24 h-0.5 bg-cage-700 mx-1">
+                <div
+                  className={`h-full bg-gold-500 transition-all duration-500 ${
+                    step > s ? 'w-full' : 'w-0'
+                  }`}
+                />
+              </div>
+            )}
+          </div>
         ))}
       </div>
 
