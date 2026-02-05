@@ -26,23 +26,6 @@ export const metadata: Metadata = {
   },
 }
 
-const ourPlatforms = [
-  {
-    title: 'Whatnot',
-    description: 'Watch live UFC card breaks and join the community. Our primary streaming platform.',
-    url: process.env.NEXT_PUBLIC_WHATNOT_URL || 'https://www.whatnot.com/user/chicken1of1',
-    buttonText: 'Watch on Whatnot',
-    color: 'bg-purple-600 hover:bg-purple-700',
-  },
-  {
-    title: 'Instagram',
-    description: 'Daily hit posts, break announcements, giveaways, and behind the scenes content.',
-    url: process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/chicken1of1',
-    buttonText: 'Follow @chicken1of1',
-    color: 'bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 hover:from-purple-700 hover:via-pink-600 hover:to-orange-500',
-  },
-]
-
 const collectorResources = [
   {
     title: '130point',
@@ -50,6 +33,7 @@ const collectorResources = [
     url: 'https://www.130point.com',
     buttonText: 'Check Card Prices',
     tag: 'Price Research',
+    image: '/partners/130point.png',
   },
   {
     title: 'Card Ladder',
@@ -57,6 +41,7 @@ const collectorResources = [
     url: 'https://www.cardladder.com',
     buttonText: 'Track Prices',
     tag: 'Portfolio Tracking',
+    image: '/partners/Cardladder.png',
   },
   {
     title: 'Checklist Insider',
@@ -64,6 +49,7 @@ const collectorResources = [
     url: 'https://www.checklistinsider.com',
     buttonText: 'View Checklists',
     tag: 'Product Checklists',
+    image: '/partners/checklist-insider.png',
   },
   {
     title: 'MMA Rookies',
@@ -71,6 +57,7 @@ const collectorResources = [
     url: 'https://www.mmarookies.com',
     buttonText: 'UFC Card News',
     tag: 'UFC News',
+    image: '/partners/mma-rookies.png',
   },
 ]
 
@@ -90,38 +77,6 @@ export default function LinksPage() {
         </Container>
       </section>
 
-      {/* Our Platforms */}
-      <Section>
-        <div className="max-w-4xl mx-auto">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white uppercase tracking-tight mb-8 text-center scroll-animate">
-            Find Us Here
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 scroll-animate">
-            {ourPlatforms.map((platform) => (
-              <div
-                key={platform.title}
-                className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)]"
-              >
-                <h3 className="font-heading text-xl font-bold text-white uppercase mb-2">
-                  {platform.title}
-                </h3>
-                <p className="text-cage-300 mb-4 text-sm leading-relaxed">
-                  {platform.description}
-                </p>
-                <a
-                  href={platform.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-block px-6 py-2 rounded-lg font-medium text-white transition-all duration-200 ${platform.color}`}
-                >
-                  {platform.buttonText}
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
       {/* Collector Resources */}
       <Section>
         <div className="max-w-4xl mx-auto">
@@ -136,33 +91,41 @@ export default function LinksPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 stagger-children">
             {collectorResources.map((resource) => (
-              <div
+              <a
                 key={resource.title}
-                className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] scroll-animate"
+                href={resource.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-black rounded-xl border border-cage-700/50 overflow-hidden transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] scroll-animate group"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-heading text-lg font-bold text-gold-400 uppercase">
-                    {resource.title}
-                  </h3>
-                  <span className="text-[10px] text-cage-400 font-semibold uppercase tracking-wider bg-cage-800 px-2 py-1 rounded-full">
-                    {resource.tag}
+                <div className="relative w-full h-40 overflow-hidden">
+                  <Image
+                    src={resource.image}
+                    alt={`${resource.title} preview`}
+                    fill
+                    className="object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="font-heading text-lg font-bold text-gold-400 uppercase">
+                      {resource.title}
+                    </h3>
+                    <span className="text-[10px] text-cage-400 font-semibold uppercase tracking-wider bg-cage-800 px-2 py-1 rounded-full">
+                      {resource.tag}
+                    </span>
+                  </div>
+                  <p className="text-cage-300 mb-4 text-sm leading-relaxed">
+                    {resource.description}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-gold-400 group-hover:text-gold-300 text-sm font-medium transition-colors">
+                    {resource.buttonText}
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
                   </span>
                 </div>
-                <p className="text-cage-300 mb-4 text-sm leading-relaxed">
-                  {resource.description}
-                </p>
-                <a
-                  href={resource.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-gold-400 hover:text-gold-300 text-sm font-medium transition-colors"
-                >
-                  {resource.buttonText}
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
-              </div>
+              </a>
             ))}
           </div>
         </div>

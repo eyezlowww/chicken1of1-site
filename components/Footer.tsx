@@ -24,21 +24,25 @@ const partnerResources = [
     name: '130point',
     href: 'https://www.130point.com',
     description: 'The premiere destination to check current comps for your cards according to sales from eBay, Fanatics Collect, and more.',
+    image: '/partners/130point.png',
   },
   {
     name: 'Card Ladder',
     href: 'https://www.cardladder.com',
     description: 'Track card prices over time and manage your collection portfolio with detailed market analytics.',
+    image: '/partners/Cardladder.png',
   },
   {
     name: 'Checklist Insider',
     href: 'https://www.checklistinsider.com',
     description: 'The most comprehensive sports card checklists. Know exactly what cards exist before you break.',
+    image: '/partners/checklist-insider.png',
   },
   {
     name: 'MMA Rookies',
     href: 'https://www.mmarookies.com',
     description: 'The premier source for UFC card collecting news, fighter profiles, and MMA rookie checklists.',
+    image: '/partners/mma-rookies.png',
   },
 ]
 
@@ -140,24 +144,34 @@ export default function Footer() {
                   href={partner.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-black rounded-xl border border-cage-700/50 p-4 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] group"
+                  className="bg-black rounded-xl border border-cage-700/50 overflow-hidden transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] group"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-heading text-sm font-bold text-gold-400 uppercase">
-                      {partner.name}
-                    </h4>
-                    <svg
-                      className="w-3.5 h-3.5 text-cage-500 group-hover:text-gold-400 transition-colors"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
+                  <div className="relative w-full h-24 overflow-hidden">
+                    <Image
+                      src={partner.image}
+                      alt={`${partner.name} preview`}
+                      fill
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
-                  <p className="text-cage-400 text-xs leading-relaxed">
-                    {partner.description}
-                  </p>
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-heading text-sm font-bold text-gold-400 uppercase">
+                        {partner.name}
+                      </h4>
+                      <svg
+                        className="w-3.5 h-3.5 text-cage-500 group-hover:text-gold-400 transition-colors"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </div>
+                    <p className="text-cage-400 text-xs leading-relaxed">
+                      {partner.description}
+                    </p>
+                  </div>
                 </a>
               ))}
             </div>

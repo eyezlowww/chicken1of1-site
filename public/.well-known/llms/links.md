@@ -8,24 +8,9 @@
 
 # Links & Resources
 
-**Our Platforms & Collector Tools**
+**Collector Tools & Partner Resources**
 
-This page lists Chicken1of1's official platforms and recommended resources for UFC card collectors.
-
----
-
-## Our Platforms
-
-### Whatnot
-- **URL**: https://www.whatnot.com/user/chicken1of1
-- **Description**: Watch live UFC card breaks and join the community. Our primary streaming platform.
-- **Content**: Live breaks, auctions, giveaways
-
-### Instagram
-- **Handle**: @chicken1of1
-- **URL**: https://www.instagram.com/chicken1of1
-- **Description**: Daily hit posts, break announcements, giveaways, and behind the scenes content.
-- **Content**: Photos, Stories, Reels, DMs
+This page lists recommended resources and partners for UFC card collectors.
 
 ---
 
