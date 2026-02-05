@@ -26,7 +26,7 @@ export default function FAQWithImage({ items }: FAQWithImageProps) {
         alt="The Coop Group"
         width={830}
         height={844}
-        className="max-w-sm w-full rounded-xl h-auto sticky top-24 hidden md:block"
+        className="w-full md:max-w-md lg:max-w-lg rounded-xl h-auto sticky top-24 hidden md:block"
       />
 
       <div className="w-full">

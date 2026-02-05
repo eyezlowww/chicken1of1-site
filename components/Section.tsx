@@ -30,7 +30,7 @@ export default function Section({
       id={id}
       className={`relative bg-[#0a0a0a] overflow-hidden ${paddingClasses[padding]} ${className}`}
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-blood-700/8 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blood-700/20 rounded-full blur-[150px] pointer-events-none" />
       <Container maxWidth={maxWidth} className="relative z-10">{children}</Container>
     </section>
   )
