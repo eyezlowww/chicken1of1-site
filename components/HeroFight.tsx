@@ -30,7 +30,7 @@ export default function HeroFight() {
             />
           </div>
 
-          <div className="animate-fade-in-up animation-delay-200">
+          <h1 className="animate-fade-in-up animation-delay-200">
             <GradientText
               colors={['#b91c1c', '#eab308', '#ffffff', '#eab308', '#b91c1c']}
               animationSpeed={7}
@@ -39,7 +39,7 @@ export default function HeroFight() {
             >
               Bauk Bauk Baby!
             </GradientText>
-          </div>
+          </h1>
 
           <p className="text-xl md:text-2xl text-cage-300 mb-2 font-medium animate-fade-in-up animation-delay-300">
             Sports Cards & Live Breaks

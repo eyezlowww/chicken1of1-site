@@ -14,13 +14,15 @@ export const metadata: Metadata = {
   keywords:
     'sell UFC boxes, sell sealed boxes, UFC Prizm, Topps Chrome UFC, sell sports cards, Chicken1of1',
   openGraph: {
+    type: 'website',
     title: 'Sell Your UFC Sealed Boxes - Chicken1of1',
     description:
       'Fair offers for your sealed UFC product. Submit what you have and we will make you an honest offer.',
-    url: 'https://chicken1of1.com/sell-to-us',
+    url: 'https://www.chicken1of1.com/sell-to-us/',
+    siteName: 'Chicken1of1',
     images: [
       {
-        url: 'https://chicken1of1.com/og-image.png',
+        url: 'https://www.chicken1of1.com/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Sell Your UFC Boxes to Chicken1of1',

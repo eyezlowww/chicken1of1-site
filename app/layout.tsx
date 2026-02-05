@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const oswald = Oswald({ subsets: ['latin'], variable: '--font-oswald' })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'),
   title: {
     default: 'Chicken1of1 – UFC Sports Cards & Live Breaks',
     template: '%s | Chicken1of1',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com',
     siteName: 'Chicken1of1',
     title: 'Chicken1of1 – UFC Sports Cards & Live Breaks',
     description:
@@ -98,12 +98,12 @@ const organizationSchema = {
   additionalType: 'BuyingService',
   description:
     'UFC & Entertainment Card Breaks and Sealed Product Buying Service - Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience. We also buy sealed UFC product.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com',
   logo: `${
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'
   }/logo-chicken1of1.svg`,
   image: `${
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'
   }/og-image.png`,
   founder: {
     '@type': 'Person',
@@ -170,7 +170,7 @@ const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Chicken1of1',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com',
   description:
     'UFC & Entertainment Card Breaks - Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience',
   publisher: {
@@ -181,7 +181,7 @@ const websiteSchema = {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/faq/?search={search_term_string}`,
+      urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'}/faq/?search={search_term_string}`,
     },
     'query-input': 'required name=search_term_string',
   },
@@ -193,31 +193,31 @@ const websiteSchema = {
         '@type': 'ListItem',
         position: 1,
         name: 'Live Breaks',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/live`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'}/live`,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Gallery',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/gallery`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'}/gallery`,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: 'About',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/about`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'}/about`,
       },
       {
         '@type': 'ListItem',
         position: 4,
         name: 'FAQ',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/faq`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'}/faq`,
       },
       {
         '@type': 'ListItem',
         position: 5,
         name: 'Sell To Us',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com'}/sell-to-us`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'}/sell-to-us`,
       },
     ],
   },
