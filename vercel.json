@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "chicken1of1.com"
+        }
+      ],
+      "destination": "https://www.chicken1of1.com/:path*",
+      "permanent": true
+    }
+  ]
+}

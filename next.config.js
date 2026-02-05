@@ -14,16 +14,7 @@ const nextConfig = {
     // optimizeCss: true, // Temporarily disabled due to Vercel build issues
   },
   env: {
-    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://chicken1of1.com',
-  },
-  async redirects() {
-    return [
-      {
-        source: '/links',
-        destination: '/',
-        permanent: true,
-      },
-    ]
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com',
   },
   async headers() {
     return [
