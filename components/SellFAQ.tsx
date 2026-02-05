@@ -53,11 +53,11 @@ export default function SellFAQ() {
         {faqs.map((faq, index) => (
           <div
             key={index}
-            className="bg-dark-800 rounded-lg overflow-hidden border border-cage-700 hover:border-gold-500/30 transition-colors"
+            className="bg-black rounded-xl overflow-hidden border border-cage-700/50 hover:border-gold-500/30 transition-all duration-300 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)]"
           >
             <button
               onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-dark-700/50 transition-colors"
+              className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-cage-900/30 transition-colors"
               aria-expanded={openIndex === index}
             >
               <span className="font-semibold text-white">{faq.question}</span>
@@ -80,21 +80,6 @@ export default function SellFAQ() {
             )}
           </div>
         ))}
-      </div>
-
-      <div className="mt-12 p-6 bg-dark-800 rounded-lg border border-cage-700 text-center">
-        <h3 className="font-heading text-xl font-bold text-white uppercase mb-3">Still Have Questions?</h3>
-        <p className="text-cage-400 mb-4">
-          Reach out anytime. We are happy to help.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="mailto:hello@chicken1of1.com" className="btn-primary">
-            Email Us
-          </a>
-          <a href="/contact" className="btn-outline">
-            Contact Form
-          </a>
-        </div>
       </div>
     </div>
   )

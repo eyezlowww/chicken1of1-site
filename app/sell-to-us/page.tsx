@@ -5,6 +5,7 @@ import HowItWorks from '@/components/HowItWorks'
 import SellFAQ from '@/components/SellFAQ'
 import Container from '@/components/Container'
 import Link from 'next/link'
+import ScrollToTopLink from '@/components/ScrollToTopLink'
 
 export const metadata: Metadata = {
   title: 'Sell Your UFC Boxes | Chicken1of1',
@@ -32,7 +33,7 @@ export default function SellToUsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative py-20 md:py-28 overflow-hidden bg-[#0a0a0a]">
+      <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-gold-500/10 rounded-full blur-[100px]" />
         <div className="absolute inset-0 cage-pattern opacity-20" />
         <Container className="relative z-10">
@@ -139,15 +140,19 @@ export default function SellToUsPage() {
       </Section>
 
       {/* Bottom CTA */}
-      <section className="relative py-16 bg-[#0a0a0a] overflow-hidden">
+      <section className="relative py-16 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-gold-500/10 rounded-full blur-[100px]" />
         <Container className="relative z-10">
           <div className="text-center max-w-3xl mx-auto scroll-animate">
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-tight mb-4">
-              Ready to Sell?
+              Ready to Sell or Still Have Questions?
             </h2>
             <p className="text-cage-300 text-lg mb-8">
-              Submit your products above or reach out directly. We respond within 24 hours.
+              Submit your products{' '}
+              <ScrollToTopLink className="text-gold-400 hover:text-gold-300 underline underline-offset-2 transition-colors">
+                above
+              </ScrollToTopLink>
+              {' '}or reach out directly. We respond within 24 hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="mailto:hello@chicken1of1.com" className="btn-primary">
