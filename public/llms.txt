@@ -36,6 +36,7 @@ For detailed content, see: https://www.chicken1of1.com/llms-full.txt
 - [FAQ](https://www.chicken1of1.com/faq/) - Common questions answered
 - [Sell To Us](https://www.chicken1of1.com/sell-to-us/) - Sell your sealed product
 - [Contact](https://www.chicken1of1.com/contact/) - Get in touch
+- [Links & Resources](https://www.chicken1of1.com/links/) - Partner sites and collector tools
 
 ### Legal Pages
 
@@ -52,6 +53,7 @@ Individual page content available at:
 - https://www.chicken1of1.com/.well-known/llms/faq.md
 - https://www.chicken1of1.com/.well-known/llms/sell-to-us.md
 - https://www.chicken1of1.com/.well-known/llms/contact.md
+- https://www.chicken1of1.com/.well-known/llms/links.md
 
 ## Key Differentiators
 

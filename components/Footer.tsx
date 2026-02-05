@@ -13,6 +13,12 @@ const navigation = {
     { name: 'Contact', href: '/contact' },
     { name: 'Sell To Us', href: '/sell-to-us' },
   ],
+  resources: [
+    { name: 'Links & Partners', href: '/links' },
+    { name: '130point', href: 'https://www.130point.com', external: true },
+    { name: 'Card Ladder', href: 'https://www.cardladder.com', external: true },
+    { name: 'MMA Rookies', href: 'https://www.mmarookies.com', external: true },
+  ],
   legal: [
     { name: 'Terms of Service', href: '/legal/terms' },
     { name: 'Privacy Policy', href: '/legal/privacy' },
@@ -29,7 +35,7 @@ export default function Footer() {
 
       <Container className="relative z-10">
         <div className="py-12 md:py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div className="md:col-span-2">
               <Link
                 href="/"
@@ -70,6 +76,41 @@ export default function Footer() {
                     >
                       {item.name}
                     </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <nav aria-labelledby="footer-resources">
+              <h3
+                id="footer-resources"
+                className="text-sm font-semibold text-white uppercase tracking-wider mb-4"
+              >
+                Resources
+              </h3>
+              <ul className="space-y-3" role="list">
+                {navigation.resources.map((item) => (
+                  <li key={item.name}>
+                    {'external' in item && item.external ? (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-white transition-colors duration-200 inline-flex items-center gap-1"
+                      >
+                        {item.name}
+                        <svg className="w-3 h-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className="text-gray-400 hover:text-white transition-colors duration-200"
+                      >
+                        {item.name}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
