@@ -36,7 +36,7 @@ export default function LivePage() {
             <h1 className="font-heading text-4xl md:text-6xl font-bold text-white uppercase tracking-tight mb-4">
               Live UFC Card Breaks
             </h1>
-            <p className="text-xl text-cage-300">Topps UFC & MMA Sports Cards Live on Whatnot</p>
+            <p className="text-xl text-cage-300">Topps & Panini UFC & MMA Sports Cards Live on Whatnot</p>
           </div>
         </div>
       </section>
@@ -110,7 +110,7 @@ export default function LivePage() {
               Join the Live Experience
             </h2>
             <p className="text-lg text-cage-400">
-              Experience authentic UFC card breaks featuring Topps UFC and Panini MMA sports cards with full transparency. Every
+              Experience authentic UFC card breaks featuring Topps & Panini UFC and MMA sports cards with full transparency. Every
               break is live, every pull is real, and every stream is recorded for
               your security.
             </p>

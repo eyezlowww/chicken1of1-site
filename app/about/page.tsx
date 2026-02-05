@@ -6,7 +6,7 @@ import VideoPlayer from '@/components/VideoPlayer'
 export const metadata: Metadata = {
   title: 'About Chicken1of1 - UFC Card Breaks & MMA Sports Cards',
   description:
-    'Learn about Chicken1of1, your trusted source for UFC card breaks. We break Topps UFC, Panini UFC, and all MMA sports cards live on Whatnot. Meet the team behind Bauk Bauk Baby.',
+    'Learn about Chicken1of1, your trusted source for UFC card breaks. We break Topps & Panini UFC and MMA sports cards live on Whatnot. Meet the team behind Bauk Bauk Baby.',
 }
 
 export default function AboutPage() {
@@ -36,7 +36,7 @@ export default function AboutPage() {
                 Chicken1of1 started in 2021 with streaming UFC card breaks to an audience of 12 people. Since then the Chicken1of1 channel has grown to several sports card loving friends running UFC and entertainment card breaks with one simple goal: have fun while being generous and trustworthy.
               </p>
               <p>
-                We stream live on Whatnot, breaking Topps UFC, Panini UFC, and all MMA sports cards along with Wrestling, Disney, Marvel, and other niche categories. Our approach is straightforward - fair breaks, quick and secure shipping, and lots of Bauking.
+                We stream live on Whatnot, breaking Topps & Panini UFC and MMA sports cards along with Wrestling, Disney, Marvel, and other niche categories. Our approach is straightforward - fair breaks, quick and secure shipping, and lots of Bauking.
               </p>
               <p>
                 Loitering is welcomed and encouraged in our streams, you do not need to spend to be welcomed or have fun. Every break is recorded live for complete transparency, and we ship quickly with secure packaging.

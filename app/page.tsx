@@ -59,7 +59,7 @@ export default function HomePage() {
             Recent Hits to Bauk About
           </h2>
           <p className="text-lg text-cage-400 max-w-2xl mx-auto">
-            Check out some of the Topps UFC and MMA sports cards we have pulled in our live breaks.
+            Check out some of the Topps & Panini UFC and MMA sports cards we have pulled in our live breaks.
           </p>
         </div>
         <GalleryGrid items={bigHits} />
@@ -84,7 +84,7 @@ export default function HomePage() {
               Ready to Bauk With Us?
             </h2>
             <p className="text-lg text-cage-400 mb-8">
-              Join us live on Whatnot for UFC card breaks featuring Topps UFC and Panini MMA sports cards.
+              Join us live on Whatnot for UFC card breaks featuring Topps & Panini UFC and MMA sports cards.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/live" className="btn-primary animate-cta-pulse">

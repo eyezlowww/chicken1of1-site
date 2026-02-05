@@ -16,11 +16,11 @@ export const metadata: Metadata = {
     template: '%s | Chicken1of1',
   },
   description:
-    'Bauk Bauk Baby — Live UFC card breaks featuring Topps UFC and Panini MMA sports cards. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience. Watch live on Whatnot.',
+    'Bauk Bauk Baby — Live UFC card breaks featuring Topps & Panini UFC and MMA sports cards. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience. Watch live on Whatnot.',
   keywords: [
     'UFC card breaks',
     'MMA sports cards',
-    'Topps UFC',
+    'Topps & Panini UFC',
     'Panini UFC',
     'UFC cards',
     'sports cards',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     siteName: 'Chicken1of1',
     title: 'Chicken1of1 – UFC Card Breaks & MMA Sports Cards',
     description:
-      'Bauk Bauk Baby — Live UFC card breaks featuring Topps UFC and Panini MMA sports cards. Join the Coop for authentic breaks and the best UFC card break experience.',
+      'Bauk Bauk Baby — Live UFC card breaks featuring Topps & Panini UFC and MMA sports cards. Join the Coop for authentic breaks and the best UFC card break experience.',
     images: [
       {
         url: '/og-image.png',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Chicken1of1 – UFC Card Breaks & MMA Sports Cards',
     description:
-      'Bauk Bauk Baby — Live UFC card breaks featuring Topps UFC and Panini MMA sports cards. Join the Coop for authentic breaks and the best UFC card break experience.',
+      'Bauk Bauk Baby — Live UFC card breaks featuring Topps & Panini UFC and MMA sports cards. Join the Coop for authentic breaks and the best UFC card break experience.',
     images: ['/og-image.png'],
   },
   verification: {

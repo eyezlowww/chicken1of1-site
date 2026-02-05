@@ -4,9 +4,9 @@ import Section from '@/components/Section'
 import GalleryGrid from '@/components/GalleryGrid'
 
 export const metadata: Metadata = {
-  title: 'Gallery - Topps UFC & MMA Sports Card Pulls | Chicken1of1',
+  title: 'Gallery - Topps & Panini UFC & MMA Sports Card Pulls | Chicken1of1',
   description:
-    'Check out our gallery of epic UFC card pulls from Topps UFC and Panini MMA sports cards. See autographs, patches, and rare hits from our live UFC card breaks.',
+    'Check out our gallery of epic UFC card pulls from Topps & Panini UFC and MMA sports cards. See autographs, patches, and rare hits from our live UFC card breaks.',
 }
 
 const galleryItems = [
@@ -59,7 +59,7 @@ export default function GalleryPage() {
             <h1 className="font-heading text-4xl md:text-6xl font-bold text-white uppercase tracking-tight mb-4">
               UFC Card Pulls Gallery
             </h1>
-            <p className="text-xl text-cage-300">Epic Topps UFC & MMA Sports Card Hits</p>
+            <p className="text-xl text-cage-300">Epic Topps & Panini UFC & MMA Sports Card Hits</p>
           </div>
         </Container>
       </section>
@@ -83,7 +83,7 @@ export default function GalleryPage() {
               Want to See These Pulls Live?
             </h3>
             <p className="text-cage-300 mb-6">
-              Join us on Whatnot for authentic UFC card breaks featuring Topps UFC and Panini MMA sports cards.
+              Join us on Whatnot for authentic UFC card breaks featuring Topps & Panini UFC and MMA sports cards.
               Every break is streamed live with full transparency.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
