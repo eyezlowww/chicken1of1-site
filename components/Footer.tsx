@@ -22,7 +22,7 @@ const navigation = {
 const partnerResources = [
   {
     name: '130point',
-    href: 'https://www.130point.com',
+    href: 'https://www.130point.com/cards',
     description: 'The premiere destination to check current comps for your cards according to sales from eBay, Fanatics Collect, and more.',
     image: '/partners/130point.png',
   },
@@ -43,6 +43,12 @@ const partnerResources = [
     href: 'https://www.mmarookies.com',
     description: 'The premier source for UFC card collecting news, fighter profiles, and MMA rookie checklists.',
     image: '/partners/mma-rookies.png',
+  },
+  {
+    name: 'TCDB',
+    href: 'https://www.tcdb.com/ViewAll.cfm/sp/MMA?MODE=Years',
+    description: 'Trading Card Database - Browse every MMA card set ever released by year. The complete historical archive.',
+    image: '/partners/tcdb.png',
   },
 ]
 

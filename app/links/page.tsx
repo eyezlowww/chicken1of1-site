@@ -30,7 +30,7 @@ const collectorResources = [
   {
     title: '130point',
     description: 'The go-to resource for sports card pricing and market data. Essential for comping cards before buying or selling.',
-    url: 'https://www.130point.com',
+    url: 'https://www.130point.com/cards',
     buttonText: 'Check Card Prices',
     tag: 'Price Research',
     image: '/partners/130point.png',
@@ -58,6 +58,14 @@ const collectorResources = [
     buttonText: 'UFC Card News',
     tag: 'UFC News',
     image: '/partners/mma-rookies.png',
+  },
+  {
+    title: 'TCDB',
+    description: 'Trading Card Database - Browse every MMA card set ever released by year. The complete historical archive.',
+    url: 'https://www.tcdb.com/ViewAll.cfm/sp/MMA?MODE=Years',
+    buttonText: 'Browse MMA Sets',
+    tag: 'Card Database',
+    image: '/partners/tcdb.png',
   },
 ]
 
