@@ -4,7 +4,6 @@ import GalleryGrid from '@/components/GalleryGrid'
 import ReviewsSection from '@/components/ReviewsSection'
 import SellCTA from '@/components/SellCTA'
 import CommunityHub from '@/components/CommunityHub'
-import SectionDivider from '@/components/ui/SectionDivider'
 import Link from 'next/link'
 
 const bigHits = [
@@ -74,12 +73,10 @@ export default function HomePage() {
       {/* Reviews */}
       <ReviewsSection />
 
-      <SectionDivider variant="octagon-line" className="max-w-4xl mx-auto" />
-
       <CommunityHub />
 
       {/* Bottom CTA */}
-      <section className="relative py-16 md:py-24 bg-[#0a0a0a] overflow-hidden">
+      <section className="relative py-16 md:py-24 overflow-hidden">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-blood-700/10 rounded-full blur-[100px]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto scroll-animate">

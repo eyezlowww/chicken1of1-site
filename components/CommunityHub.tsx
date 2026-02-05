@@ -21,7 +21,7 @@ const phones = [
 
 export default function CommunityHub() {
   return (
-    <section className="py-16 md:py-24 bg-[#0a0a0a]">
+    <section className="py-16 md:py-24">
       <Container>
         <div className="text-center mb-12 scroll-animate">
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-white uppercase tracking-tight mb-4">

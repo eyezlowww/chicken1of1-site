@@ -4,7 +4,6 @@ import ProductSubmissionForm from '@/components/ProductSubmissionForm'
 import HowItWorks from '@/components/HowItWorks'
 import SellFAQ from '@/components/SellFAQ'
 import Container from '@/components/Container'
-import SectionDivider from '@/components/ui/SectionDivider'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -89,8 +88,6 @@ export default function SellToUsPage() {
           <ProductSubmissionForm />
         </div>
       </Section>
-
-      <SectionDivider variant="octagon-line" className="max-w-4xl mx-auto" />
 
       {/* How It Works */}
       <Section>
