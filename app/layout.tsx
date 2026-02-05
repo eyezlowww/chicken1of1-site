@@ -16,8 +16,12 @@ export const metadata: Metadata = {
     template: '%s | Chicken1of1',
   },
   description:
-    'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience. Watch live on Whatnot.',
+    'Bauk Bauk Baby — Live UFC card breaks featuring Topps UFC and Panini MMA sports cards. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience. Watch live on Whatnot.',
   keywords: [
+    'UFC card breaks',
+    'MMA sports cards',
+    'Topps UFC',
+    'Panini UFC',
     'UFC cards',
     'sports cards',
     'card breaks',
@@ -26,6 +30,8 @@ export const metadata: Metadata = {
     'Bauk Bauk Baby',
     'UFC sports cards',
     'Whatnot',
+    'combat sports cards',
+    'UFC trading cards',
   ],
   authors: [{ name: 'Chicken1of1' }],
   creator: 'Chicken1of1',
@@ -36,9 +42,9 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com',
     siteName: 'Chicken1of1',
-    title: 'Chicken1of1 – UFC Sports Cards & Live Breaks',
+    title: 'Chicken1of1 – UFC Card Breaks & MMA Sports Cards',
     description:
-      'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience.',
+      'Bauk Bauk Baby — Live UFC card breaks featuring Topps UFC and Panini MMA sports cards. Join the Coop for authentic breaks and the best UFC card break experience.',
     images: [
       {
         url: '/og-image.png',
@@ -50,9 +56,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chicken1of1 – UFC Sports Cards & Live Breaks',
+    title: 'Chicken1of1 – UFC Card Breaks & MMA Sports Cards',
     description:
-      'Bauk Bauk Baby — UFC & Entertainment Card Breaks by Chicken1of1. Join the Coop community for authentic breaks, card collecting education, and the best UFC card break experience.',
+      'Bauk Bauk Baby — Live UFC card breaks featuring Topps UFC and Panini MMA sports cards. Join the Coop for authentic breaks and the best UFC card break experience.',
     images: ['/og-image.png'],
   },
   verification: {
