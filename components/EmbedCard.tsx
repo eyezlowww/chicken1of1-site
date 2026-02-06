@@ -10,7 +10,6 @@ interface EmbedCardProps {
   embedUrl?: string
   fallbackUrl: string
   previewImage?: string
-  customEmbedCode?: string
 }
 
 export default function EmbedCard({
@@ -19,7 +18,6 @@ export default function EmbedCard({
   embedUrl,
   fallbackUrl,
   previewImage,
-  customEmbedCode,
 }: EmbedCardProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
@@ -45,15 +43,6 @@ export default function EmbedCard({
   }
 
   const renderEmbed = () => {
-    if (customEmbedCode) {
-      return (
-        <div
-          dangerouslySetInnerHTML={{ __html: customEmbedCode }}
-          className="w-full h-full"
-        />
-      )
-    }
-
     if (!embedUrl) {
       return (
         <div className="flex flex-col w-full h-full bg-white rounded-lg overflow-hidden">
