@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chicken1of1.com'
+  // Hardcode www to ensure sitemap always uses canonical www URLs
+  const baseUrl = 'https://www.chicken1of1.com'
   const currentDate = new Date()
 
   // Calculate specific last modified dates for better SEO
