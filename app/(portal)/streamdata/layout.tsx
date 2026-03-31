@@ -1,8 +1,13 @@
 // Portal shell layout - server component that checks auth and renders sidebar + main content area
+// force-dynamic: auth() must run per-request to read the session cookie.
+// Without this, Next.js can statically pre-render the layout at build time
+// (when there is no session), caching the unauthenticated shell for all users.
 
 import { auth } from '@/lib/auth'
 import PortalProviders from '@/components/portal/Providers'
 import SidebarNav from '@/components/portal/SidebarNav'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: 'StreamData | Chicken1of1',

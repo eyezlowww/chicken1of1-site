@@ -1,6 +1,11 @@
 // Full NextAuth v5 configuration with credentials provider
 // Uses bcrypt + pg (Node.js only) — NOT safe for Edge/middleware
 // For middleware, use auth.config.ts instead
+//
+// IMPORTANT: This config spreads authConfig so that callbacks (jwt, session)
+// are defined in ONE place (auth.config.ts). Duplicating them here caused a
+// production bug where the middleware and server-component NextAuth instances
+// could diverge.
 
 import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
@@ -8,11 +13,13 @@ import bcrypt from 'bcryptjs'
 import { db } from './db'
 import { users } from './db/schema'
 import { eq } from 'drizzle-orm'
+import { authConfig } from './auth.config'
 
 // Pre-computed dummy hash for timing-safe comparison when user is not found
 const DUMMY_HASH = '$2a$12$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {
@@ -57,27 +64,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id as string
-        token.role = (user as any).role ?? 'streamer'
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string
-        ;(session.user as any).role = token.role as string
-      }
-      return session
-    },
-  },
-  pages: {
-    signIn: '/streamdata/login',
-  },
-  session: {
-    strategy: 'jwt',
-    maxAge: 28800, // 8 hours
-  },
 })
