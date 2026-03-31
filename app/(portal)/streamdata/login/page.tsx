@@ -39,9 +39,9 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Invalid email or password.')
       } else {
-        // Redirect to root /streamdata — the server-side page.tsx
-        // checks the role and redirects to admin or dashboard accordingly
-        router.push('/streamdata')
+        // Full page navigation (not client-side) so the server reads
+        // the fresh session cookie and renders the layout with sidebar
+        window.location.href = '/streamdata'
       }
     } catch {
       setError('Something went wrong. Please try again.')
