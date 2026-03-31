@@ -1,9 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Oswald } from 'next/font/google'
 import './globals.css'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import ScrollAnimateProvider from '@/components/ScrollAnimateProvider'
 import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -332,10 +329,7 @@ export default function RootLayout({
           </noscript>
         )}
 
-        <ScrollAnimateProvider />
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   )

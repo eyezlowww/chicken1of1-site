@@ -1,0 +1,168 @@
+// GET /api/streamdata/admin/streamers
+// Returns all users with their fee configs
+// Admin only
+//
+// POST /api/streamdata/admin/streamers
+// Create a new streamer account
+// Body: { username, displayName, email, password, supportFeeRate }
+// Admin only — hashes password with bcrypt
+
+import { NextRequest, NextResponse } from 'next/server'
+import { db } from '@/lib/db'
+import { users, streamerFeeConfig } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
+import { requireAdmin } from '@/lib/auth-helpers'
+import bcrypt from 'bcryptjs'
+import { z } from 'zod'
+import { rateLimit, getClientIp } from '@/lib/rate-limit'
+
+const createStreamerSchema = z.object({
+  username: z
+    .string()
+    .min(2)
+    .max(50)
+    .regex(/^[a-zA-Z0-9_]+$/, 'Username must be alphanumeric with underscores'),
+  displayName: z.string().min(1).max(100),
+  email: z.string().email(),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+  supportFeeRate: z.number().min(0).max(1),
+})
+
+export async function GET(request: NextRequest) {
+  try {
+    const { error } = await requireAdmin()
+    if (error) return error
+
+    const ip = getClientIp(request)
+    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
+    if (!limit.success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    const allUsers = await db.query.users.findMany({
+      columns: {
+        id: true,
+        username: true,
+        displayName: true,
+        email: true,
+        passwordHash: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+      },
+      with: {
+        streamerFeeConfigs: {
+          columns: {
+            id: true,
+            feeName: true,
+            rate: true,
+            isActive: true,
+            effectiveFrom: true,
+          },
+        },
+      },
+    })
+
+    // Map users to include hasPassword flag instead of exposing passwordHash
+    const streamers = allUsers.map(({ passwordHash, ...user }) => ({
+      ...user,
+      hasPassword: passwordHash !== '',
+    }))
+
+    return NextResponse.json({ streamers })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error('GET /api/streamdata/admin/streamers error:', message)
+    return NextResponse.json(
+      { error: 'Failed to fetch streamers' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const { error } = await requireAdmin()
+    if (error) return error
+
+    const ip = getClientIp(request)
+    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
+    if (!limit.success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    const body = await request.json()
+    const parsed = createStreamerSchema.safeParse(body)
+
+    if (!parsed.success) {
+      console.error('POST /api/streamdata/admin/streamers validation error:', parsed.error.message)
+      return NextResponse.json(
+        { error: 'Invalid request data' },
+        { status: 400 }
+      )
+    }
+
+    const { username, displayName, email, password, supportFeeRate } = parsed.data
+
+    // Check for existing username or email
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.username, username),
+    })
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: 'Username already taken' },
+        { status: 409 }
+      )
+    }
+
+    const existingEmail = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    })
+
+    if (existingEmail) {
+      return NextResponse.json(
+        { error: 'Email already registered' },
+        { status: 409 }
+      )
+    }
+
+    // Hash password with bcrypt (12 rounds)
+    const passwordHash = await bcrypt.hash(password, 12)
+
+    // Create user
+    const [newUser] = await db
+      .insert(users)
+      .values({
+        username,
+        displayName,
+        email,
+        passwordHash,
+        role: 'streamer',
+      })
+      .returning({
+        id: users.id,
+        username: users.username,
+        displayName: users.displayName,
+        email: users.email,
+        role: users.role,
+        createdAt: users.createdAt,
+      })
+
+    // Create support fee config
+    await db.insert(streamerFeeConfig).values({
+      userId: newUser.id,
+      feeName: 'support_fee',
+      rate: supportFeeRate.toString(),
+    })
+
+    return NextResponse.json({ streamer: newUser }, { status: 201 })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error('POST /api/streamdata/admin/streamers error:', message)
+    return NextResponse.json(
+      { error: 'Failed to create streamer' },
+      { status: 500 }
+    )
+  }
+}
