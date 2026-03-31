@@ -17,7 +17,7 @@ export default async function PortalLayout({
 }) {
   const session = await auth()
 
-  const isAuthenticated = !!session?.user?.id
+  const isAuthenticated = !!session?.user?.email
   const userName = session?.user?.name || 'User'
   const userRole = (session?.user as any)?.role || 'streamer'
 
