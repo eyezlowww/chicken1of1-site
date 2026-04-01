@@ -31,6 +31,17 @@ const toggleProductSchema = z.object({
   isActive: z.boolean(),
 })
 
+const updateProductSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(200),
+  manufacturer: z.string().max(50).optional(),
+  year: z.number().int().min(1900).max(2100).optional(),
+})
+
+const deleteProductSchema = z.object({
+  id: z.string().uuid(),
+})
+
 export async function GET(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
@@ -160,5 +171,92 @@ export async function PATCH(request: NextRequest) {
       { error: 'Failed to update product' },
       { status: 500 }
     )
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const { error } = await requireAdmin()
+    if (error) return error
+
+    const ip = getClientIp(request)
+    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
+    if (!limit.success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    const body = await request.json()
+    const parsed = updateProductSchema.safeParse(body)
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || 'Invalid input' },
+        { status: 400 }
+      )
+    }
+
+    const { id, name, manufacturer, year } = parsed.data
+
+    const [updated] = await db
+      .update(products)
+      .set({ name, manufacturer: manufacturer || null, year: year || null })
+      .where(eq(products.id, id))
+      .returning({
+        id: products.id,
+        name: products.name,
+        manufacturer: products.manufacturer,
+        year: products.year,
+        isActive: products.isActive,
+      })
+
+    if (!updated) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+    }
+
+    return NextResponse.json({ product: updated })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error('PUT /api/streamdata/admin/products error:', message)
+    return NextResponse.json({ error: 'Failed to update product' }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { error } = await requireAdmin()
+    if (error) return error
+
+    const ip = getClientIp(request)
+    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
+    if (!limit.success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    const body = await request.json()
+    const parsed = deleteProductSchema.safeParse(body)
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || 'Invalid input' },
+        { status: 400 }
+      )
+    }
+
+    const { id } = parsed.data
+
+    const [deleted] = await db
+      .delete(products)
+      .where(eq(products.id, id))
+      .returning({ id: products.id, name: products.name })
+
+    if (!deleted) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+    }
+
+    return NextResponse.json({ deleted: true, product: deleted })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error('DELETE /api/streamdata/admin/products error:', message)
+    return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 })
   }
 }

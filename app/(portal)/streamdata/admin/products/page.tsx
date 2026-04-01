@@ -50,6 +50,16 @@ export default function ProductManagementPage() {
   // Toggling state tracker
   const [togglingId, setTogglingId] = useState<string | null>(null)
 
+  // Inline editing state
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editName, setEditName] = useState('')
+  const [editManufacturer, setEditManufacturer] = useState('')
+  const [editYear, setEditYear] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  // Deleting state tracker
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
   // Search / filter
   const [search, setSearch] = useState('')
 
@@ -82,18 +92,28 @@ export default function ProductManagementPage() {
     setCreateError(null)
 
     try {
+      const trimmedName = newName.trim()
+      const trimmedManufacturer = newManufacturer.trim()
       const body: { name: string; manufacturer?: string; year?: number } = {
-        name: newName.trim(),
+        name: trimmedName,
       }
-      if (newManufacturer.trim()) body.manufacturer = newManufacturer.trim()
+      if (trimmedManufacturer) body.manufacturer = trimmedManufacturer
+      let yr: number | undefined
       if (newYear) {
-        const yr = parseInt(newYear, 10)
+        yr = parseInt(newYear, 10)
         if (isNaN(yr) || yr < 1900 || yr > 2100) {
           setCreateError('Year must be between 1900 and 2100.')
           setCreating(false)
           return
         }
         body.year = yr
+      }
+
+      // Auto-prefix name with year and manufacturer if not already present
+      if (yr && trimmedManufacturer && !trimmedName.startsWith(String(yr))) {
+        body.name = `${yr} ${trimmedManufacturer} ${trimmedName}`
+      } else if (yr && !trimmedManufacturer && !trimmedName.startsWith(String(yr))) {
+        body.name = `${yr} ${trimmedName}`
       }
 
       const res = await fetch('/api/streamdata/admin/products', {
@@ -141,6 +161,84 @@ export default function ProductManagementPage() {
       setError(err instanceof Error ? err.message : 'Failed to toggle product')
     } finally {
       setTogglingId(null)
+    }
+  }
+
+  const startEditing = (product: Product) => {
+    setEditingId(product.id)
+    setEditName(product.name)
+    setEditManufacturer(product.manufacturer ?? '')
+    setEditYear(product.year ? String(product.year) : '')
+  }
+
+  const cancelEditing = () => {
+    setEditingId(null)
+    setEditName('')
+    setEditManufacturer('')
+    setEditYear('')
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editingId || !editName.trim()) return
+
+    setSaving(true)
+    try {
+      const body: { id: string; name: string; manufacturer?: string; year?: number } = {
+        id: editingId,
+        name: editName.trim(),
+      }
+      if (editManufacturer.trim()) body.manufacturer = editManufacturer.trim()
+      if (editYear) {
+        const yr = parseInt(editYear, 10)
+        if (isNaN(yr) || yr < 1900 || yr > 2100) {
+          setError('Year must be between 1900 and 2100.')
+          setSaving(false)
+          return
+        }
+        body.year = yr
+      }
+
+      const res = await fetch('/api/streamdata/admin/products', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || 'Save failed')
+      }
+
+      cancelEditing()
+      await fetchProducts()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save product')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleDelete = async (product: Product) => {
+    if (!window.confirm(`Delete ${product.name}? This cannot be undone.`)) return
+
+    setDeletingId(product.id)
+    try {
+      const res = await fetch('/api/streamdata/admin/products', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: product.id }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || 'Delete failed')
+      }
+
+      setProducts((prev) => prev.filter((p) => p.id !== product.id))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete product')
+    } finally {
+      setDeletingId(null)
     }
   }
 
@@ -301,52 +399,127 @@ export default function ProductManagementPage() {
                   </td>
                 </tr>
               ) : (
-                filteredProducts.map((product) => (
-                  <tr
-                    key={product.id}
-                    className={`hover:bg-dark-700/30 transition-colors ${
-                      !product.isActive ? 'opacity-50' : ''
-                    }`}
-                  >
-                    <td className="px-6 py-3 text-sm text-white font-medium">
-                      {product.name}
-                    </td>
-                    <td className="px-6 py-3 text-sm text-cage-400">
-                      {product.manufacturer || '\u2014'}
-                    </td>
-                    <td className="px-6 py-3 text-sm text-cage-400 tabular-nums">
-                      {product.year || '\u2014'}
-                    </td>
-                    <td className="px-6 py-3">
-                      <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                          product.isActive
-                            ? 'bg-green-500/10 text-green-400'
-                            : 'bg-dark-700 text-cage-400'
-                        }`}
-                      >
-                        {product.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-3 text-right">
-                      <button
-                        type="button"
-                        onClick={() => handleToggleActive(product)}
-                        disabled={togglingId === product.id}
-                        className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 ${
-                          product.isActive
-                            ? 'text-red-400 hover:bg-red-500/10'
-                            : 'text-green-400 hover:bg-green-500/10'
-                        }`}
-                      >
-                        {togglingId === product.id ? (
-                          <SpinnerIcon className="w-3 h-3" />
-                        ) : null}
-                        {product.isActive ? 'Deactivate' : 'Activate'}
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                filteredProducts.map((product) => {
+                  const isEditing = editingId === product.id
+
+                  return (
+                    <tr
+                      key={product.id}
+                      className={`hover:bg-dark-700/30 transition-colors ${
+                        !product.isActive ? 'opacity-50' : ''
+                      }`}
+                    >
+                      <td className="px-6 py-3 text-sm text-white font-medium">
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            className="bg-dark-700 border border-cage-600 rounded px-2 py-1 text-sm text-white w-full focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                          />
+                        ) : (
+                          product.name
+                        )}
+                      </td>
+                      <td className="px-6 py-3 text-sm text-cage-400">
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            value={editManufacturer}
+                            onChange={(e) => setEditManufacturer(e.target.value)}
+                            className="bg-dark-700 border border-cage-600 rounded px-2 py-1 text-sm text-white w-full focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                          />
+                        ) : (
+                          product.manufacturer || '\u2014'
+                        )}
+                      </td>
+                      <td className="px-6 py-3 text-sm text-cage-400 tabular-nums">
+                        {isEditing ? (
+                          <input
+                            type="number"
+                            value={editYear}
+                            onChange={(e) => setEditYear(e.target.value)}
+                            min="1900"
+                            max="2100"
+                            className="bg-dark-700 border border-cage-600 rounded px-2 py-1 text-sm text-white w-20 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent tabular-nums"
+                          />
+                        ) : (
+                          product.year || '\u2014'
+                        )}
+                      </td>
+                      <td className="px-6 py-3">
+                        <span
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                            product.isActive
+                              ? 'bg-green-500/10 text-green-400'
+                              : 'bg-dark-700 text-cage-400'
+                          }`}
+                        >
+                          {product.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-3 text-right">
+                        {isEditing ? (
+                          <div className="inline-flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={handleSaveEdit}
+                              disabled={saving}
+                              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 text-green-400 hover:text-green-300 hover:bg-green-500/10"
+                            >
+                              {saving ? <SpinnerIcon className="w-3 h-3" /> : null}
+                              Save
+                            </button>
+                            <button
+                              type="button"
+                              onClick={cancelEditing}
+                              disabled={saving}
+                              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 text-cage-400 hover:text-cage-300 hover:bg-cage-500/10"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="inline-flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => startEditing(product)}
+                              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/10"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleActive(product)}
+                              disabled={togglingId === product.id}
+                              className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 ${
+                                product.isActive
+                                  ? 'text-red-400 hover:bg-red-500/10'
+                                  : 'text-green-400 hover:bg-green-500/10'
+                              }`}
+                            >
+                              {togglingId === product.id ? (
+                                <SpinnerIcon className="w-3 h-3" />
+                              ) : null}
+                              {product.isActive ? 'Deactivate' : 'Activate'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(product)}
+                              disabled={deletingId === product.id}
+                              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                            >
+                              {deletingId === product.id ? (
+                                <SpinnerIcon className="w-3 h-3" />
+                              ) : null}
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })
               )}
             </tbody>
           </table>
