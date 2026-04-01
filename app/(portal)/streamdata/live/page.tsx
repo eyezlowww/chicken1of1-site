@@ -47,6 +47,7 @@ interface PastSession {
   totalCogs: number
   totalProfit: number
   duration: string
+  breaks?: BreakEntry[]
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────
@@ -361,7 +362,23 @@ export default function LiveTrackerPage() {
         const pastRes = await fetch('/api/streamdata/live/sessions')
         if (pastRes.ok) {
           const data = await pastRes.json()
-          setPastSessions(data.sessions || [])
+          setPastSessions((data.sessions || []).map((s: any) => {
+            const breaks = (s.breaks || []).map(mapBreak)
+            const totalSales = breaks.reduce((sum: number, b: BreakEntry) => sum + b.revenue, 0)
+            const totalCogs = breaks.reduce((sum: number, b: BreakEntry) => sum + b.totalCogs, 0)
+            return {
+              id: s.id,
+              platform: s.platform || 'Whatnot',
+              startedAt: s.startedAt,
+              endedAt: s.endedAt,
+              breakCount: breaks.length,
+              totalSales,
+              totalCogs,
+              totalProfit: totalSales - totalCogs,
+              duration: '',
+              breaks,
+            }
+          }))
         }
 
         // Fetch product suggestions
@@ -485,23 +502,17 @@ export default function LiveTrackerPage() {
     }
   }, [activeSession, runningTotals, elapsed])
 
-  const handleExpandSession = useCallback(async (sessionId: string) => {
+  const handleExpandSession = useCallback((sessionId: string) => {
     if (expandedSessionId === sessionId) {
       setExpandedSessionId(null)
       setExpandedBreaks([])
       return
     }
-    try {
-      const res = await fetch(`/api/streamdata/live/sessions/${sessionId}`)
-      if (res.ok) {
-        const data = await res.json()
-        setExpandedBreaks(data.session?.breaks || [])
-        setExpandedSessionId(sessionId)
-      }
-    } catch {
-      // Silently handle
-    }
-  }, [expandedSessionId])
+    // Use already-loaded breaks from the past session
+    const session = pastSessions.find((s) => s.id === sessionId)
+    setExpandedBreaks(session?.breaks || [])
+    setExpandedSessionId(sessionId)
+  }, [expandedSessionId, pastSessions])
 
   // ── Product row handlers ────────────────────────────────────────────
 
