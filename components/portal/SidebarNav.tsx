@@ -215,8 +215,6 @@ export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
             </div>
             {/* Submit Stream — admin can submit on behalf of a streamer */}
             <NavLink item={streamerNav[1]} />
-            {/* Live Tracker */}
-            <NavLink item={streamerNav[2]} />
             {/* Stock Management — admin inventory management */}
             <NavLink item={{
               label: 'Stock Management',

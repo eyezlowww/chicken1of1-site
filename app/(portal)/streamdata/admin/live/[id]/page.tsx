@@ -62,8 +62,11 @@ function formatDateTime(iso: string | Date): string {
   })
 }
 
-function formatTime(iso: string | Date): string {
-  return new Date(iso).toLocaleTimeString('en-US', {
+function formatTime(iso: string | Date | null | undefined): string {
+  if (!iso) return '—'
+  const d = iso instanceof Date ? iso : new Date(iso)
+  if (isNaN(d.getTime())) return '—'
+  return d.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
   })
@@ -319,8 +322,14 @@ export default async function AdminLiveSessionDetailPage({
                       <td className="whitespace-nowrap px-4 py-3 font-mono font-medium text-white">
                         {brk.breakNumber}
                       </td>
-                      <td className="max-w-[200px] truncate px-4 py-3 text-cage-300" title={productNames}>
-                        {productNames}
+                      <td className="px-4 py-3 text-cage-300">
+                        <ul className="space-y-0.5">
+                          {brk.products.length > 0 ? brk.products.map((p, i) => (
+                            <li key={i} className="text-sm">
+                              {p.productName}{p.quantity > 1 ? ` x${p.quantity}` : ''} <span className="text-cage-500">— {fmt(p.costPerUnit)}</span>
+                            </li>
+                          )) : <li className="text-cage-500">—</li>}
+                        </ul>
                       </td>
                       <td className="whitespace-nowrap px-4 py-3 text-right text-white">
                         {fmt(brk.totalCogs)}

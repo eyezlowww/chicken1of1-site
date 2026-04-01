@@ -365,7 +365,7 @@ export default function LiveTrackerPage() {
         }
 
         // Fetch product suggestions
-        const prodRes = await fetch('/api/streamdata/admin/products')
+        const prodRes = await fetch('/api/streamdata/products')
         if (prodRes.ok) {
           const data = await prodRes.json()
           setProductSuggestions(
@@ -640,7 +640,7 @@ export default function LiveTrackerPage() {
                   />
                 </div>
                 <div className="w-16">
-                  <label className="sr-only">Qty</label>
+                  <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-cage-500">Qty</label>
                   <input
                     type="number"
                     min={1}
@@ -651,7 +651,7 @@ export default function LiveTrackerPage() {
                   />
                 </div>
                 <div className="w-28">
-                  <label className="sr-only">Cost per unit</label>
+                  <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-cage-500">Cost</label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-cage-500">$</span>
                     <input
@@ -711,7 +711,7 @@ export default function LiveTrackerPage() {
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-cage-500">
-                Revenue This Break
+                Sales Total This Break
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-cage-500">$</span>
@@ -797,8 +797,12 @@ export default function LiveTrackerPage() {
                   {breaks.map((b) => (
                     <tr key={b.id} className="text-cage-300 hover:bg-dark-900/30">
                       <td className="px-5 py-3 font-bold text-white">{b.breakNumber}</td>
-                      <td className="max-w-[200px] truncate px-5 py-3">
-                        {b.products.map((p) => p.name).join(', ') || '--'}
+                      <td className="px-5 py-3">
+                        <ul className="space-y-0.5">
+                          {b.products.length > 0 ? b.products.map((p, i) => (
+                            <li key={i} className="text-sm">{p.name}{p.qty > 1 ? ` x${p.qty}` : ''} <span className="text-cage-500">— {fmt(p.costPerUnit)}</span></li>
+                          )) : <li className="text-cage-500">--</li>}
+                        </ul>
                       </td>
                       <td className="px-5 py-3 text-right">{fmt(b.totalCogs)}</td>
                       <td className="px-5 py-3 text-right">{b.spotsSold}</td>
@@ -810,7 +814,7 @@ export default function LiveTrackerPage() {
                         <MarginBadge margin={b.margin} />
                       </td>
                       <td className="px-5 py-3 text-right text-cage-500">
-                        {new Date(b.loggedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                        {b.loggedAt && !isNaN(new Date(b.loggedAt).getTime()) ? new Date(b.loggedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : 'Just now'}
                       </td>
                     </tr>
                   ))}
@@ -825,12 +829,14 @@ export default function LiveTrackerPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-bold text-white">Break #{b.breakNumber}</span>
                     <span className="text-xs text-cage-500">
-                      {new Date(b.loggedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                      {b.loggedAt && !isNaN(new Date(b.loggedAt).getTime()) ? new Date(b.loggedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : 'Just now'}
                     </span>
                   </div>
-                  <p className="mt-1 truncate text-xs text-cage-400">
-                    {b.products.map((p) => p.name).join(', ') || '--'}
-                  </p>
+                  <ul className="mt-1 space-y-0.5">
+                    {b.products.length > 0 ? b.products.map((p, i) => (
+                      <li key={i} className="text-xs text-cage-400">{p.name}{p.qty > 1 ? ` x${p.qty}` : ''} — {fmt(p.costPerUnit)}</li>
+                    )) : <li className="text-xs text-cage-500">--</li>}
+                  </ul>
                   <div className="mt-2 grid grid-cols-4 gap-2 text-center text-xs">
                     <div>
                       <p className="text-cage-600">COGS</p>
@@ -980,8 +986,8 @@ export default function LiveTrackerPage() {
                           className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-dark-900/40 px-3 py-2 text-xs"
                         >
                           <span className="font-bold text-white">#{b.breakNumber}</span>
-                          <span className="truncate text-cage-400">
-                            {b.products.map((p) => p.name).join(', ') || '--'}
+                          <span className="text-cage-400">
+                            {b.products.length > 0 ? b.products.map((p) => `${p.name}${p.qty > 1 ? ` x${p.qty}` : ''}`).join(' · ') : '--'}
                           </span>
                           <span className="text-cage-300">{fmt(b.totalCogs)}</span>
                           <span className="text-cage-300">{b.spotsSold} spots</span>
