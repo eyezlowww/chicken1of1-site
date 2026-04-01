@@ -248,7 +248,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* All-time one-liner */}
-      <div className="mb-8 -mt-4 flex items-center gap-1 text-sm text-cage-500">
+      <div className="mb-8 -mt-4 flex flex-wrap items-center gap-1 text-sm text-cage-500">
         <span>All Time:</span>
         <span className="text-gold-400 font-medium">{fmt(lifetimeRevenue)}</span>
         <span>&middot; Breaker</span>

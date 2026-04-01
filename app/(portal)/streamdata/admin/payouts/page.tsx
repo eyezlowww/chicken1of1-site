@@ -337,7 +337,7 @@ export default function PayoutsPage() {
                 ].map((h) => (
                   <th
                     key={h}
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-cage-400"
+                    className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-cage-400"
                   >
                     {h}
                   </th>
@@ -347,7 +347,7 @@ export default function PayoutsPage() {
             <tbody className="divide-y divide-cage-700/50">
               {payouts.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-6 py-12 text-center text-sm text-cage-500">
+                  <td colSpan={9} className="px-3 py-12 text-center text-sm text-cage-500">
                     No payout records found.
                   </td>
                 </tr>
@@ -364,22 +364,22 @@ export default function PayoutsPage() {
                       key={p.id}
                       className="transition-colors hover:bg-dark-700/50"
                     >
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm font-medium text-white">
                         {p.displayName}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm text-cage-300">
                         W{p.weekNumber}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm text-cage-300">
                         {monthName(p.month)} {p.year}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm text-cage-300">
                         {fmt(salesTotal)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm text-cage-300">
                         {fmt(breakerPayout)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm">
                         <span
                           className={
                             adjustments > 0
@@ -396,10 +396,10 @@ export default function PayoutsPage() {
                               : '--'}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-white">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm font-semibold text-white">
                         {fmt(finalPayout)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap px-3 py-3">
                         <span
                           className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
                             p.isPaid
@@ -410,7 +410,7 @@ export default function PayoutsPage() {
                           {p.isPaid ? 'Paid' : 'Unpaid'}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap px-3 py-3">
                         {!p.isPaid ? (
                           <button
                             onClick={() => markAsPaid(p.id)}

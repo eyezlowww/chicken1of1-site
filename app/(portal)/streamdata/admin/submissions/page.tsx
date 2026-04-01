@@ -249,7 +249,7 @@ export default function SubmissionsPage() {
                   (h) => (
                     <th
                       key={h}
-                      className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-cage-400"
+                      className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-cage-400"
                     >
                       {h}
                     </th>
@@ -262,7 +262,7 @@ export default function SubmissionsPage() {
                 <tr>
                   <td
                     colSpan={9}
-                    className="px-6 py-12 text-center text-sm text-cage-500"
+                    className="px-3 py-12 text-center text-sm text-cage-500"
                   >
                     No submissions match the selected filters.
                   </td>
@@ -279,35 +279,35 @@ export default function SubmissionsPage() {
                       key={s.id}
                       className="transition-colors hover:bg-dark-700/50"
                     >
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm font-medium text-white">
                         {s.user.displayName}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm text-cage-300">
                         {s.streamDate}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm text-cage-300">
                         {s.platform ?? 'Whatnot'}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm text-cage-300">
                         {fmt(sales)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm text-cage-300">
                         {fmt(cogs)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm text-cage-300">
                         {fmt(grossProfit)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm font-medium text-white">
                         {fmt(payout)}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap px-3 py-3">
                         <span
                           className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${statusBadge[s.status] ?? 'bg-dark-700 text-cage-300'}`}
                         >
                           {statusLabel[s.status] ?? s.status}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap px-3 py-3">
                         <div className="flex gap-3">
                           <Link
                             href={`/streamdata/admin/submissions/${s.id}`}

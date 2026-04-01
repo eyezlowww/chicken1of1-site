@@ -223,19 +223,19 @@ export default async function HistoryPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-cage-400 text-left border-b border-blood-900/40">
-                <th className="px-6 py-3 font-medium">
+                <th className="px-3 py-3 font-medium">
                   <span className="inline-flex items-center gap-1">
                     Date
                     <ArrowUpDownIcon className="w-3 h-3" />
                   </span>
                 </th>
-                <th className="px-6 py-3 font-medium">Platform</th>
-                <th className="px-6 py-3 font-medium text-right">Sales</th>
-                <th className="px-6 py-3 font-medium text-right">COGS</th>
-                <th className="px-6 py-3 font-medium text-right">Gross Profit</th>
-                <th className="px-6 py-3 font-medium text-right">Payout</th>
-                <th className="px-6 py-3 font-medium text-center">Status</th>
-                <th className="px-6 py-3 font-medium"><span className="sr-only">Details</span></th>
+                <th className="hidden sm:table-cell px-3 py-3 font-medium">Platform</th>
+                <th className="px-3 py-3 font-medium text-right">Sales</th>
+                <th className="hidden sm:table-cell px-3 py-3 font-medium text-right">COGS</th>
+                <th className="px-3 py-3 font-medium text-right">Gross Profit</th>
+                <th className="px-3 py-3 font-medium text-right">Payout</th>
+                <th className="px-3 py-3 font-medium text-center">Status</th>
+                <th className="px-3 py-3 font-medium"><span className="sr-only">Details</span></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-cage-700/50">
@@ -246,32 +246,32 @@ export default async function HistoryPage() {
                     key={stream.id}
                     className="hover:bg-dark-700/40 transition-colors group"
                   >
-                    <td className="px-6 py-4 text-white whitespace-nowrap">
+                    <td className="px-3 py-3 text-xs sm:text-sm text-white whitespace-nowrap">
                       {formatDate(stream.date)}
                     </td>
-                    <td className="px-6 py-4 text-cage-300 whitespace-nowrap">
+                    <td className="hidden sm:table-cell px-3 py-3 text-xs sm:text-sm text-cage-300 whitespace-nowrap">
                       {stream.platform}
                     </td>
-                    <td className="px-6 py-4 text-white text-right tabular-nums">
+                    <td className="px-3 py-3 text-xs sm:text-sm text-white text-right tabular-nums">
                       {fmt(stream.sales)}
                     </td>
-                    <td className="px-6 py-4 text-cage-300 text-right tabular-nums">
+                    <td className="hidden sm:table-cell px-3 py-3 text-xs sm:text-sm text-cage-300 text-right tabular-nums">
                       {fmt(stream.cogs)}
                     </td>
-                    <td className="px-6 py-4 text-white text-right tabular-nums">
+                    <td className="px-3 py-3 text-xs sm:text-sm text-white text-right tabular-nums">
                       {stream.status === 'draft' ? '\u2014' : fmt(stream.grossProfit)}
                     </td>
-                    <td className="px-6 py-4 text-white font-medium text-right tabular-nums">
+                    <td className="px-3 py-3 text-xs sm:text-sm text-white font-medium text-right tabular-nums">
                       {stream.status === 'draft' ? '\u2014' : fmt(stream.payout)}
                     </td>
-                    <td className="px-6 py-4 text-center">
+                    <td className="px-3 py-3 text-center">
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${badge.bg} ${badge.text}`}
                       >
                         {badge.label}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-3">
                       <Link
                         href={`/streamdata/history/${stream.id}`}
                         className="text-cage-500 group-hover:text-gold-400 transition-colors"

@@ -412,7 +412,7 @@ export default function AdminAnalyticsPage() {
               </h2>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[900px]">
+              <table className="w-full min-w-[700px]">
                 <thead>
                   <tr className="border-b border-blood-900/40">
                     {[
@@ -428,7 +428,7 @@ export default function AdminAnalyticsPage() {
                     ].map((header) => (
                       <th
                         key={header}
-                        className="whitespace-nowrap px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-cage-400"
+                        className="whitespace-nowrap px-3 py-3 text-left text-xs font-medium uppercase tracking-wider text-cage-400"
                       >
                         {header}
                       </th>
@@ -441,32 +441,32 @@ export default function AdminAnalyticsPage() {
                       key={`${row.year}-${row.month}`}
                       className="transition-colors hover:bg-dark-700/50"
                     >
-                      <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-white">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm font-medium text-white">
                         {row.monthLabel}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-green-400">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-green-400">
                         {fmt(row.revenue)}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-red-400">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-red-400">
                         {fmt(row.cogs)}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
                         {fmt(row.platformFees)}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
                         {fmt(row.productFees)}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
                         {fmt(row.orderFees)}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
                         {fmt(row.breakerPayouts)}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-cage-300">
+                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
                         {fmt(row.chickenPayouts)}
                       </td>
                       <td
-                        className={`whitespace-nowrap px-4 py-3 text-sm font-semibold tabular-nums ${
+                        className={`whitespace-nowrap px-3 py-3 text-xs sm:text-sm font-semibold tabular-nums ${
                           row.netProfit >= 0 ? 'text-green-400' : 'text-red-400'
                         }`}
                       >
