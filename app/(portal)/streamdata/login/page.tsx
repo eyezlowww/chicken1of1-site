@@ -189,6 +189,13 @@ export default function LoginPage() {
               )}
             </button>
           </form>
+
+          <a
+            href="/streamdata/forgot-password"
+            className="mt-4 block text-center text-sm text-cage-500 transition-colors hover:text-gold-400"
+          >
+            Forgot Password?
+          </a>
         </div>
 
         {/* Footer */}

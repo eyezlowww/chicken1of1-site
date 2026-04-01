@@ -131,7 +131,7 @@ export default async function InventoryPage() {
     <div>
       <h1 className="text-2xl font-bold text-white">Inventory</h1>
       <p className="mt-1 text-sm text-cage-400">
-        Current inventory in hand across all streamers
+        Current inventory in hand across all breakers
       </p>
 
       {!hasAnyInventory ? (
@@ -141,7 +141,7 @@ export default async function InventoryPage() {
           </svg>
           <p className="mt-4 text-cage-400">No inventory data yet.</p>
           <p className="mt-1 text-sm text-cage-500">
-            Inventory is recorded when streamers submit their streams.
+            Inventory is recorded when breakers submit their streams.
           </p>
         </div>
       ) : (
@@ -151,7 +151,7 @@ export default async function InventoryPage() {
             <h2 className="mb-4 text-lg font-semibold text-white">
               Total Inventory
               <span className="ml-2 text-sm font-normal text-cage-400">
-                (combined across all streamers)
+                (combined across all breakers)
               </span>
             </h2>
             <div className="overflow-x-auto rounded-xl border border-blood-900/40 bg-black">
@@ -194,7 +194,7 @@ export default async function InventoryPage() {
 
           {/* ── Per-Streamer Inventory ─────────────────────────────────── */}
           <div className="mt-10">
-            <h2 className="mb-4 text-lg font-semibold text-white">By Streamer</h2>
+            <h2 className="mb-4 text-lg font-semibold text-white">By Breaker</h2>
             <div className="grid gap-6">
               {streamerInventories.map((si) => (
                 <div key={si.streamerId} className="rounded-xl border border-blood-900/40 bg-black p-5">

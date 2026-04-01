@@ -239,7 +239,7 @@ export default function FeesPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Fee Management</h1>
           <p className="mt-1 text-sm text-cage-400">
-            Configure global and per-streamer fee rates
+            Configure global and per-breaker fee rates
           </p>
         </div>
         <Link
@@ -357,10 +357,10 @@ export default function FeesPage() {
       {/* Per-streamer fees */}
       <section>
         <h2 className="mb-4 text-lg font-semibold text-white">
-          Per-Streamer Support Fees
+          Per-Breaker Support Fees
         </h2>
         {streamerFees.length === 0 ? (
-          <p className="text-sm text-cage-500">No streamer fee configurations found.</p>
+          <p className="text-sm text-cage-500">No breaker fee configurations found.</p>
         ) : (
           <div className="overflow-hidden rounded-xl border border-blood-900/40 bg-black/60 backdrop-blur-md">
             <div className="overflow-x-auto">
@@ -368,7 +368,7 @@ export default function FeesPage() {
                 <thead>
                   <tr className="border-b border-blood-900/40">
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-cage-400">
-                      Streamer
+                      Breaker
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-cage-400">
                       Support Fee Rate

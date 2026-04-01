@@ -81,7 +81,7 @@ const adminNav: NavItem[] = [
     ),
   },
   {
-    label: 'Manage Streamers',
+    label: 'Manage Breakers',
     href: '/streamdata/admin/streamers',
     icon: (
       <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
@@ -119,7 +119,7 @@ const pageTitles: Record<string, string> = {
   '/streamdata/admin': 'Admin Dashboard',
   '/streamdata/admin/analytics': 'Analytics',
   '/streamdata/admin/fees': 'Manage Fees',
-  '/streamdata/admin/streamers': 'Manage Streamers',
+  '/streamdata/admin/streamers': 'Manage Breakers',
   '/streamdata/admin/products': 'Products',
   '/streamdata/admin/payouts': 'All Payouts',
   '/streamdata/profile': 'Profile & Settings',
@@ -239,7 +239,7 @@ export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
                   : 'bg-dark-700 text-cage-400'
               }`}
             >
-              {userRole}
+              {userRole === 'streamer' ? 'Breaker' : userRole}
             </span>
           </div>
           <svg className="h-4 w-4 flex-shrink-0 text-cage-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">

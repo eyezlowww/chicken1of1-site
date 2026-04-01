@@ -184,7 +184,7 @@ export default function StreamersPage() {
 
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error ?? 'Failed to invite streamer')
+        throw new Error(data.error ?? 'Failed to invite breaker')
       }
 
       const savedEmail = newEmail.trim()
@@ -197,7 +197,7 @@ export default function StreamersPage() {
       setSuccessMsg(`Invite sent to ${savedEmail}!`)
       await fetchStreamers()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to invite streamer')
+      setError(err instanceof Error ? err.message : 'Failed to invite breaker')
     } finally {
       setSubmitting(false)
     }
@@ -235,7 +235,7 @@ export default function StreamersPage() {
       <div className="flex min-h-screen items-center justify-center bg-dark-950">
         <div className="text-center">
           <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
-          <p className="mt-4 text-sm text-cage-400">Loading streamers...</p>
+          <p className="mt-4 text-sm text-cage-400">Loading breakers...</p>
         </div>
       </div>
     )
@@ -246,9 +246,9 @@ export default function StreamersPage() {
       {/* Header */}
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Streamer Management</h1>
+          <h1 className="text-2xl font-bold text-white">Breaker Management</h1>
           <p className="mt-1 text-sm text-cage-400">
-            {activeCount} active / {streamers.length} total streamers
+            {activeCount} active / {streamers.length} total breakers
           </p>
         </div>
         <div className="flex gap-3">
@@ -257,7 +257,7 @@ export default function StreamersPage() {
             className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-500"
           >
             <PlusIcon className="h-4 w-4" />
-            Add Streamer
+            Add Breaker
           </button>
           <Link
             href="/streamdata/admin"
@@ -295,10 +295,10 @@ export default function StreamersPage() {
       {showAddForm && (
         <div className="mb-8 rounded-xl border border-indigo-500/30 bg-black/60 backdrop-blur-md p-6">
           <h2 className="mb-2 text-lg font-semibold text-white">
-            Invite New Streamer
+            Invite New Breaker
           </h2>
           <p className="mb-4 text-sm text-cage-400">
-            An invite email with a setup link will be sent to the streamer.
+            An invite email with a setup link will be sent to the breaker.
           </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
@@ -410,7 +410,7 @@ export default function StreamersPage() {
               {streamers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-sm text-cage-500">
-                    No streamers found.
+                    No breakers found.
                   </td>
                 </tr>
               ) : (

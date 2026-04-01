@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: 'StreamData | Chicken1of1',
-  description: 'Chicken1of1 streamer portal for managing streams, inventory, and payouts.',
+  description: 'Chicken1of1 breaker portal for managing streams, inventory, and payouts.',
   robots: 'noindex, nofollow',
 }
 

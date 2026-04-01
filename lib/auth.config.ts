@@ -32,13 +32,16 @@ export const authConfig: NextAuthConfig = {
       const isLoggedIn = !!auth?.user
       const pathname = nextUrl.pathname
 
-      // Allow unauthenticated access to login and setup pages
+      // Allow unauthenticated access to login, setup, and forgot-password pages
       if (
         pathname === '/streamdata/login' ||
         pathname === '/streamdata/login/' ||
         pathname.startsWith('/streamdata/setup') ||
+        pathname.startsWith('/streamdata/forgot-password') ||
         pathname === '/api/streamdata/setup' ||
-        pathname === '/api/streamdata/setup/'
+        pathname === '/api/streamdata/setup/' ||
+        pathname === '/api/streamdata/forgot-password' ||
+        pathname === '/api/streamdata/forgot-password/'
       ) {
         // Redirect logged-in users away from login page
         if (isLoggedIn && (pathname === '/streamdata/login' || pathname === '/streamdata/login/')) {

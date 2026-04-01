@@ -43,7 +43,7 @@ async function seed() {
 
   if (!streamerPassword) {
     streamerPassword = generateRandomPassword()
-    console.log(`  Generated streamer password: ${streamerPassword}`)
+    console.log(`  Generated breaker password: ${streamerPassword}`)
     console.log('  (Set SEED_STREAMER_PASSWORD env var to use a fixed password)\n')
   }
 
@@ -168,7 +168,7 @@ async function seed() {
         WHERE user_id = ${user.id} AND fee_name = 'support_fee' AND is_active = true
       )
     `)
-    console.log(`  Streamer fee: ${user.displayName} support_fee = ${sf.rate}`)
+    console.log(`  Breaker fee: ${user.displayName} support_fee = ${sf.rate}`)
   }
   console.log('')
 

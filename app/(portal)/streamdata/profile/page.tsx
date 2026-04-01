@@ -200,7 +200,7 @@ export default function ProfilePage() {
                   : 'bg-dark-700 text-cage-400'
               }`}
             >
-              {profile?.role || '---'}
+              {profile?.role === 'streamer' ? 'Breaker' : profile?.role || '---'}
             </span>
           </div>
         </div>
@@ -421,7 +421,7 @@ export default function ProfilePage() {
                   : 'bg-dark-700 text-cage-400'
               }`}
             >
-              {profile?.role || '---'}
+              {profile?.role === 'streamer' ? 'Breaker' : profile?.role || '---'}
             </span>
           </div>
           <div className="flex items-center justify-between">

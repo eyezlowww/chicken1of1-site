@@ -140,7 +140,7 @@ function SetupForm() {
         <div className="rounded-xl border border-cage-700/50 bg-black p-6 shadow-2xl">
           <h2 className="mb-2 text-lg font-semibold text-white">Set Your Password</h2>
           <p className="mb-6 text-sm text-cage-400">
-            Welcome! Create a password to access your streamer portal.
+            Welcome! Create a password to access your breaker portal.
           </p>
 
           {error && (

@@ -211,7 +211,7 @@ export default async function AdminDashboardPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
           <p className="mt-1 text-sm text-cage-400">
-            Overview of all streamer activity and revenue
+            Overview of all breaker activity and revenue
           </p>
         </div>
         <nav className="flex flex-wrap gap-2">
@@ -219,7 +219,7 @@ export default async function AdminDashboardPage() {
             { href: '/streamdata/admin/submissions', label: 'Submissions' },
             { href: '/streamdata/admin/payouts', label: 'Payouts' },
             { href: '/streamdata/admin/fees', label: 'Fees' },
-            { href: '/streamdata/admin/streamers', label: 'Streamers' },
+            { href: '/streamdata/admin/streamers', label: 'Breakers' },
           ].map((link) => (
             <Link
               key={link.href}
@@ -260,10 +260,10 @@ export default async function AdminDashboardPage() {
       {/* Per-streamer cards */}
       <div className="mb-8">
         <h2 className="mb-4 text-lg font-semibold text-white">
-          Streamer Performance — This Week
+          Breaker Performance — This Week
         </h2>
         {streamers.length === 0 ? (
-          <p className="text-sm text-cage-500">No streamer data available yet.</p>
+          <p className="text-sm text-cage-500">No breaker data available yet.</p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {streamers.map((st) => (
