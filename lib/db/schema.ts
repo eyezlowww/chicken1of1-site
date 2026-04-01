@@ -27,6 +27,7 @@ export const periodStatusEnum = pgEnum('period_status', ['open', 'closed'])
 export const entryStatusEnum = pgEnum('entry_status', ['draft', 'submitted'])
 export const transactionTypeEnum = pgEnum('transaction_type', ['sale', 'adjustment', 'return'])
 export const unitTypeEnum = pgEnum('unit_type', ['case', 'box', 'pack'])
+export const liveSessionStatusEnum = pgEnum('live_session_status', ['live', 'ended'])
 
 // ── Users ──────────────────────────────────────────────────────────────────────
 
@@ -253,6 +254,56 @@ export const inventoryTransactions = pgTable('inventory_transactions', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
+// ── Live Sessions ─────────────────────────────────────────────────────────────
+// Real-time break tracking: a session represents one live stream
+
+export const liveSessions = pgTable('live_sessions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id')
+    .references(() => users.id)
+    .notNull(),
+  platform: varchar('platform', { length: 50 }).default('Whatnot'),
+  startedAt: timestamp('started_at').notNull(),
+  endedAt: timestamp('ended_at'),
+  status: liveSessionStatusEnum('status').default('live').notNull(),
+  notes: text('notes'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+// ── Live Breaks ───────────────────────────────────────────────────────────────
+// Individual breaks within a live session, tracking P/L per break
+
+export const liveBreaks = pgTable('live_breaks', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  sessionId: uuid('session_id')
+    .references(() => liveSessions.id)
+    .notNull(),
+  breakNumber: integer('break_number').notNull(),
+  totalCogs: decimal('total_cogs', { precision: 10, scale: 2 }).notNull(),
+  spotsSold: integer('spots_sold').notNull(),
+  salesTotal: decimal('sales_total', { precision: 10, scale: 2 }).notNull(),
+  profit: decimal('profit', { precision: 10, scale: 2 }).notNull(),
+  costPerSpot: decimal('cost_per_spot', { precision: 10, scale: 2 }),
+  revenuePerSpot: decimal('revenue_per_spot', { precision: 10, scale: 2 }),
+  notes: text('notes'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+// ── Live Break Products ───────────────────────────────────────────────────────
+// Products used in each break (denormalized name for quick display)
+
+export const liveBreakProducts = pgTable('live_break_products', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  breakId: uuid('break_id')
+    .references(() => liveBreaks.id, { onDelete: 'cascade' })
+    .notNull(),
+  productId: uuid('product_id').references(() => products.id),
+  productName: varchar('product_name', { length: 200 }).notNull(),
+  quantity: integer('quantity').notNull().default(1),
+  costPerUnit: decimal('cost_per_unit', { precision: 10, scale: 2 }).notNull(),
+  totalCost: decimal('total_cost', { precision: 10, scale: 2 }).notNull(),
+})
+
 // ── Relations ──────────────────────────────────────────────────────────────────
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -262,6 +313,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   payoutRecords: many(payoutRecords),
   inviteTokens: many(inviteTokens),
   inventoryTransactions: many(inventoryTransactions),
+  liveSessions: many(liveSessions),
 }))
 
 export const inviteTokensRelations = relations(inviteTokens, ({ one }) => ({
@@ -356,6 +408,7 @@ export const productsRelations = relations(products, ({ many }) => ({
   streamProductsSold: many(streamProductsSold),
   streamInventory: many(streamInventory),
   inventoryLots: many(inventoryLots),
+  liveBreakProducts: many(liveBreakProducts),
 }))
 
 // ── Inventory Lot Relations ───────────────────────────────────────────────────
@@ -380,5 +433,34 @@ export const inventoryTransactionsRelations = relations(inventoryTransactions, (
   streamEntry: one(streamEntries, {
     fields: [inventoryTransactions.streamEntryId],
     references: [streamEntries.id],
+  }),
+}))
+
+// ── Live Session Relations ────────────────────────────────────────────────────
+
+export const liveSessionsRelations = relations(liveSessions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [liveSessions.userId],
+    references: [users.id],
+  }),
+  breaks: many(liveBreaks),
+}))
+
+export const liveBreaksRelations = relations(liveBreaks, ({ one, many }) => ({
+  session: one(liveSessions, {
+    fields: [liveBreaks.sessionId],
+    references: [liveSessions.id],
+  }),
+  products: many(liveBreakProducts),
+}))
+
+export const liveBreakProductsRelations = relations(liveBreakProducts, ({ one }) => ({
+  break: one(liveBreaks, {
+    fields: [liveBreakProducts.breakId],
+    references: [liveBreaks.id],
+  }),
+  product: one(products, {
+    fields: [liveBreakProducts.productId],
+    references: [products.id],
   }),
 }))

@@ -33,6 +33,15 @@ const streamerNav: NavItem[] = [
     ),
   },
   {
+    label: 'Live Tracker',
+    href: '/streamdata/live',
+    icon: (
+      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.348 14.652a3.75 3.75 0 010-5.304m5.304 0a3.75 3.75 0 010 5.304m-7.425 2.121a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.807-3.808-9.98 0-13.788m13.788 0c3.808 3.807 3.808 9.98 0 13.788M12 12h.008v.008H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+      </svg>
+    ),
+  },
+  {
     label: 'History',
     href: '/streamdata/history',
     icon: (
@@ -116,6 +125,7 @@ const pageTitles: Record<string, string> = {
   '/streamdata/history': 'Stream History',
   '/streamdata/inventory': 'Inventory',
   '/streamdata/admin/inventory-mgmt': 'Stock Management',
+  '/streamdata/live': 'Live Break Tracker',
   '/streamdata/payouts': 'Payouts',
   '/streamdata/admin': 'Admin Dashboard',
   '/streamdata/admin/analytics': 'Analytics',
@@ -195,6 +205,8 @@ export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
             </div>
             {/* Submit Stream — admin can submit on behalf of a streamer */}
             <NavLink item={streamerNav[1]} />
+            {/* Live Tracker */}
+            <NavLink item={streamerNav[2]} />
             {/* Stock Management — admin inventory management */}
             <NavLink item={{
               label: 'Stock Management',
