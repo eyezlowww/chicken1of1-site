@@ -51,8 +51,43 @@ interface PastSession {
 
 // ─── Helpers ────────────────────────────────────────────────────────────
 
-function fmt(n: number): string {
-  return n.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+function num(v: any): number {
+  if (typeof v === 'number') return v
+  if (typeof v === 'string') return parseFloat(v) || 0
+  return 0
+}
+
+function fmt(n: number | string | null | undefined): string {
+  return num(n).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+}
+
+// Map raw API break data to our BreakEntry interface
+function mapBreak(raw: any): BreakEntry {
+  return {
+    id: raw.id,
+    breakNumber: raw.breakNumber,
+    products: (raw.products || []).map((p: any) => ({
+      id: p.id || '',
+      name: p.productName || p.name || '',
+      qty: p.quantity || p.qty || 1,
+      costPerUnit: num(p.costPerUnit),
+    })),
+    totalCogs: num(raw.totalCogs),
+    spotsSold: raw.spotsSold || 0,
+    revenue: num(raw.salesTotal || raw.revenue),
+    profit: num(raw.profit),
+    margin: num(raw.salesTotal || raw.revenue) > 0 ? num(raw.profit) / num(raw.salesTotal || raw.revenue) : 0,
+    costPerSpot: num(raw.costPerSpot),
+    revenuePerSpot: num(raw.revenuePerSpot),
+    loggedAt: raw.createdAt || raw.loggedAt || '',
+  }
+}
+
+function mapSession(raw: any): LiveSession {
+  return {
+    ...raw,
+    breaks: (raw.breaks || []).map(mapBreak),
+  }
 }
 
 function pct(n: number): string {
@@ -292,7 +327,7 @@ export default function LiveTrackerPage() {
   // Running totals
   const runningTotals = useMemo(() => {
     if (!activeSession) return { breaks: 0, cogs: 0, sales: 0, profit: 0, margin: 0 }
-    const breaks = activeSession.breaks
+    const breaks = activeSession.breaks || []
     const totalCogs = breaks.reduce((s, b) => s + b.totalCogs, 0)
     const totalSales = breaks.reduce((s, b) => s + b.revenue, 0)
     const totalProfit = breaks.reduce((s, b) => s + b.profit, 0)
@@ -318,7 +353,7 @@ export default function LiveTrackerPage() {
         if (activeRes.ok) {
           const data = await activeRes.json()
           if (data.session) {
-            setActiveSession(data.session)
+            setActiveSession(mapSession(data.session))
           }
         }
 
@@ -358,7 +393,7 @@ export default function LiveTrackerPage() {
       })
       if (!res.ok) throw new Error('Failed to start session')
       const data = await res.json()
-      setActiveSession(data.session)
+      setActiveSession(mapSession(data.session))
     } catch {
       alert('Failed to go live. Please try again.')
     } finally {
@@ -377,9 +412,15 @@ export default function LiveTrackerPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sessionId: activeSession.id,
-          products: products.filter((p) => p.name.trim()),
+          products: products
+            .filter((p) => p.name.trim())
+            .map((p) => ({
+              productName: p.name,
+              quantity: p.qty,
+              costPerUnit: p.costPerUnit,
+            })),
           spotsSold,
-          revenue,
+          salesTotal: revenue,
         }),
       })
       if (!res.ok) throw new Error('Failed to log break')
@@ -390,7 +431,7 @@ export default function LiveTrackerPage() {
         if (!prev) return prev
         return {
           ...prev,
-          breaks: [data.break, ...prev.breaks],
+          breaks: [mapBreak(data.break), ...(prev.breaks || [])],
         }
       })
 
@@ -542,7 +583,7 @@ export default function LiveTrackerPage() {
   // ── LIVE state ──────────────────────────────────────────────────────
 
   if (activeSession) {
-    const breaks = activeSession.breaks
+    const breaks = activeSession.breaks || []
 
     return (
       <div className="space-y-6">

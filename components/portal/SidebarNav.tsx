@@ -108,6 +108,15 @@ const adminNav: NavItem[] = [
     ),
   },
   {
+    label: 'Live Monitor',
+    href: '/streamdata/admin/live',
+    icon: (
+      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.348 14.652a3.75 3.75 0 010-5.304m5.304 0a3.75 3.75 0 010 5.304m-7.425 2.121a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.807-3.808-9.98 0-13.788m13.788 0c3.808 3.807 3.808 9.98 0 13.788M12 12h.008v.008H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+      </svg>
+    ),
+  },
+  {
     label: 'All Payouts',
     href: '/streamdata/admin/payouts',
     icon: (
@@ -132,6 +141,7 @@ const pageTitles: Record<string, string> = {
   '/streamdata/admin/fees': 'Manage Fees',
   '/streamdata/admin/streamers': 'Manage Breakers',
   '/streamdata/admin/products': 'Products',
+  '/streamdata/admin/live': 'Live Monitor',
   '/streamdata/admin/payouts': 'All Payouts',
   '/streamdata/profile': 'Profile & Settings',
 }
