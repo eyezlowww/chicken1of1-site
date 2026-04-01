@@ -307,7 +307,8 @@ export default function InventoryManagementPage() {
     const breakerPerPack = packsPerBox > 0 ? breakerPerBox / packsPerBox : 0
     const totalInvestment = ownerPerBox * totalBoxes
     const totalBreakerValue = breakerPerBox * totalBoxes
-    const markup = ownerPerBox > 0 ? ((breakerPerBox - ownerPerBox) / ownerPerBox) * 100 : 0
+    const breakerHasValue = breakerPerBox > 0
+    const markup = ownerPerBox > 0 && breakerHasValue ? ((breakerPerBox - ownerPerBox) / ownerPerBox) * 100 : 0
 
     return {
       totalBoxes,
@@ -321,6 +322,7 @@ export default function InventoryManagementPage() {
       totalInvestment,
       totalBreakerValue,
       markup,
+      breakerHasValue,
       hasData: cases > 0 && boxesPerCase > 0,
     }
   }, [
@@ -406,30 +408,26 @@ export default function InventoryManagementPage() {
 
     if (formCostMethod === 'per_box') {
       const ownerCost = parseFloat(formOwnerCostPerBox)
-      const breakerCost = parseFloat(formBreakerCostPerBox)
       if (!ownerCost || ownerCost <= 0) {
         setCreateError('Owner cost per box is required.')
         return
       }
-      if (!breakerCost || breakerCost <= 0) {
-        setCreateError('Breaker cost per box is required.')
-        return
-      }
       body.costPerBox = ownerCost
-      body.breakerCostPerBox = breakerCost
+      const breakerCost = parseFloat(formBreakerCostPerBox)
+      if (breakerCost && breakerCost > 0) {
+        body.breakerCostPerBox = breakerCost
+      }
     } else {
       const ownerCost = parseFloat(formOwnerCostPerCase)
-      const breakerCost = parseFloat(formBreakerCostPerCase)
       if (!ownerCost || ownerCost <= 0) {
         setCreateError('Owner cost per case is required.')
         return
       }
-      if (!breakerCost || breakerCost <= 0) {
-        setCreateError('Breaker cost per case is required.')
-        return
-      }
       body.costPerCase = ownerCost
-      body.breakerCostPerCase = breakerCost
+      const breakerCost = parseFloat(formBreakerCostPerCase)
+      if (breakerCost && breakerCost > 0) {
+        body.breakerCostPerCase = breakerCost
+      }
     }
 
     setCreating(true)
@@ -716,10 +714,13 @@ export default function InventoryManagementPage() {
                       className="w-full bg-dark-700 border border-cage-600 rounded-lg pl-7 pr-4 py-2.5 text-green-400 placeholder-cage-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-shadow text-sm tabular-nums"
                     />
                   </div>
+                  {parseFloat(formOwnerCostPerBox) > 0 && parseInt(formBoxesPerCase, 10) > 0 && (
+                    <p className="text-xs text-cage-500 mt-1">= {fmt(parseFloat(formOwnerCostPerBox) * parseInt(formBoxesPerCase, 10))} per case (auto-calculated)</p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="inv-breaker-box" className="block text-sm font-medium text-cage-300 mb-1.5">
-                    Breaker Cost / Box <span className="text-red-400">*</span>
+                    Breaker Cost / Box <span className="text-cage-500 text-xs">(optional)</span>
                   </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-cage-500 text-sm">$</span>
@@ -755,10 +756,13 @@ export default function InventoryManagementPage() {
                       className="w-full bg-dark-700 border border-cage-600 rounded-lg pl-7 pr-4 py-2.5 text-green-400 placeholder-cage-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-shadow text-sm tabular-nums"
                     />
                   </div>
+                  {parseFloat(formOwnerCostPerCase) > 0 && parseInt(formBoxesPerCase, 10) > 0 && (
+                    <p className="text-xs text-cage-500 mt-1">= {fmt(parseFloat(formOwnerCostPerCase) / parseInt(formBoxesPerCase, 10))} per box (auto-calculated)</p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="inv-breaker-case" className="block text-sm font-medium text-cage-300 mb-1.5">
-                    Breaker Cost / Case <span className="text-red-400">*</span>
+                    Breaker Cost / Case <span className="text-cage-500 text-xs">(optional)</span>
                   </label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-cage-500 text-sm">$</span>
@@ -852,13 +856,21 @@ export default function InventoryManagementPage() {
                 </div>
                 <div>
                   <span className="text-cage-400">Total Breaker Value:</span>{' '}
-                  <span className="text-green-400 font-semibold tabular-nums">{fmt(preview.totalBreakerValue)}</span>
+                  {preview.breakerHasValue ? (
+                    <span className="text-green-400 font-semibold tabular-nums">{fmt(preview.totalBreakerValue)}</span>
+                  ) : (
+                    <span className="text-cage-500 font-semibold">TBD</span>
+                  )}
                 </div>
                 <div>
                   <span className="text-cage-400">Markup:</span>{' '}
-                  <span className={`font-semibold tabular-nums ${preview.markup > 0 ? 'text-green-400' : preview.markup < 0 ? 'text-red-400' : 'text-cage-400'}`}>
-                    {preview.markup.toFixed(1)}%
-                  </span>
+                  {preview.breakerHasValue ? (
+                    <span className={`font-semibold tabular-nums ${preview.markup > 0 ? 'text-green-400' : preview.markup < 0 ? 'text-red-400' : 'text-cage-400'}`}>
+                      {preview.markup.toFixed(1)}%
+                    </span>
+                  ) : (
+                    <span className="text-cage-500 font-semibold">--</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -1067,7 +1079,9 @@ export default function InventoryManagementPage() {
                             className="bg-dark-700 border border-cage-600 rounded px-2 py-1 text-sm text-green-400 w-20 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent tabular-nums"
                           />
                         ) : (
-                          fmt(Number(lot.breakerCostPerBox))
+                          !lot.breakerCostPerBox || lot.breakerCostPerBox === '0.00'
+                            ? <span className="text-cage-500">Not set</span>
+                            : fmt(Number(lot.breakerCostPerBox))
                         )}
                       </td>
 

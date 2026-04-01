@@ -17,7 +17,7 @@ interface AvailableProduct {
   availableBoxes: number
   availablePacks: number
   breakerCostPerCase: string | null
-  breakerCostPerBox: string
+  breakerCostPerBox: string | null
   breakerCostPerPack: string | null
 }
 
@@ -75,9 +75,9 @@ export async function GET(request: NextRequest) {
           availableCases: lot.remainingCases,
           availableBoxes: lot.remainingBoxes,
           availablePacks: lot.remainingPacks,
-          breakerCostPerCase: lot.breakerCostPerCase,
-          breakerCostPerBox: lot.breakerCostPerBox,
-          breakerCostPerPack: lot.breakerCostPerPack,
+          breakerCostPerCase: lot.breakerCostPerCase ?? null,
+          breakerCostPerBox: lot.breakerCostPerBox ?? null,
+          breakerCostPerPack: lot.breakerCostPerPack ?? null,
         })
       }
     }

@@ -218,7 +218,7 @@ export const inventoryLots = pgTable('inventory_lots', {
   totalBoxes: integer('total_boxes').notNull(),
   totalPacks: integer('total_packs').notNull(),
   ownerCostPerBox: decimal('owner_cost_per_box', { precision: 10, scale: 2 }).notNull(),
-  breakerCostPerBox: decimal('breaker_cost_per_box', { precision: 10, scale: 2 }).notNull(),
+  breakerCostPerBox: decimal('breaker_cost_per_box', { precision: 10, scale: 2 }),
   ownerCostPerCase: decimal('owner_cost_per_case', { precision: 10, scale: 2 }),
   breakerCostPerCase: decimal('breaker_cost_per_case', { precision: 10, scale: 2 }),
   ownerCostPerPack: decimal('owner_cost_per_pack', { precision: 10, scale: 2 }),

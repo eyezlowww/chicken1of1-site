@@ -31,6 +31,7 @@ const createInventoryLotSchema = z
     notes: z.string().max(1000).optional(),
   })
   .superRefine((data, ctx) => {
+    // Owner cost is required, breaker cost is optional (can be set later)
     if (data.costEntryType === 'per_box') {
       if (data.costPerBox == null || data.costPerBox <= 0) {
         ctx.addIssue({
@@ -39,26 +40,12 @@ const createInventoryLotSchema = z
           path: ['costPerBox'],
         })
       }
-      if (data.breakerCostPerBox == null || data.breakerCostPerBox <= 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'breakerCostPerBox is required when costEntryType is per_box',
-          path: ['breakerCostPerBox'],
-        })
-      }
     } else if (data.costEntryType === 'per_case') {
       if (data.costPerCase == null || data.costPerCase <= 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'costPerCase is required when costEntryType is per_case',
           path: ['costPerCase'],
-        })
-      }
-      if (data.breakerCostPerCase == null || data.breakerCostPerCase <= 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'breakerCostPerCase is required when costEntryType is per_case',
-          path: ['breakerCostPerCase'],
         })
       }
     }
@@ -147,25 +134,26 @@ export async function POST(request: NextRequest) {
     const totalPacks = totalBoxes * data.packsPerBox
 
     // Calculate costs based on entry type
+    // Owner cost is required, breaker cost is optional
     let ownerCostPerBox: number
-    let breakerCostPerBox: number
+    let breakerCostPerBox: number | null
     let ownerCostPerCase: number
-    let breakerCostPerCase: number
+    let breakerCostPerCase: number | null
 
     if (data.costEntryType === 'per_case') {
       ownerCostPerCase = data.costPerCase!
-      breakerCostPerCase = data.breakerCostPerCase!
       ownerCostPerBox = ownerCostPerCase / data.boxesPerCase
-      breakerCostPerBox = breakerCostPerCase / data.boxesPerCase
+      breakerCostPerCase = data.breakerCostPerCase ?? null
+      breakerCostPerBox = breakerCostPerCase != null ? breakerCostPerCase / data.boxesPerCase : null
     } else {
       ownerCostPerBox = data.costPerBox!
-      breakerCostPerBox = data.breakerCostPerBox!
       ownerCostPerCase = ownerCostPerBox * data.boxesPerCase
-      breakerCostPerCase = breakerCostPerBox * data.boxesPerCase
+      breakerCostPerBox = data.breakerCostPerBox ?? null
+      breakerCostPerCase = breakerCostPerBox != null ? breakerCostPerBox * data.boxesPerCase : null
     }
 
     const ownerCostPerPack = ownerCostPerBox / data.packsPerBox
-    const breakerCostPerPack = breakerCostPerBox / data.packsPerBox
+    const breakerCostPerPack = breakerCostPerBox != null ? breakerCostPerBox / data.packsPerBox : null
 
     const [newLot] = await db
       .insert(inventoryLots)
@@ -177,11 +165,11 @@ export async function POST(request: NextRequest) {
         totalBoxes,
         totalPacks,
         ownerCostPerBox: ownerCostPerBox.toFixed(2),
-        breakerCostPerBox: breakerCostPerBox.toFixed(2),
+        breakerCostPerBox: breakerCostPerBox != null ? breakerCostPerBox.toFixed(2) : undefined,
         ownerCostPerCase: ownerCostPerCase.toFixed(2),
-        breakerCostPerCase: breakerCostPerCase.toFixed(2),
+        breakerCostPerCase: breakerCostPerCase != null ? breakerCostPerCase.toFixed(2) : undefined,
         ownerCostPerPack: ownerCostPerPack.toFixed(2),
-        breakerCostPerPack: breakerCostPerPack.toFixed(2),
+        breakerCostPerPack: breakerCostPerPack != null ? breakerCostPerPack.toFixed(2) : undefined,
         remainingCases: data.quantityCases,
         remainingBoxes: totalBoxes,
         remainingPacks: totalPacks,
