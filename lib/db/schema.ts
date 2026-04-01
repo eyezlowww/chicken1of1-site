@@ -1,5 +1,8 @@
 // Drizzle ORM schema for Chicken1of1 streamer portal
 // Defines all tables for stream tracking, fee calculation, and payout management
+//
+// After modifying this schema, push changes to Supabase with:
+//   npx drizzle-kit push
 
 import {
   pgTable,
@@ -22,6 +25,8 @@ export const userRoleEnum = pgEnum('user_role', ['streamer', 'admin'])
 export const feeTypeEnum = pgEnum('fee_type', ['percentage', 'flat_per_order'])
 export const periodStatusEnum = pgEnum('period_status', ['open', 'closed'])
 export const entryStatusEnum = pgEnum('entry_status', ['draft', 'submitted'])
+export const transactionTypeEnum = pgEnum('transaction_type', ['sale', 'adjustment', 'return'])
+export const unitTypeEnum = pgEnum('unit_type', ['case', 'box', 'pack'])
 
 // ── Users ──────────────────────────────────────────────────────────────────────
 
@@ -198,6 +203,56 @@ export const inviteTokens = pgTable('invite_tokens', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
+// ── Inventory Lots ────────────────────────────────────────────────────────────
+// Smart Inventory: tracks cases, boxes, and packs received with dual-cost model
+// (owner cost vs breaker cost). Remaining quantities decrement via FIFO deductions.
+
+export const inventoryLots = pgTable('inventory_lots', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  productId: uuid('product_id')
+    .references(() => products.id)
+    .notNull(),
+  quantityCases: integer('quantity_cases').notNull(),
+  boxesPerCase: integer('boxes_per_case').notNull(),
+  packsPerBox: integer('packs_per_box').notNull(),
+  totalBoxes: integer('total_boxes').notNull(),
+  totalPacks: integer('total_packs').notNull(),
+  ownerCostPerBox: decimal('owner_cost_per_box', { precision: 10, scale: 2 }).notNull(),
+  breakerCostPerBox: decimal('breaker_cost_per_box', { precision: 10, scale: 2 }).notNull(),
+  ownerCostPerCase: decimal('owner_cost_per_case', { precision: 10, scale: 2 }),
+  breakerCostPerCase: decimal('breaker_cost_per_case', { precision: 10, scale: 2 }),
+  ownerCostPerPack: decimal('owner_cost_per_pack', { precision: 10, scale: 2 }),
+  breakerCostPerPack: decimal('breaker_cost_per_pack', { precision: 10, scale: 2 }),
+  remainingCases: integer('remaining_cases').notNull(),
+  remainingBoxes: integer('remaining_boxes').notNull(),
+  remainingPacks: integer('remaining_packs').notNull(),
+  receivedDate: date('received_date').notNull(),
+  notes: text('notes'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
+// ── Inventory Transactions ────────────────────────────────────────────────────
+// Audit log of all stock movements against inventory lots.
+// Positive quantity = deduction (sale), negative = return/add-back.
+
+export const inventoryTransactions = pgTable('inventory_transactions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  inventoryLotId: uuid('inventory_lot_id')
+    .references(() => inventoryLots.id)
+    .notNull(),
+  userId: uuid('user_id')
+    .references(() => users.id)
+    .notNull(),
+  streamEntryId: uuid('stream_entry_id').references(() => streamEntries.id),
+  transactionType: transactionTypeEnum('transaction_type').notNull(),
+  unitType: unitTypeEnum('unit_type').notNull(),
+  quantity: integer('quantity').notNull(),
+  costPerUnit: decimal('cost_per_unit', { precision: 10, scale: 2 }),
+  notes: text('notes'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
 // ── Relations ──────────────────────────────────────────────────────────────────
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -206,6 +261,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   streamEntries: many(streamEntries),
   payoutRecords: many(payoutRecords),
   inviteTokens: many(inviteTokens),
+  inventoryTransactions: many(inventoryTransactions),
 }))
 
 export const inviteTokensRelations = relations(inviteTokens, ({ one }) => ({
@@ -253,6 +309,7 @@ export const streamEntriesRelations = relations(streamEntries, ({ one, many }) =
     fields: [streamEntries.id],
     references: [streamCalculations.streamEntryId],
   }),
+  inventoryTransactions: many(inventoryTransactions),
 }))
 
 export const streamProductsSoldRelations = relations(streamProductsSold, ({ one }) => ({
@@ -298,4 +355,30 @@ export const payoutRecordsRelations = relations(payoutRecords, ({ one }) => ({
 export const productsRelations = relations(products, ({ many }) => ({
   streamProductsSold: many(streamProductsSold),
   streamInventory: many(streamInventory),
+  inventoryLots: many(inventoryLots),
+}))
+
+// ── Inventory Lot Relations ───────────────────────────────────────────────────
+
+export const inventoryLotsRelations = relations(inventoryLots, ({ one, many }) => ({
+  product: one(products, {
+    fields: [inventoryLots.productId],
+    references: [products.id],
+  }),
+  transactions: many(inventoryTransactions),
+}))
+
+export const inventoryTransactionsRelations = relations(inventoryTransactions, ({ one }) => ({
+  inventoryLot: one(inventoryLots, {
+    fields: [inventoryTransactions.inventoryLotId],
+    references: [inventoryLots.id],
+  }),
+  user: one(users, {
+    fields: [inventoryTransactions.userId],
+    references: [users.id],
+  }),
+  streamEntry: one(streamEntries, {
+    fields: [inventoryTransactions.streamEntryId],
+    references: [streamEntries.id],
+  }),
 }))
