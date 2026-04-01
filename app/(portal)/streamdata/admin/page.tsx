@@ -245,26 +245,6 @@ export default async function AdminDashboardPage() {
         </nav>
       </div>
 
-      {/* Live breakers indicator */}
-      {liveSessionsRaw.length > 0 && (
-        <Link
-          href="/streamdata/admin/live"
-          className="mb-6 flex items-center gap-3 rounded-xl border border-blood-600/40 bg-blood-950/40 backdrop-blur-md px-5 py-3 transition-colors hover:border-blood-500/50"
-        >
-          <span className="relative flex h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-red-500" />
-          </span>
-          <span className="text-sm font-medium text-white">
-            {liveSessionsRaw.length} breaker{liveSessionsRaw.length !== 1 ? 's' : ''} live now
-          </span>
-          <span className="text-xs text-cage-400">
-            — {liveSessionsRaw.map((s) => s.displayName).join(', ')}
-          </span>
-          <span className="ml-auto text-xs text-cage-500">View Live Monitor →</span>
-        </Link>
-      )}
-
       {/* Stats row */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((s) => (

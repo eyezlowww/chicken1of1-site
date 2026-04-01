@@ -2,7 +2,7 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import LogoutButton from './LogoutButton'
@@ -153,10 +153,29 @@ interface SidebarNavProps {
 
 export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [liveCount, setLiveCount] = useState(0)
   const pathname = usePathname()
 
   const isAdmin = userRole === 'admin'
   const pageTitle = pageTitles[pathname] || 'StreamData'
+
+  // Poll for live breakers count (admin only)
+  useEffect(() => {
+    if (!isAdmin) return
+    async function checkLive() {
+      try {
+        const res = await fetch('/api/streamdata/admin/live')
+        if (res.ok) {
+          const data = await res.json()
+          const count = (data.sessions || []).filter((s: any) => s.status === 'live').length
+          setLiveCount(count)
+        }
+      } catch { /* silent */ }
+    }
+    checkLive()
+    const interval = setInterval(checkLive, 30000) // every 30s
+    return () => clearInterval(interval)
+  }, [isAdmin])
 
   // Get initials for avatar
   const initials = userName
@@ -331,6 +350,16 @@ export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
       {/* Desktop top bar */}
       <div className="hidden lg:fixed lg:left-64 lg:right-0 lg:top-0 lg:z-20 lg:flex lg:h-14 lg:items-center lg:justify-between lg:border-b lg:border-blood-900/40 lg:bg-dark-950/80 lg:px-6 lg:backdrop-blur-sm">
         <h1 className="text-sm font-semibold text-white">{pageTitle}</h1>
+        {/* Live indicator — centered */}
+        {isAdmin && liveCount > 0 && (
+          <Link href="/streamdata/admin/live" className="flex items-center gap-2 rounded-full border border-blood-600/40 bg-blood-950/60 px-3 py-1 transition-colors hover:border-blood-500/50">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
+            </span>
+            <span className="text-xs font-medium text-white">{liveCount} Live</span>
+          </Link>
+        )}
         <div className="flex items-center gap-3">
           <span className="text-sm text-cage-400">{userName}</span>
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-dark-700 text-xs font-bold text-white">
