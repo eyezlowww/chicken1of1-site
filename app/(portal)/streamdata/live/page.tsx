@@ -120,9 +120,10 @@ function formatDateTime(iso: string): string {
   })
 }
 
-function formatDuration(start: string, end: string | null): string {
+function formatDuration(start: string | Date, end: string | Date | null): string {
   const endMs = end ? new Date(end).getTime() : Date.now()
   const ms = endMs - new Date(start).getTime()
+  if (isNaN(ms) || ms < 0) return '—'
   const totalMin = Math.floor(ms / 60000)
   const h = Math.floor(totalMin / 60)
   const m = totalMin % 60
@@ -375,7 +376,7 @@ export default function LiveTrackerPage() {
               totalSales,
               totalCogs,
               totalProfit: totalSales - totalCogs,
-              duration: '',
+              duration: s.endedAt ? formatDuration(new Date(s.startedAt), new Date(s.endedAt)) : 'Ongoing',
               breaks,
             }
           }))
@@ -965,8 +966,11 @@ export default function LiveTrackerPage() {
                       <span className="rounded-full bg-dark-700 px-2 py-0.5 text-[11px] font-medium text-cage-400">
                         {session.platform}
                       </span>
+                      <span className="text-xs text-blood-400">
+                        {session.duration}
+                      </span>
                       <span className="text-xs text-cage-500">
-                        {session.duration} &middot; {session.breakCount} break{session.breakCount !== 1 ? 's' : ''}
+                        {session.breakCount} break{session.breakCount !== 1 ? 's' : ''}
                       </span>
                     </div>
                     <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-cage-400">
