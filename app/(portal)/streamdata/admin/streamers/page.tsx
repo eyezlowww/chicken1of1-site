@@ -511,16 +511,18 @@ export default function StreamersPage() {
                               <PencilIcon className="h-3.5 w-3.5" />
                               Edit
                             </button>
-                            <button
-                              onClick={() => toggleStatus(s.id)}
-                              className={`text-sm font-medium transition-colors ${
-                                s.isActive
-                                  ? 'text-red-400 hover:text-red-300'
-                                  : 'text-green-400 hover:text-green-300'
-                              }`}
-                            >
-                              {s.isActive ? 'Deactivate' : 'Activate'}
-                            </button>
+                            {s.role !== 'admin' && (
+                              <button
+                                onClick={() => toggleStatus(s.id)}
+                                className={`text-sm font-medium transition-colors ${
+                                  s.isActive
+                                    ? 'text-red-400 hover:text-red-300'
+                                    : 'text-green-400 hover:text-green-300'
+                                }`}
+                              >
+                                {s.isActive ? 'Deactivate' : 'Activate'}
+                              </button>
+                            )}
                             {s.hasPassword === false ? (
                               <button
                                 onClick={() => resendInvite(s.id)}
