@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     const baseUrl = process.env.NEXTAUTH_URL || 'https://chicken1of1.com'
     const resetLink = `${baseUrl}/streamdata/setup?token=${token}`
 
-    await resend.emails.send({
+    const { data: emailData, error: emailError } = await resend.emails.send({
       from: 'Chicken1of1 StreamData <noreply@chicken1of1.com>',
       to: [user.email],
       subject: 'Reset your StreamData password',
@@ -99,6 +99,13 @@ This link expires in 1 hour. If you didn't request this, you can safely ignore t
 Bauk Bauk Baby!
 The Chicken1of1 Team`,
     })
+
+    if (emailError) {
+      console.error('Resend forgot-password email error:', emailError)
+      // Still return generic message to avoid info leakage, but log the actual error
+    } else {
+      console.log('Password reset email sent successfully:', emailData?.id)
+    }
 
     return NextResponse.json({ message: GENERIC_SUCCESS_MESSAGE })
   } catch (err) {

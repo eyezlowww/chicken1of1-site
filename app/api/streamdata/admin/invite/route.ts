@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
     const baseUrl = process.env.NEXTAUTH_URL || 'https://chicken1of1.com'
     const setupLink = `${baseUrl}/streamdata/setup?token=${token}`
 
-    await resend.emails.send({
+    const { data: emailData, error: emailError } = await resend.emails.send({
       from: 'Chicken1of1 StreamData <noreply@chicken1of1.com>',
       to: [email],
       subject: "You're invited to Chicken1of1 StreamData",
@@ -121,12 +121,26 @@ Bauk Bauk Baby!
 The Chicken1of1 Team`,
     })
 
+    if (emailError) {
+      console.error('Resend invite email error:', emailError)
+      // User was created but email failed — inform the admin so they can resend
+      return NextResponse.json(
+        {
+          streamer: newUser,
+          warning: 'Streamer created but invite email failed to send',
+          emailError: emailError.message,
+        },
+        { status: 201 }
+      )
+    }
+
+    console.log('Invite email sent successfully:', emailData?.id)
     return NextResponse.json({ streamer: newUser }, { status: 201 })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     console.error('POST /api/streamdata/admin/invite error:', message)
     return NextResponse.json(
-      { error: 'Failed to invite streamer' },
+      { error: `Failed to invite streamer: ${message}` },
       { status: 500 }
     )
   }
