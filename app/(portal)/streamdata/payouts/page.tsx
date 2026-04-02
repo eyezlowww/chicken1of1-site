@@ -110,13 +110,15 @@ export default async function PayoutsPage() {
   if (periods.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-white tracking-tight">
-            Payout History
-          </h1>
-          <p className="mt-1 text-cage-400 text-sm">
-            Weekly payout summaries and payment status.
-          </p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="font-heading text-3xl font-bold text-white tracking-tight">
+              Payout History
+            </h1>
+            <p className="mt-1 text-cage-400 text-sm">
+              Weekly payout summaries and payment status.
+            </p>
+          </div>
         </div>
         <div className="bg-black/60 backdrop-blur-md border border-blood-900/40 rounded-xl px-6 py-16 text-center">
           <p className="text-cage-400">No payout data yet. Submit streams to see your payouts here.</p>
@@ -258,13 +260,24 @@ export default async function PayoutsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="font-heading text-3xl font-bold text-white tracking-tight">
-          Payout History
-        </h1>
-        <p className="mt-1 text-cage-400 text-sm">
-          Weekly payout summaries and payment status.
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="font-heading text-3xl font-bold text-white tracking-tight">
+            Payout History
+          </h1>
+          <p className="mt-1 text-cage-400 text-sm">
+            Weekly payout summaries and payment status.
+          </p>
+        </div>
+        <a
+          href="/api/streamdata/payouts/export"
+          className="inline-flex items-center gap-2 rounded-lg border border-blood-900/40 bg-black/60 backdrop-blur-md px-4 py-2 text-sm font-medium text-cage-300 transition-colors hover:border-gold-500/50 hover:text-white"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>
+          Export CSV
+        </a>
       </div>
 
       {/* Summary strip */}
