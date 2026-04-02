@@ -229,8 +229,17 @@ export default function ProductManagementPage() {
         body: JSON.stringify({ id: product.id }),
       })
 
+      const data = await res.json().catch(() => ({}))
+
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
+        if (data.deactivated) {
+          // Product was auto-deactivated instead of deleted
+          setProducts((prev) =>
+            prev.map((p) => (p.id === product.id ? { ...p, isActive: false } : p))
+          )
+          setError(data.error)
+          return
+        }
         throw new Error(data.error || 'Delete failed')
       }
 

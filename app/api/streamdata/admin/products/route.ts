@@ -244,16 +244,33 @@ export async function DELETE(request: NextRequest) {
 
     const { id } = parsed.data
 
-    const [deleted] = await db
-      .delete(products)
-      .where(eq(products.id, id))
-      .returning({ id: products.id, name: products.name })
+    try {
+      const [deleted] = await db
+        .delete(products)
+        .where(eq(products.id, id))
+        .returning({ id: products.id, name: products.name })
 
-    if (!deleted) {
-      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+      if (!deleted) {
+        return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+      }
+
+      return NextResponse.json({ deleted: true, product: deleted })
+    } catch (deleteErr: any) {
+      // FK constraint — product is referenced by stream entries or inventory
+      if (deleteErr?.code === '23503' || deleteErr?.message?.includes('foreign key') || deleteErr?.message?.includes('violates')) {
+        // Auto-deactivate instead of delete
+        await db
+          .update(products)
+          .set({ isActive: false })
+          .where(eq(products.id, id))
+
+        return NextResponse.json({
+          error: 'Product has been used in stream submissions and cannot be deleted. It has been deactivated instead.',
+          deactivated: true,
+        }, { status: 409 })
+      }
+      throw deleteErr
     }
-
-    return NextResponse.json({ deleted: true, product: deleted })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     console.error('DELETE /api/streamdata/admin/products error:', message)
