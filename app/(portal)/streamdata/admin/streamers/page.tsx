@@ -161,6 +161,25 @@ export default function StreamersPage() {
     )
   }
 
+  async function deleteBreaker(id: string, name: string) {
+    if (!window.confirm(`Permanently delete ${name}? This cannot be undone.`)) return
+    try {
+      const res = await fetch('/api/streamdata/admin/streamers', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        alert(data.error || 'Failed to delete breaker')
+        return
+      }
+      setStreamers((prev) => prev.filter((s) => s.id !== id))
+    } catch {
+      alert('Failed to delete breaker')
+    }
+  }
+
   /* invite streamer (magic link) */
   async function addStreamer() {
     if (!newUsername.trim() || !newName.trim() || !newEmail.trim()) return
@@ -521,6 +540,14 @@ export default function StreamersPage() {
                                 }`}
                               >
                                 {s.isActive ? 'Deactivate' : 'Activate'}
+                              </button>
+                            )}
+                            {s.role !== 'admin' && !s.isActive && (
+                              <button
+                                onClick={() => deleteBreaker(s.id, s.displayName)}
+                                className="text-sm font-medium text-red-400 transition-colors hover:text-red-300"
+                              >
+                                Delete
                               </button>
                             )}
                             {s.hasPassword === false ? (

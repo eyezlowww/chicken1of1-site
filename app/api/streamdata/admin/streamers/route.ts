@@ -9,8 +9,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { users, streamerFeeConfig } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { users, streamerFeeConfig, streamEntries, inviteTokens } from '@/lib/db/schema'
+import { eq, count } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
@@ -164,5 +164,54 @@ export async function POST(request: NextRequest) {
       { error: 'Failed to create streamer' },
       { status: 500 }
     )
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { error } = await requireAdmin()
+    if (error) return error
+
+    const ip = getClientIp(request)
+    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
+    if (!limit.success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    const body = await request.json()
+    const id = body?.id
+    if (!id || typeof id !== 'string') {
+      return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 })
+    }
+
+    // Can't delete admin accounts
+    const user = await db.query.users.findFirst({ where: eq(users.id, id) })
+    if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    if (user.role === 'admin') {
+      return NextResponse.json({ error: 'Cannot delete admin accounts' }, { status: 403 })
+    }
+
+    // Check if breaker has any stream submissions
+    const [submissions] = await db
+      .select({ value: count() })
+      .from(streamEntries)
+      .where(eq(streamEntries.userId, id))
+
+    if ((submissions?.value ?? 0) > 0) {
+      return NextResponse.json({
+        error: 'This breaker has stream submissions on record and cannot be deleted. Deactivate them instead to preserve historical data.',
+      }, { status: 409 })
+    }
+
+    // Safe to delete — remove fee configs, invite tokens, then user
+    await db.delete(streamerFeeConfig).where(eq(streamerFeeConfig.userId, id))
+    await db.delete(inviteTokens).where(eq(inviteTokens.userId, id))
+    await db.delete(users).where(eq(users.id, id))
+
+    return NextResponse.json({ deleted: true })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error('DELETE /api/streamdata/admin/streamers error:', message)
+    return NextResponse.json({ error: 'Failed to delete breaker' }, { status: 500 })
   }
 }
