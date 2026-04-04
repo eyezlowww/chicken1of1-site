@@ -117,7 +117,7 @@ export default function PYTCalculatorPage() {
 
   const basePrice = useMemo(() => {
     if (teamCount === 0 || targetRevenue <= 0) return 0
-    return targetRevenue / teamCount
+    return Math.ceil(targetRevenue / teamCount)
   }, [targetRevenue, teamCount])
 
   // ── Initialize teams when sport changes ───────────────────────────────
@@ -141,8 +141,8 @@ export default function PYTCalculatorPage() {
     const lockedSum = teams.reduce((s, t) => s + (t.locked ? t.price : 0), 0)
     const unlockedCount = teams.filter((t) => !t.locked).length
     const remaining = targetRevenue - lockedSum
-    const unlockedPrice = unlockedCount > 0 ? remaining / unlockedCount : 0
-    return teams.map((t) => (t.locked ? t : { ...t, price: unlockedPrice }))
+    const unlockedPrice = unlockedCount > 0 ? Math.ceil(remaining / unlockedCount) : 0
+    return teams.map((t) => (t.locked ? { ...t, price: Math.round(t.price) } : { ...t, price: unlockedPrice }))
   }, [teams, targetRevenue])
 
   const lockedSum = useMemo(
@@ -210,7 +210,7 @@ export default function PYTCalculatorPage() {
     // Group teams with same price
     const unique: { price: number; names: string[] }[] = []
     for (const t of sorted) {
-      const roundedPrice = Math.round(t.price * 100) / 100
+      const roundedPrice = Math.round(t.price)
       const existing = unique.find((u) => Math.abs(u.price - roundedPrice) < 0.005)
       if (existing) {
         existing.names.push(t.name)
@@ -444,8 +444,8 @@ export default function PYTCalculatorPage() {
                   <input
                     type="number"
                     min={0}
-                    step={0.01}
-                    value={Math.round(team.price * 100) / 100 || ''}
+                    step={1}
+                    value={Math.round(team.price) || ''}
                     onChange={(e) => setTeamPrice(idx, e.target.value)}
                     onBlur={() => {
                       if (team.price > 0 && !team.locked) {
