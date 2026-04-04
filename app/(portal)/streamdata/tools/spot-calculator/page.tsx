@@ -18,6 +18,17 @@ function fmt(n: number): string {
   return n.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
 }
 
+// ─── Platform fee options ────────────────────────────────────────────────
+
+const PLATFORMS = [
+  { key: 'whatnot', label: 'Whatnot (10.9%)', rate: 0.109 },
+  { key: 'fanatics', label: 'Fanatics (12.5%)', rate: 0.125 },
+  { key: 'ebay', label: 'eBay (13.2%)', rate: 0.132 },
+  { key: 'tiktok', label: 'TikTok (8%)', rate: 0.08 },
+  { key: 'none', label: 'No Fee', rate: 0 },
+  { key: 'custom', label: 'Custom', rate: 0 },
+]
+
 // ─── Preset margin buttons ──────────────────────────────────────────────
 
 const MARGIN_PRESETS = [10, 15, 20, 25, 30, 40, 50]
@@ -31,6 +42,8 @@ export default function SpotCalculatorPage() {
   const [spots, setSpots] = useState('')
   const [customMargin, setCustomMargin] = useState('')
   const [activeMargin, setActiveMargin] = useState<number | null>(null)
+  const [platform, setPlatform] = useState('whatnot')
+  const [customFeeRate, setCustomFeeRate] = useState('')
 
   // ── Cost handlers ─────────────────────────────────────────────────────
 
@@ -55,16 +68,29 @@ export default function SpotCalculatorPage() {
 
   const spotCount = parseInt(spots, 10) || 0
 
-  const breakEvenPerSpot = spotCount > 0 ? totalCost / spotCount : 0
+  // ── Platform fee rate ─────────────────────────────────────────────────
+  const selectedPlatform = PLATFORMS.find((p) => p.key === platform) ?? PLATFORMS[0]
+  const feeRate = platform === 'custom'
+    ? (parseFloat(customFeeRate) || 0) / 100
+    : selectedPlatform.rate
 
+  // ── Break-even (accounts for platform fee) ────────────────────────────
+  const breakEvenTotal = feeRate < 1 && spotCount > 0 ? totalCost / (1 - feeRate) : 0
+  const breakEvenPerSpot = spotCount > 0 ? breakEvenTotal / spotCount : 0
+  const breakEvenFee = breakEvenTotal * feeRate
+
+  // ── Margin calculation (accounts for platform fee) ────────────────────
   const margin = activeMargin ?? (parseFloat(customMargin) || 0)
 
-  const priceWithMargin = spotCount > 0 && margin > 0
-    ? (totalCost / spotCount) * (1 + margin / 100)
+  const targetNet = totalCost * (1 + margin / 100)
+  const totalRevAtMargin = spotCount > 0 && margin > 0 && feeRate < 1
+    ? targetNet / (1 - feeRate)
     : 0
-
-  const totalRevAtMargin = priceWithMargin * spotCount
-  const profitAtMargin = totalRevAtMargin - totalCost
+  const priceWithMargin = spotCount > 0 && margin > 0
+    ? totalRevAtMargin / spotCount
+    : 0
+  const feeAtMargin = totalRevAtMargin * feeRate
+  const profitAtMargin = totalRevAtMargin - feeAtMargin - totalCost
 
   // ── Reset ─────────────────────────────────────────────────────────────
 
@@ -73,6 +99,8 @@ export default function SpotCalculatorPage() {
     setSpots('')
     setCustomMargin('')
     setActiveMargin(null)
+    setPlatform('whatnot')
+    setCustomFeeRate('')
   }, [])
 
   return (
@@ -154,6 +182,46 @@ export default function SpotCalculatorPage() {
         />
       </div>
 
+      {/* Platform */}
+      <div className="rounded-xl border border-blood-900/40 bg-black/60 backdrop-blur-md p-6 mb-6">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-cage-400 mb-3">
+          Platform
+        </h2>
+        <div className="flex flex-wrap gap-2">
+          {PLATFORMS.map((p) => (
+            <button
+              key={p.key}
+              onClick={() => setPlatform(p.key)}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                platform === p.key
+                  ? 'bg-gold-500 text-dark-950'
+                  : 'border border-cage-600 bg-dark-700 text-cage-300 hover:border-gold-500/50 hover:text-white'
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+        {platform === 'custom' && (
+          <div className="mt-3 flex items-center gap-3">
+            <span className="text-sm text-cage-400">Fee:</span>
+            <div className="relative w-28">
+              <input
+                type="number"
+                min={0}
+                max={100}
+                step={0.1}
+                value={customFeeRate}
+                onChange={(e) => setCustomFeeRate(e.target.value)}
+                placeholder="0"
+                className="w-full rounded-lg border border-cage-600 bg-dark-700 px-3 py-2 pr-8 text-sm text-white placeholder-cage-500 focus:border-gold-500 focus:outline-none focus:ring-1 focus:ring-gold-500"
+              />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-cage-500">%</span>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Results */}
       {totalCost > 0 && spotCount > 0 && (
         <>
@@ -165,6 +233,11 @@ export default function SpotCalculatorPage() {
             <div className="text-center">
               <p className="text-4xl font-bold text-white tabular-nums">{fmt(breakEvenPerSpot)}</p>
               <p className="mt-1 text-sm text-cage-500">per spot to break even (0% margin)</p>
+              {feeRate > 0 && (
+                <p className="mt-2 text-sm text-blood-400 tabular-nums">
+                  Includes {fmt(breakEvenFee)} platform fee ({(feeRate * 100).toFixed(1)}%)
+                </p>
+              )}
             </div>
           </div>
 
@@ -220,6 +293,15 @@ export default function SpotCalculatorPage() {
                   <p className="text-xs uppercase tracking-wider text-gold-400/70 mb-1">Profit at {margin}%</p>
                   <p className="text-2xl font-bold text-gold-400 tabular-nums">{fmt(profitAtMargin)}</p>
                 </div>
+                {feeRate > 0 && (
+                  <div className="col-span-2 rounded-lg border border-blood-900/30 bg-dark-800/50 p-3 text-center">
+                    <span className="text-xs text-cage-500">Platform Fee: </span>
+                    <span className="text-sm font-medium text-blood-400 tabular-nums">{fmt(feeAtMargin)}</span>
+                    <span className="text-xs text-cage-500 mx-2">|</span>
+                    <span className="text-xs text-cage-500">Net After Fee: </span>
+                    <span className="text-sm font-medium text-white tabular-nums">{fmt(totalRevAtMargin - feeAtMargin)}</span>
+                  </div>
+                )}
                 <div className="col-span-2 rounded-lg border border-blood-900/30 bg-dark-800/50 p-3 text-center">
                   <span className="text-xs text-cage-500">Total Revenue: </span>
                   <span className="text-sm font-medium text-white tabular-nums">{fmt(totalRevAtMargin)}</span>

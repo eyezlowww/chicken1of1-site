@@ -41,7 +41,7 @@ function globalFeeLabel(name: string): string {
 
 function globalFeeDescription(name: string): string {
   const descs: Record<string, string> = {
-    platform_fee: 'Whatnot / Fanatics Live platform processing fee',
+    platform_fee: 'Total platform fee rate (commission + Stripe 2.9%)',
     product_fee: 'Cost of goods / product sourcing fee',
     per_order_fee: 'Fixed fee applied to each individual order',
   }

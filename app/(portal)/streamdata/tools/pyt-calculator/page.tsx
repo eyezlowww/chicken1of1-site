@@ -50,17 +50,19 @@ const TEAMS: Record<string, string[]> = {
 const SPORTS = ['NBA', 'NFL', 'MLB', 'NHL', 'UFC'] as const
 type Sport = (typeof SPORTS)[number]
 
-interface Platform {
+interface PlatformOption {
+  key: string
   label: string
-  feeRate: number
+  rate: number
 }
 
-const PLATFORMS: Platform[] = [
-  { label: 'Whatnot (10.1%)', feeRate: 0.101 },
-  { label: 'Fanatics (12.5%)', feeRate: 0.125 },
-  { label: 'eBay (13.2%)', feeRate: 0.132 },
-  { label: 'TikTok (8%)', feeRate: 0.08 },
-  { label: 'None (0%)', feeRate: 0 },
+const PLATFORMS: PlatformOption[] = [
+  { key: 'whatnot', label: 'Whatnot (10.9%)', rate: 0.109 },
+  { key: 'fanatics', label: 'Fanatics (12.5%)', rate: 0.125 },
+  { key: 'ebay', label: 'eBay (13.2%)', rate: 0.132 },
+  { key: 'tiktok', label: 'TikTok (8%)', rate: 0.08 },
+  { key: 'none', label: 'No Fee', rate: 0 },
+  { key: 'custom', label: 'Custom', rate: 0 },
 ]
 
 const MARGIN_PRESETS = [0, 10, 15, 20, 25, 30]
@@ -99,21 +101,25 @@ export default function PYTCalculatorPage() {
   const [sport, setSport] = useState<Sport | ''>('')
   const [marginInput, setMarginInput] = useState('')
   const [activeMargin, setActiveMargin] = useState<number | null>(null)
-  const [platformIdx, setPlatformIdx] = useState(0)
+  const [platformKey, setPlatformKey] = useState('whatnot')
+  const [customFeeRate, setCustomFeeRate] = useState('')
   const [teams, setTeams] = useState<TeamEntry[]>([])
   const [copied, setCopied] = useState(false)
 
   const cogsNum = parseFloat(cogs) || 0
   const margin = activeMargin ?? (parseFloat(marginInput) || 0)
-  const platform = PLATFORMS[platformIdx]
+  const selectedPlatform = PLATFORMS.find((p) => p.key === platformKey) ?? PLATFORMS[0]
+  const feeRate = platformKey === 'custom'
+    ? (parseFloat(customFeeRate) || 0) / 100
+    : selectedPlatform.rate
   const teamCount = teams.length
 
   // ── Derived calculations ──────────────────────────────────────────────
 
   const targetRevenue = useMemo(() => {
-    if (cogsNum <= 0 || !sport || sport === 'UFC') return 0
-    return (cogsNum / (1 - platform.feeRate)) * (1 + margin / 100)
-  }, [cogsNum, sport, platform.feeRate, margin])
+    if (cogsNum <= 0 || !sport || sport === 'UFC' || feeRate >= 1) return 0
+    return (cogsNum / (1 - feeRate)) * (1 + margin / 100)
+  }, [cogsNum, sport, feeRate, margin])
 
   const basePrice = useMemo(() => {
     if (teamCount === 0 || targetRevenue <= 0) return 0
@@ -185,7 +191,7 @@ export default function PYTCalculatorPage() {
   const summary = useMemo(() => {
     if (teamsWithPrices.length === 0 || targetRevenue <= 0) return null
     const totalRev = teamsWithPrices.reduce((s, t) => s + t.price, 0)
-    const platformFee = totalRev * platform.feeRate
+    const platformFee = totalRev * feeRate
     const netRevenue = totalRev - platformFee
     const profit = netRevenue - cogsNum
     const actualMargin = cogsNum > 0 ? ((profit / cogsNum) * 100) : 0
@@ -197,7 +203,7 @@ export default function PYTCalculatorPage() {
       if (t.price < lowest.price) lowest = t
     }
     return { totalRev, platformFee, netRevenue, profit, actualMargin, avgPrice, highest, lowest }
-  }, [teamsWithPrices, targetRevenue, platform.feeRate, cogsNum])
+  }, [teamsWithPrices, targetRevenue, feeRate, cogsNum])
 
   // ── Copy to clipboard ─────────────────────────────────────────────────
 
@@ -243,7 +249,8 @@ export default function PYTCalculatorPage() {
     setSport('')
     setMarginInput('')
     setActiveMargin(null)
-    setPlatformIdx(0)
+    setPlatformKey('whatnot')
+    setCustomFeeRate('')
     setTeams([])
     setCopied(false)
   }, [])
@@ -305,20 +312,43 @@ export default function PYTCalculatorPage() {
           </div>
 
           {/* Platform */}
-          <div>
-            <label htmlFor="pyt-platform" className="mb-1.5 block text-xs font-medium text-cage-400">
+          <div className="sm:col-span-2 lg:col-span-4">
+            <label className="mb-1.5 block text-xs font-medium text-cage-400">
               Platform
             </label>
-            <select
-              id="pyt-platform"
-              value={platformIdx}
-              onChange={(e) => setPlatformIdx(Number(e.target.value))}
-              className="w-full rounded-lg border border-cage-600 bg-dark-700 px-3 py-2.5 text-sm text-white focus:border-gold-500 focus:outline-none focus:ring-1 focus:ring-gold-500"
-            >
-              {PLATFORMS.map((p, i) => (
-                <option key={p.label} value={i}>{p.label}</option>
+            <div className="flex flex-wrap gap-2">
+              {PLATFORMS.map((p) => (
+                <button
+                  key={p.key}
+                  onClick={() => setPlatformKey(p.key)}
+                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                    platformKey === p.key
+                      ? 'bg-gold-500 text-dark-950'
+                      : 'border border-cage-600 bg-dark-700 text-cage-300 hover:border-gold-500/50 hover:text-white'
+                  }`}
+                >
+                  {p.label}
+                </button>
               ))}
-            </select>
+            </div>
+            {platformKey === 'custom' && (
+              <div className="mt-2 flex items-center gap-3">
+                <span className="text-sm text-cage-400">Fee:</span>
+                <div className="relative w-28">
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    step={0.1}
+                    value={customFeeRate}
+                    onChange={(e) => setCustomFeeRate(e.target.value)}
+                    placeholder="0"
+                    className="w-full rounded-lg border border-cage-600 bg-dark-700 px-3 py-2 pr-8 text-sm text-white placeholder-cage-500 focus:border-gold-500 focus:outline-none focus:ring-1 focus:ring-gold-500"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-cage-500">%</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Target Margin */}
