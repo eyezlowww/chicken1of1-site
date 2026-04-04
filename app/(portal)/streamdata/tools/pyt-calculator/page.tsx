@@ -447,6 +447,16 @@ export default function PYTCalculatorPage() {
                     step={0.01}
                     value={Math.round(team.price * 100) / 100 || ''}
                     onChange={(e) => setTeamPrice(idx, e.target.value)}
+                    onBlur={() => {
+                      if (team.price > 0 && !team.locked) {
+                        toggleLock(idx)
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.currentTarget.blur()
+                      }
+                    }}
                     className="w-full rounded border border-cage-600 bg-dark-700 py-1 pl-5 pr-1 text-right text-xs tabular-nums text-white placeholder-cage-500 focus:border-gold-500 focus:outline-none focus:ring-1 focus:ring-gold-500"
                     aria-label={`Price for ${team.name}`}
                   />
