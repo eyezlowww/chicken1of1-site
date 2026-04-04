@@ -71,15 +71,20 @@ export default function SpotCalculatorPage() {
     ? (parseFloat(customFeeRate) || 0) / 100
     : selectedPlatform.rate
 
-  // ── Break-even (accounts for platform fee) ────────────────────────────
-  const breakEvenTotal = feeRate < 1 && spotCount > 0 ? totalCost / (1 - feeRate) : 0
+  // ── Per-order fee ─────────────────────────────────────────────────────
+  const perOrderFee = 0.30
+  const totalOrderFees = spotCount * perOrderFee
+
+  // ── Break-even (accounts for platform fee + per-order fees) ──────────
+  // Revenue needed: (totalCost + orderFees) / (1 - feeRate)
+  const breakEvenTotal = feeRate < 1 && spotCount > 0 ? (totalCost + totalOrderFees) / (1 - feeRate) : 0
   const breakEvenPerSpot = spotCount > 0 ? breakEvenTotal / spotCount : 0
   const breakEvenFee = breakEvenTotal * feeRate
 
-  // ── Margin calculation (accounts for platform fee) ────────────────────
+  // ── Margin calculation (accounts for platform fee + per-order fees) ──
   const margin = activeMargin ?? (parseFloat(customMargin) || 0)
 
-  const targetNet = totalCost * (1 + margin / 100)
+  const targetNet = totalCost * (1 + margin / 100) + totalOrderFees
   const totalRevAtMargin = spotCount > 0 && margin > 0 && feeRate < 1
     ? targetNet / (1 - feeRate)
     : 0
@@ -87,7 +92,7 @@ export default function SpotCalculatorPage() {
     ? totalRevAtMargin / spotCount
     : 0
   const feeAtMargin = totalRevAtMargin * feeRate
-  const profitAtMargin = totalRevAtMargin - feeAtMargin - totalCost
+  const profitAtMargin = totalRevAtMargin - feeAtMargin - totalOrderFees - totalCost
 
   // ── Reset ─────────────────────────────────────────────────────────────
 
@@ -216,7 +221,7 @@ export default function SpotCalculatorPage() {
               <p className="mt-1 text-sm text-cage-500">per spot to break even (0% margin)</p>
               {feeRate > 0 && (
                 <p className="mt-2 text-sm text-blood-400 tabular-nums">
-                  Includes {fmt(breakEvenFee)} platform fee ({(feeRate * 100).toFixed(1)}%)
+                  Includes {fmt(breakEvenFee)} platform fee ({(feeRate * 100).toFixed(1)}%) + {fmt(totalOrderFees)} order fees (${perOrderFee} × {spotCount})
                 </p>
               )}
             </div>

@@ -113,10 +113,13 @@ export default function PYTCalculatorPage() {
 
   // ── Derived calculations ──────────────────────────────────────────────
 
+  const perOrderFee = 0.30
+  const totalOrderFees = teamCount * perOrderFee
+
   const targetRevenue = useMemo(() => {
     if (cogsNum <= 0 || !sport || sport === 'UFC' || feeRate >= 1) return 0
-    return (cogsNum / (1 - feeRate)) * (1 + margin / 100)
-  }, [cogsNum, sport, feeRate, margin])
+    return ((cogsNum + totalOrderFees) / (1 - feeRate)) * (1 + margin / 100)
+  }, [cogsNum, sport, feeRate, margin, totalOrderFees])
 
   const basePrice = useMemo(() => {
     if (teamCount === 0 || targetRevenue <= 0) return 0
@@ -189,7 +192,8 @@ export default function PYTCalculatorPage() {
     if (teamsWithPrices.length === 0 || targetRevenue <= 0) return null
     const totalRev = teamsWithPrices.reduce((s, t) => s + t.price, 0)
     const platformFee = totalRev * feeRate
-    const netRevenue = totalRev - platformFee
+    const orderFees = teamsWithPrices.length * perOrderFee
+    const netRevenue = totalRev - platformFee - orderFees
     const profit = netRevenue - cogsNum
     const actualMargin = cogsNum > 0 ? ((profit / cogsNum) * 100) : 0
     const avgPrice = totalRev / teamsWithPrices.length
@@ -199,7 +203,7 @@ export default function PYTCalculatorPage() {
       if (t.price > highest.price) highest = t
       if (t.price < lowest.price) lowest = t
     }
-    return { totalRev, platformFee, netRevenue, profit, actualMargin, avgPrice, highest, lowest }
+    return { totalRev, platformFee, orderFees, netRevenue, profit, actualMargin, avgPrice, highest, lowest }
   }, [teamsWithPrices, targetRevenue, feeRate, cogsNum])
 
   // ── Copy to clipboard ─────────────────────────────────────────────────
@@ -520,6 +524,11 @@ export default function PYTCalculatorPage() {
             <div className="rounded-lg border border-cage-700/40 bg-dark-800/50 p-3">
               <span className="text-[10px] uppercase tracking-wider text-cage-500">Platform Fee</span>
               <p className="text-lg font-bold tabular-nums text-red-400">{fmt(summary.platformFee)}</p>
+            </div>
+            <div className="rounded-lg border border-cage-700/40 bg-dark-800/50 p-3">
+              <span className="text-[10px] uppercase tracking-wider text-cage-500">Order Fees</span>
+              <p className="text-lg font-bold tabular-nums text-red-400">{fmt(summary.orderFees)}</p>
+              <span className="text-[9px] text-cage-500">${perOrderFee} × {teamsWithPrices.length}</span>
             </div>
             <div className="rounded-lg border border-cage-700/40 bg-dark-800/50 p-3">
               <span className="text-[10px] uppercase tracking-wider text-cage-500">Net Revenue</span>
