@@ -110,9 +110,9 @@ export default function SpotCalculatorPage() {
       </div>
 
       {/* Top row: Product Costs + Spots + Platform */}
-      <div className="grid gap-4 mb-6 sm:grid-cols-3">
+      <div className="grid gap-4 mb-6 sm:grid-cols-4">
         {/* Product Costs */}
-        <div className="rounded-xl border border-blood-900/40 bg-black/60 backdrop-blur-md p-4">
+        <div className="sm:col-span-2 rounded-xl border border-blood-900/40 bg-black/60 backdrop-blur-md p-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-cage-400">
               Product Costs
@@ -121,7 +121,7 @@ export default function SpotCalculatorPage() {
               onClick={addCost}
               className="text-xs font-medium text-gold-400 hover:text-gold-300 transition-colors"
             >
-              + Add
+              + Add Product
             </button>
           </div>
           <div className="space-y-2">
