@@ -522,13 +522,9 @@ export default function PYTCalculatorPage() {
               <p className="text-lg font-bold tabular-nums text-white">{fmt(cogsNum)}</p>
             </div>
             <div className="rounded-lg border border-cage-700/40 bg-dark-800/50 p-3">
-              <span className="text-[10px] uppercase tracking-wider text-cage-500">Platform Fee</span>
-              <p className="text-lg font-bold tabular-nums text-red-400">{fmt(summary.platformFee)}</p>
-            </div>
-            <div className="rounded-lg border border-cage-700/40 bg-dark-800/50 p-3">
-              <span className="text-[10px] uppercase tracking-wider text-cage-500">Order Fees</span>
-              <p className="text-lg font-bold tabular-nums text-red-400">{fmt(summary.orderFees)}</p>
-              <span className="text-[9px] text-cage-500">${perOrderFee} × {teamsWithPrices.length}</span>
+              <span className="text-[10px] uppercase tracking-wider text-cage-500">Total Fees</span>
+              <p className="text-lg font-bold tabular-nums text-red-400">{fmt(summary.platformFee + summary.orderFees)}</p>
+              <span className="text-[9px] text-cage-500">Platform + order fees incl.</span>
             </div>
             <div className="rounded-lg border border-cage-700/40 bg-dark-800/50 p-3">
               <span className="text-[10px] uppercase tracking-wider text-cage-500">Net Revenue</span>
@@ -562,19 +558,21 @@ export default function PYTCalculatorPage() {
               <span className="text-[10px] uppercase tracking-wider text-cage-500">Avg Spot Price</span>
               <p className="text-lg font-bold tabular-nums text-white">{fmt(summary.avgPrice)}</p>
             </div>
-            <div className="rounded-lg border border-cage-700/40 bg-dark-800/50 p-3">
-              <span className="text-[10px] uppercase tracking-wider text-cage-500">Highest</span>
-              <p className="truncate text-xs font-medium text-gold-400" title={summary.highest.name}>
-                {summary.highest.name}
-              </p>
-              <p className="text-sm font-bold tabular-nums text-white">{fmt(summary.highest.price)}</p>
-            </div>
-            <div className="rounded-lg border border-cage-700/40 bg-dark-800/50 p-3 sm:col-span-1">
-              <span className="text-[10px] uppercase tracking-wider text-cage-500">Lowest</span>
-              <p className="truncate text-xs font-medium text-cage-400" title={summary.lowest.name}>
-                {summary.lowest.name}
-              </p>
-              <p className="text-sm font-bold tabular-nums text-white">{fmt(summary.lowest.price)}</p>
+            <div className="sm:col-span-4 flex justify-center gap-4">
+              <div className="flex-1 max-w-xs rounded-lg border border-gold-500/20 bg-gold-500/5 p-3 text-center">
+                <span className="text-[10px] uppercase tracking-wider text-cage-500">Highest</span>
+                <p className="truncate text-xs font-medium text-gold-400" title={summary.highest.name}>
+                  {summary.highest.name}
+                </p>
+                <p className="text-lg font-bold tabular-nums text-white">{fmt(summary.highest.price)}</p>
+              </div>
+              <div className="flex-1 max-w-xs rounded-lg border border-cage-700/40 bg-dark-800/50 p-3 text-center">
+                <span className="text-[10px] uppercase tracking-wider text-cage-500">Lowest</span>
+                <p className="truncate text-xs font-medium text-cage-400" title={summary.lowest.name}>
+                  {summary.lowest.name}
+                </p>
+                <p className="text-lg font-bold tabular-nums text-white">{fmt(summary.lowest.price)}</p>
+              </div>
             </div>
           </div>
         </div>
