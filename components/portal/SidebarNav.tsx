@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import LogoutButton from './LogoutButton'
+import FeedbackPopup from './FeedbackPopup'
 
 interface NavItem {
   label: string
@@ -164,6 +165,7 @@ interface SidebarNavProps {
 export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [liveCount, setLiveCount] = useState(0)
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
   const pathname = usePathname()
 
   const isAdmin = userRole === 'admin'
@@ -266,6 +268,20 @@ export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
           </>
         )}
       </nav>
+
+      {/* Feedback button */}
+      <div className="px-3 pb-2">
+        <button
+          onClick={() => setFeedbackOpen(true)}
+          className="flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-xs text-cage-500 transition-colors hover:bg-dark-800 hover:text-cage-300"
+          aria-label="Send feedback"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+          </svg>
+          Feedback
+        </button>
+      </div>
 
       {/* User info + Logout at bottom */}
       <div className="border-t border-blood-900/40 p-3">
@@ -377,6 +393,9 @@ export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
           </div>
         </div>
       </div>
+
+      {/* Feedback popup */}
+      <FeedbackPopup open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
     </>
   )
 }
