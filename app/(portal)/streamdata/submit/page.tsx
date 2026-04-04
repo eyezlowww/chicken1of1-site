@@ -23,8 +23,20 @@ interface Product {
 interface ProductRow {
   id: string
   productId: string
+  unitType: 'case' | 'box' | 'pack'
   costPerUnit: string
   amountSold: string
+}
+
+interface AvailableProduct {
+  productId: string
+  productName: string
+  availableCases: number
+  availableBoxes: number
+  availablePacks: number
+  breakerCostPerCase: string | null
+  breakerCostPerBox: string
+  breakerCostPerPack: string | null
 }
 
 interface InventoryRow {
@@ -137,20 +149,61 @@ function SearchableProductSelect({
   onChange,
   placeholder,
   dropUp = false,
+  availableInventory,
+  unitType,
 }: {
   products: Product[]
   value: string
   onChange: (id: string) => void
   placeholder?: string
   dropUp?: boolean
+  availableInventory?: AvailableProduct[]
+  unitType?: 'case' | 'box' | 'pack'
 }) {
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  // Build a lookup of available inventory by productId
+  const inventoryMap = useMemo(() => {
+    const map = new Map<string, AvailableProduct>()
+    if (availableInventory) {
+      for (const item of availableInventory) {
+        map.set(item.productId, item)
+      }
+    }
+    return map
+  }, [availableInventory])
+
+  // Helper to get available qty label for a product
+  function getAvailLabel(productId: string): string {
+    const inv = inventoryMap.get(productId)
+    if (!inv) return ''
+    const ut = unitType || 'box'
+    if (ut === 'case' && inv.availableCases > 0) return ` (${inv.availableCases} cases avail)`
+    if (ut === 'box' && inv.availableBoxes > 0) return ` (${inv.availableBoxes} boxes avail)`
+    if (ut === 'pack' && inv.availablePacks > 0) return ` (${inv.availablePacks} packs avail)`
+    // Fallback: show whichever has stock
+    const parts: string[] = []
+    if (inv.availableCases > 0) parts.push(`${inv.availableCases} cases`)
+    if (inv.availableBoxes > 0) parts.push(`${inv.availableBoxes} boxes`)
+    if (inv.availablePacks > 0) parts.push(`${inv.availablePacks} packs`)
+    return parts.length > 0 ? ` (${parts.join(' / ')} avail)` : ''
+  }
+
+  // If we have inventory data, show inventory products first, then others
+  const sortedProducts = useMemo(() => {
+    if (!availableInventory || availableInventory.length === 0) return products
+    return [...products].sort((a, b) => {
+      const aHas = inventoryMap.has(a.id) ? 0 : 1
+      const bHas = inventoryMap.has(b.id) ? 0 : 1
+      return aHas - bHas
+    })
+  }, [products, availableInventory, inventoryMap])
+
   // Filter products by search term
-  const filtered = products.filter((p) =>
+  const filtered = sortedProducts.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase())
   )
 
@@ -200,22 +253,30 @@ function SearchableProductSelect({
           {filtered.length === 0 ? (
             <div className="px-3 py-2 text-sm text-cage-500">No products found</div>
           ) : (
-            filtered.map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => {
-                  onChange(p.id)
-                  setOpen(false)
-                  setSearch('')
-                }}
-                className={`w-full text-left px-3 py-2 text-sm hover:bg-gold-500/10 hover:text-gold-400 transition-colors ${
-                  p.id === value ? 'bg-gold-500/10 text-gold-400' : 'text-cage-300'
-                }`}
-              >
-                {p.name}
-              </button>
-            ))
+            filtered.map((p) => {
+              const inv = inventoryMap.get(p.id)
+              const hasStock = !!inv
+              const availLabel = getAvailLabel(p.id)
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => {
+                    onChange(p.id)
+                    setOpen(false)
+                    setSearch('')
+                  }}
+                  className={`w-full text-left px-3 py-2 text-sm hover:bg-gold-500/10 hover:text-gold-400 transition-colors ${
+                    p.id === value ? 'bg-gold-500/10 text-gold-400' : hasStock ? 'text-cage-300' : 'text-cage-500'
+                  }`}
+                >
+                  {p.name}
+                  {availLabel && (
+                    <span className="text-xs text-gold-500/70 ml-1">{availLabel}</span>
+                  )}
+                </button>
+              )
+            })
           )}
         </div>
       )}
@@ -227,6 +288,7 @@ function SearchableProductSelect({
 export default function SubmitStreamPage() {
   // ─── Data loading state ───────────────────────────────────────────────
   const [productList, setProductList] = useState<Product[]>([])
+  const [availableInventory, setAvailableInventory] = useState<AvailableProduct[]>([])
   const [fees, setFees] = useState<FeeConfig | null>(null)
   const [weeks, setWeeks] = useState<WeekPeriod[]>([])
   const [selectedWeekId, setSelectedWeekId] = useState('')
@@ -241,7 +303,7 @@ export default function SubmitStreamPage() {
 
   // Section 2: Products Sold
   const [products, setProducts] = useState<ProductRow[]>([
-    { id: nextId(), productId: '', costPerUnit: '', amountSold: '' },
+    { id: nextId(), productId: '', unitType: 'box', costPerUnit: '', amountSold: '' },
   ])
 
   // Section 3b: Show Adjustments
@@ -275,10 +337,11 @@ export default function SubmitStreamPage() {
         const year = now.getFullYear()
         const month = now.getMonth() + 1
 
-        const [productsRes, feesRes, weeksRes] = await Promise.all([
+        const [productsRes, feesRes, weeksRes, inventoryRes] = await Promise.all([
           fetch('/api/streamdata/products'),
           fetch('/api/streamdata/fees'),
           fetch(`/api/streamdata/weeks?year=${year}&month=${month}`),
+          fetch('/api/streamdata/inventory/available'),
         ])
 
         if (!productsRes.ok) throw new Error('Failed to load products')
@@ -288,6 +351,12 @@ export default function SubmitStreamPage() {
         const productsData = await productsRes.json()
         const feesData = await feesRes.json()
         const weeksData = await weeksRes.json()
+
+        // Inventory is optional — don't block form if it fails
+        if (inventoryRes.ok) {
+          const inventoryData = await inventoryRes.json()
+          setAvailableInventory(inventoryData.products ?? [])
+        }
 
         setProductList(productsData.products ?? [])
 
@@ -329,10 +398,19 @@ export default function SubmitStreamPage() {
   }
 
   // ─── Product row handlers ─────────────────────────────────────────────
+  // Build a lookup of available inventory by productId
+  const inventoryMap = useMemo(() => {
+    const map = new Map<string, AvailableProduct>()
+    for (const item of availableInventory) {
+      map.set(item.productId, item)
+    }
+    return map
+  }, [availableInventory])
+
   const addProduct = useCallback(() => {
     setProducts((prev) => [
       ...prev,
-      { id: nextId(), productId: '', costPerUnit: '', amountSold: '' },
+      { id: nextId(), productId: '', unitType: 'box', costPerUnit: '', amountSold: '' },
     ])
   }, [])
 
@@ -340,13 +418,42 @@ export default function SubmitStreamPage() {
     setProducts((prev) => (prev.length > 1 ? prev.filter((r) => r.id !== id) : prev))
   }, [])
 
+  // Get breaker cost from inventory for a given product + unit type
+  const getBreakerCost = useCallback(
+    (productId: string, unitType: 'case' | 'box' | 'pack'): string | null => {
+      const inv = inventoryMap.get(productId)
+      if (!inv) return null
+      switch (unitType) {
+        case 'case': return inv.breakerCostPerCase
+        case 'box': return inv.breakerCostPerBox
+        case 'pack': return inv.breakerCostPerPack
+      }
+    },
+    [inventoryMap]
+  )
+
   const updateProduct = useCallback(
     (id: string, field: keyof Omit<ProductRow, 'id'>, value: string) => {
       setProducts((prev) =>
-        prev.map((r) => (r.id === id ? { ...r, [field]: value } : r))
+        prev.map((r) => {
+          if (r.id !== id) return r
+          const updated = { ...r, [field]: value }
+
+          // Auto-fill cost when product or unitType changes
+          if (field === 'productId' || field === 'unitType') {
+            const pid = field === 'productId' ? value : r.productId
+            const ut = field === 'unitType' ? (value as 'case' | 'box' | 'pack') : r.unitType
+            const cost = getBreakerCost(pid, ut)
+            if (cost) {
+              updated.costPerUnit = cost
+            }
+          }
+
+          return updated
+        })
       )
     },
-    []
+    [getBreakerCost]
   )
 
   // ─── Inventory row handlers ───────────────────────────────────────────
@@ -405,6 +512,7 @@ export default function SubmitStreamPage() {
       .filter((p) => p.productId && (parseFloat(p.costPerUnit) > 0 || parseInt(p.amountSold, 10) > 0))
       .map((p) => ({
         productId: p.productId,
+        unitType: p.unitType,
         costPerUnit: parseFloat(p.costPerUnit) || 0,
         amountSold: parseInt(p.amountSold, 10) || 0,
       }))
@@ -491,6 +599,15 @@ export default function SubmitStreamPage() {
         return
       }
 
+      // Inventory is mandatory — must report what's left in hand
+      const validInv = inventory.filter((i) => i.productId)
+      if (validInv.length === 0) {
+        setSubmitError('Please add your Inventory In Hand before submitting. Report what product you have remaining after this stream.')
+        setSubmitting(false)
+        setInventoryOpen(true)
+        return
+      }
+
       const res = await fetch('/api/streamdata/streams', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -504,6 +621,44 @@ export default function SubmitStreamPage() {
 
       const data = await res.json()
       const calcResult = data.stream?.calculation
+      const streamEntryId: string | undefined = data.stream?.id
+
+      // Deduct inventory for each product that has inventory lots
+      if (streamEntryId) {
+        const deductWarnings: string[] = []
+        for (const p of body.productsSold) {
+          // Only deduct if the product has inventory
+          if (!inventoryMap.has(p.productId)) continue
+
+          try {
+            const deductRes = await fetch('/api/streamdata/inventory/deduct', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                productId: p.productId,
+                unitType: p.unitType,
+                quantity: p.amountSold,
+                streamEntryId,
+              }),
+            })
+
+            if (!deductRes.ok) {
+              const deductData = await deductRes.json().catch(() => ({}))
+              const productName = productList.find((pl) => pl.id === p.productId)?.name || p.productId
+              deductWarnings.push(`${productName}: ${deductData.error || 'deduction failed'}`)
+            }
+          } catch {
+            // Network error on deduction — don't block
+            const productName = productList.find((pl) => pl.id === p.productId)?.name || p.productId
+            deductWarnings.push(`${productName}: network error during deduction`)
+          }
+        }
+
+        if (deductWarnings.length > 0) {
+          // Show warnings but still mark as success (stream data is saved)
+          setSubmitError(`Stream submitted, but inventory deduction warnings: ${deductWarnings.join('; ')}`)
+        }
+      }
 
       setSubmitSuccess({
         status: 'submitted',
@@ -607,7 +762,7 @@ export default function SubmitStreamPage() {
                 setPlatform('Whatnot')
                 setStreamSales('')
                 setOrderAmount('')
-                setProducts([{ id: nextId(), productId: '', costPerUnit: '', amountSold: '' }])
+                setProducts([{ id: nextId(), productId: '', unitType: 'box', costPerUnit: '', amountSold: '' }])
                 setInventory([])
               }}
               className="inline-flex items-center gap-2 bg-dark-700 hover:bg-dark-700 border border-cage-600 text-cage-300 font-medium px-5 py-2.5 rounded-lg transition-colors"
@@ -739,8 +894,9 @@ export default function SubmitStreamPage() {
           </div>
 
           {/* Column headers (hidden on mobile) */}
-          <div className="hidden sm:grid sm:grid-cols-[1fr_120px_100px_120px_36px] gap-3 mb-2 px-1">
+          <div className="hidden sm:grid sm:grid-cols-[1fr_110px_120px_90px_110px_36px] gap-3 mb-2 px-1">
             <span className="text-xs text-cage-500 uppercase tracking-wider">Product</span>
+            <span className="text-xs text-cage-500 uppercase tracking-wider">Unit Type</span>
             <span className="text-xs text-cage-500 uppercase tracking-wider">Cost/Unit</span>
             <span className="text-xs text-cage-500 uppercase tracking-wider">Qty Sold</span>
             <span className="text-xs text-cage-500 uppercase tracking-wider">COGS</span>
@@ -751,75 +907,105 @@ export default function SubmitStreamPage() {
             {products.map((row) => {
               const rowCogs =
                 (parseFloat(row.costPerUnit) || 0) * (parseInt(row.amountSold, 10) || 0)
+              const rowInv = inventoryMap.get(row.productId)
               return (
-                <div
-                  key={row.id}
-                  className="grid grid-cols-1 sm:grid-cols-[1fr_120px_100px_120px_36px] gap-3 items-end bg-dark-700/40 sm:bg-transparent rounded-lg sm:rounded-none p-3 sm:p-0"
-                >
-                  {/* Product select */}
-                  <div>
-                    <label className="sm:hidden text-xs text-cage-500 mb-1 block">Product</label>
-                    <SearchableProductSelect
-                      products={productList}
-                      value={row.productId}
-                      onChange={(id) => updateProduct(row.id, 'productId', id)}
-                      placeholder="Search products..."
-                    />
-                  </div>
-
-                  {/* Cost per unit */}
-                  <div>
-                    <label className="sm:hidden text-xs text-cage-500 mb-1 block">Cost/Unit</label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-cage-500 text-sm">
-                        $
-                      </span>
-                      <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        value={row.costPerUnit}
-                        onChange={(e) => updateProduct(row.id, 'costPerUnit', e.target.value)}
-                        placeholder="0.00"
-                        className="w-full bg-dark-700 border border-cage-600 rounded-lg pl-7 pr-2 py-2 text-sm text-white placeholder-cage-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-shadow tabular-nums"
-                        aria-label="Cost per unit"
+                <div key={row.id} className="space-y-1">
+                  <div
+                    className="grid grid-cols-1 sm:grid-cols-[1fr_110px_120px_90px_110px_36px] gap-3 items-end bg-dark-700/40 sm:bg-transparent rounded-lg sm:rounded-none p-3 sm:p-0"
+                  >
+                    {/* Product select */}
+                    <div>
+                      <label className="sm:hidden text-xs text-cage-500 mb-1 block">Product</label>
+                      <SearchableProductSelect
+                        products={productList}
+                        value={row.productId}
+                        onChange={(id) => updateProduct(row.id, 'productId', id)}
+                        placeholder="Search products..."
+                        availableInventory={availableInventory}
+                        unitType={row.unitType}
                       />
                     </div>
-                  </div>
 
-                  {/* Amount sold */}
-                  <div>
-                    <label className="sm:hidden text-xs text-cage-500 mb-1 block">Qty Sold</label>
-                    <input
-                      type="number"
-                      min="0"
-                      step="1"
-                      value={row.amountSold}
-                      onChange={(e) => updateProduct(row.id, 'amountSold', e.target.value)}
-                      placeholder="0"
-                      className="w-full bg-dark-700 border border-cage-600 rounded-lg px-3 py-2 text-sm text-white placeholder-cage-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-shadow tabular-nums"
-                      aria-label="Amount sold"
-                    />
-                  </div>
-
-                  {/* COGS (read-only) */}
-                  <div>
-                    <label className="sm:hidden text-xs text-cage-500 mb-1 block">COGS</label>
-                    <div className="bg-dark-700/60 border border-cage-600/50 rounded-lg px-3 py-2 text-sm text-cage-300 tabular-nums">
-                      {fmt(rowCogs)}
+                    {/* Unit Type */}
+                    <div>
+                      <label className="sm:hidden text-xs text-cage-500 mb-1 block">Unit Type</label>
+                      <select
+                        value={row.unitType}
+                        onChange={(e) => updateProduct(row.id, 'unitType', e.target.value)}
+                        className="w-full bg-dark-700 border border-cage-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-shadow appearance-none"
+                        aria-label="Unit type"
+                      >
+                        <option value="case">Case</option>
+                        <option value="box">Box</option>
+                        <option value="pack">Pack</option>
+                      </select>
                     </div>
+
+                    {/* Cost per unit — auto-filled from inventory, editable as override */}
+                    <div>
+                      <label className="sm:hidden text-xs text-cage-500 mb-1 block">Cost/Unit</label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-cage-500 text-sm">
+                          $
+                        </span>
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={row.costPerUnit}
+                          onChange={(e) => updateProduct(row.id, 'costPerUnit', e.target.value)}
+                          placeholder="0.00"
+                          className={`w-full border rounded-lg pl-7 pr-2 py-2 text-sm placeholder-cage-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-shadow tabular-nums ${
+                            rowInv ? 'bg-dark-700 border-gold-500/30 text-white' : 'bg-dark-700 border-cage-600 text-white'
+                          }`}
+                          aria-label="Cost per unit"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Amount sold */}
+                    <div>
+                      <label className="sm:hidden text-xs text-cage-500 mb-1 block">Qty Sold</label>
+                      <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={row.amountSold}
+                        onChange={(e) => updateProduct(row.id, 'amountSold', e.target.value)}
+                        placeholder="0"
+                        className="w-full bg-dark-700 border border-cage-600 rounded-lg px-3 py-2 text-sm text-white placeholder-cage-400 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-shadow tabular-nums"
+                        aria-label="Amount sold"
+                      />
+                    </div>
+
+                    {/* COGS (read-only) */}
+                    <div>
+                      <label className="sm:hidden text-xs text-cage-500 mb-1 block">COGS</label>
+                      <div className="bg-dark-700/60 border border-cage-600/50 rounded-lg px-3 py-2 text-sm text-cage-300 tabular-nums">
+                        {fmt(rowCogs)}
+                      </div>
+                    </div>
+
+                    {/* Remove button */}
+                    <button
+                      type="button"
+                      onClick={() => removeProduct(row.id)}
+                      disabled={products.length <= 1}
+                      className="self-center sm:self-end p-2 text-cage-500 hover:text-red-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors rounded-lg hover:bg-red-500/10"
+                      aria-label="Remove product row"
+                    >
+                      <XIcon className="w-4 h-4" />
+                    </button>
                   </div>
 
-                  {/* Remove button */}
-                  <button
-                    type="button"
-                    onClick={() => removeProduct(row.id)}
-                    disabled={products.length <= 1}
-                    className="self-center sm:self-end p-2 text-cage-500 hover:text-red-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors rounded-lg hover:bg-red-500/10"
-                    aria-label="Remove product row"
-                  >
-                    <XIcon className="w-4 h-4" />
-                  </button>
+                  {/* Available stock indicator */}
+                  {rowInv && row.productId && (
+                    <div className="px-1 sm:px-0">
+                      <p className="text-xs text-cage-500">
+                        Available: {rowInv.availableCases} cases / {rowInv.availableBoxes} boxes / {rowInv.availablePacks} packs
+                      </p>
+                    </div>
+                  )}
                 </div>
               )
             })}

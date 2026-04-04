@@ -31,7 +31,6 @@ export default function SpotCalculatorPage() {
   const [spots, setSpots] = useState('')
   const [customMargin, setCustomMargin] = useState('')
   const [activeMargin, setActiveMargin] = useState<number | null>(null)
-  const [platform, setPlatform] = useState('whatnot')
 
   // ── Cost handlers ─────────────────────────────────────────────────────
 
@@ -56,35 +55,16 @@ export default function SpotCalculatorPage() {
 
   const spotCount = parseInt(spots, 10) || 0
 
-  // Platform fee rates
-  const platformFees: Record<string, { rate: number; label: string }> = {
-    whatnot: { rate: 0.101, label: 'Whatnot (10.1%)' },
-    fanatics: { rate: 0.125, label: 'Fanatics Live (12.5%)' },
-    ebay: { rate: 0.132, label: 'eBay Live (13.2%)' },
-    tiktok: { rate: 0.08, label: 'TikTok (8%)' },
-    none: { rate: 0, label: 'No Platform Fee' },
-  }
-
-  const feeRate = platformFees[platform]?.rate ?? 0
-  const feeLabel = platformFees[platform]?.label ?? ''
-
-  // Break-even: price per spot where revenue - platform fee = COGS
-  // revenue * (1 - feeRate) = totalCost  =>  revenue = totalCost / (1 - feeRate)
-  const breakEvenTotal = feeRate < 1 ? totalCost / (1 - feeRate) : totalCost
-  const breakEvenPerSpot = spotCount > 0 ? breakEvenTotal / spotCount : 0
-  const breakEvenFee = breakEvenTotal * feeRate
+  const breakEvenPerSpot = spotCount > 0 ? totalCost / spotCount : 0
 
   const margin = activeMargin ?? (parseFloat(customMargin) || 0)
 
-  // With margin: price needs to cover COGS + desired profit after platform fee
-  // revenue * (1 - feeRate) = totalCost * (1 + margin/100)  =>  revenue = totalCost * (1 + margin/100) / (1 - feeRate)
-  const targetNet = totalCost * (1 + margin / 100)
-  const totalRevAtMargin = spotCount > 0 && margin > 0
-    ? (feeRate < 1 ? targetNet / (1 - feeRate) : targetNet)
+  const priceWithMargin = spotCount > 0 && margin > 0
+    ? (totalCost / spotCount) * (1 + margin / 100)
     : 0
-  const priceWithMargin = spotCount > 0 && margin > 0 ? totalRevAtMargin / spotCount : 0
-  const feeAtMargin = totalRevAtMargin * feeRate
-  const profitAtMargin = totalRevAtMargin - feeAtMargin - totalCost
+
+  const totalRevAtMargin = priceWithMargin * spotCount
+  const profitAtMargin = totalRevAtMargin - totalCost
 
   // ── Reset ─────────────────────────────────────────────────────────────
 
@@ -93,7 +73,6 @@ export default function SpotCalculatorPage() {
     setSpots('')
     setCustomMargin('')
     setActiveMargin(null)
-    setPlatform('whatnot')
   }, [])
 
   return (
@@ -175,28 +154,6 @@ export default function SpotCalculatorPage() {
         />
       </div>
 
-      {/* Platform */}
-      <div className="rounded-xl border border-blood-900/40 bg-black/60 backdrop-blur-md p-6 mb-6">
-        <label className="block text-sm font-semibold uppercase tracking-wider text-cage-400 mb-3">
-          Platform
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {Object.entries(platformFees).map(([key, { label }]) => (
-            <button
-              key={key}
-              onClick={() => setPlatform(key)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                platform === key
-                  ? 'bg-gold-500 text-dark-950'
-                  : 'border border-cage-600 bg-dark-700 text-cage-300 hover:border-gold-500/50 hover:text-white'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Results */}
       {totalCost > 0 && spotCount > 0 && (
         <>
@@ -208,11 +165,6 @@ export default function SpotCalculatorPage() {
             <div className="text-center">
               <p className="text-4xl font-bold text-white tabular-nums">{fmt(breakEvenPerSpot)}</p>
               <p className="mt-1 text-sm text-cage-500">per spot to break even (0% margin)</p>
-              {feeRate > 0 && (
-                <p className="mt-2 text-xs text-blood-400">
-                  Includes {feeLabel} — {fmt(breakEvenFee)} in fees
-                </p>
-              )}
             </div>
           </div>
 
@@ -269,17 +221,10 @@ export default function SpotCalculatorPage() {
                   <p className="text-2xl font-bold text-gold-400 tabular-nums">{fmt(profitAtMargin)}</p>
                 </div>
                 <div className="col-span-2 rounded-lg border border-blood-900/30 bg-dark-800/50 p-3 text-center">
-                  <span className="text-xs text-cage-500">Gross Revenue: </span>
+                  <span className="text-xs text-cage-500">Total Revenue: </span>
                   <span className="text-sm font-medium text-white tabular-nums">{fmt(totalRevAtMargin)}</span>
-                  {feeRate > 0 && (
-                    <>
-                      <span className="text-xs text-cage-500 mx-2">|</span>
-                      <span className="text-xs text-cage-500">Platform Fee: </span>
-                      <span className="text-sm font-medium text-blood-400 tabular-nums">-{fmt(feeAtMargin)}</span>
-                    </>
-                  )}
                   <span className="text-xs text-cage-500 mx-2">|</span>
-                  <span className="text-xs text-cage-500">COGS: </span>
+                  <span className="text-xs text-cage-500">Total Cost: </span>
                   <span className="text-sm font-medium text-white tabular-nums">{fmt(totalCost)}</span>
                   <span className="text-xs text-cage-500 mx-2">|</span>
                   <span className="text-xs text-cage-500">Spots: </span>

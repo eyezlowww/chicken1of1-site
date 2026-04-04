@@ -9,6 +9,7 @@ import {
   streamEntries,
   streamCalculations,
   streamerFeeConfig,
+  liveSessions,
 } from '@/lib/db/schema'
 import { eq, and, desc, sql, gte } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
@@ -167,6 +168,18 @@ export default async function AdminDashboardPage() {
     sales: fmt(parseFloat(a.sales)),
     status: a.status,
   }))
+
+  // Check for live breakers
+  const liveSessionsRaw = await db
+    .select({
+      id: liveSessions.id,
+      displayName: users.displayName,
+      platform: liveSessions.platform,
+      startedAt: liveSessions.startedAt,
+    })
+    .from(liveSessions)
+    .innerJoin(users, eq(liveSessions.userId, users.id))
+    .where(eq(liveSessions.status, 'live'))
 
   // Build stats cards
   const stats = [

@@ -93,7 +93,6 @@ export default function StreamersPage() {
   const [streamers, setStreamers] = useState<Streamer[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [showDeactivated, setShowDeactivated] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -160,25 +159,6 @@ export default function StreamersPage() {
           : s
       )
     )
-  }
-
-  async function deleteBreaker(id: string, name: string) {
-    if (!window.confirm(`Permanently delete ${name}? This cannot be undone.`)) return
-    try {
-      const res = await fetch('/api/streamdata/admin/streamers', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id }),
-      })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) {
-        alert(data.error || 'Failed to delete breaker')
-        return
-      }
-      setStreamers((prev) => prev.filter((s) => s.id !== id))
-    } catch {
-      alert('Failed to delete breaker')
-    }
   }
 
   /* invite streamer (magic link) */
@@ -408,19 +388,6 @@ export default function StreamersPage() {
         </div>
       )}
 
-      {/* Filter toggle */}
-      <div className="mb-4 flex items-center gap-3">
-        <label className="flex cursor-pointer items-center gap-2 text-sm text-cage-400">
-          <input
-            type="checkbox"
-            checked={showDeactivated}
-            onChange={(e) => setShowDeactivated(e.target.checked)}
-            className="h-4 w-4 rounded border-cage-600 bg-dark-700 text-gold-500 focus:ring-gold-500"
-          />
-          Show deactivated breakers
-        </label>
-      </div>
-
       {/* Streamers table */}
       <div className="overflow-hidden rounded-xl border border-blood-900/40 bg-black/60 backdrop-blur-md">
         <div className="overflow-x-auto">
@@ -440,14 +407,14 @@ export default function StreamersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-cage-700/50">
-              {streamers.filter((s) => showDeactivated || s.isActive).length === 0 ? (
+              {streamers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-sm text-cage-500">
                     No breakers found.
                   </td>
                 </tr>
               ) : (
-                streamers.filter((s) => showDeactivated || s.isActive).map((s) => {
+                streamers.map((s) => {
                   const isEditing = editingId === s.id
                   const supportFee = getSupportFeeRate(s)
                   return (
@@ -554,14 +521,6 @@ export default function StreamersPage() {
                                 }`}
                               >
                                 {s.isActive ? 'Deactivate' : 'Activate'}
-                              </button>
-                            )}
-                            {s.role !== 'admin' && !s.isActive && (
-                              <button
-                                onClick={() => deleteBreaker(s.id, s.displayName)}
-                                className="text-sm font-medium text-red-400 transition-colors hover:text-red-300"
-                              >
-                                Delete
                               </button>
                             )}
                             {s.hasPassword === false ? (

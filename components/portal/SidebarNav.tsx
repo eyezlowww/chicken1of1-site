@@ -2,7 +2,7 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import LogoutButton from './LogoutButton'
@@ -29,6 +29,15 @@ const streamerNav: NavItem[] = [
     icon: (
       <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Live Tracker',
+    href: '/streamdata/live',
+    icon: (
+      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.348 14.652a3.75 3.75 0 010-5.304m5.304 0a3.75 3.75 0 010 5.304m-7.425 2.121a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.807-3.808-9.98 0-13.788m13.788 0c3.808 3.807 3.808 9.98 0 13.788M12 12h.008v.008H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
       </svg>
     ),
   },
@@ -108,6 +117,15 @@ const adminNav: NavItem[] = [
     ),
   },
   {
+    label: 'Live Monitor',
+    href: '/streamdata/admin/live',
+    icon: (
+      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.348 14.652a3.75 3.75 0 010-5.304m5.304 0a3.75 3.75 0 010 5.304m-7.425 2.121a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.807-3.808-9.98 0-13.788m13.788 0c3.808 3.807 3.808 9.98 0 13.788M12 12h.008v.008H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+      </svg>
+    ),
+  },
+  {
     label: 'All Payouts',
     href: '/streamdata/admin/payouts',
     icon: (
@@ -124,12 +142,15 @@ const pageTitles: Record<string, string> = {
   '/streamdata/submit': 'Submit Stream',
   '/streamdata/history': 'Stream History',
   '/streamdata/inventory': 'Inventory',
+  '/streamdata/admin/inventory-mgmt': 'Stock Management',
+  '/streamdata/live': 'Live Break Tracker',
   '/streamdata/payouts': 'Payouts',
   '/streamdata/admin': 'Admin Dashboard',
   '/streamdata/admin/analytics': 'Analytics',
   '/streamdata/admin/fees': 'Manage Fees',
   '/streamdata/admin/streamers': 'Manage Breakers',
   '/streamdata/admin/products': 'Products',
+  '/streamdata/admin/live': 'Live Monitor',
   '/streamdata/admin/payouts': 'All Payouts',
   '/streamdata/tools/spot-calculator': 'Spot Calculator',
   '/streamdata/profile': 'Profile & Settings',
@@ -142,10 +163,29 @@ interface SidebarNavProps {
 
 export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [liveCount, setLiveCount] = useState(0)
   const pathname = usePathname()
 
   const isAdmin = userRole === 'admin'
   const pageTitle = pageTitles[pathname] || 'StreamData'
+
+  // Poll for live breakers count (admin only)
+  useEffect(() => {
+    if (!isAdmin) return
+    async function checkLive() {
+      try {
+        const res = await fetch('/api/streamdata/admin/live')
+        if (res.ok) {
+          const data = await res.json()
+          const count = (data.sessions || []).filter((s: any) => s.status === 'live').length
+          setLiveCount(count)
+        }
+      } catch { /* silent */ }
+    }
+    checkLive()
+    const interval = setInterval(checkLive, 30000) // every 30s
+    return () => clearInterval(interval)
+  }, [isAdmin])
 
   // Get initials for avatar
   const initials = userName
@@ -204,10 +244,10 @@ export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
             </div>
             {/* Submit Stream — admin can submit on behalf of a streamer */}
             <NavLink item={streamerNav[1]} />
-            {/* Inventory — admin only */}
+            {/* Stock Management — admin inventory management */}
             <NavLink item={{
-              label: 'Inventory',
-              href: '/streamdata/inventory',
+              label: 'Stock Management',
+              href: '/streamdata/admin/inventory-mgmt',
               icon: (
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
@@ -320,6 +360,16 @@ export default function SidebarNav({ userName, userRole }: SidebarNavProps) {
       {/* Desktop top bar */}
       <div className="hidden lg:fixed lg:left-64 lg:right-0 lg:top-0 lg:z-20 lg:flex lg:h-14 lg:items-center lg:justify-between lg:border-b lg:border-blood-900/40 lg:bg-dark-950/80 lg:px-6 lg:backdrop-blur-sm">
         <h1 className="text-sm font-semibold text-white">{pageTitle}</h1>
+        {/* Live indicator — centered */}
+        {isAdmin && liveCount > 0 && (
+          <Link href="/streamdata/admin/live" className="flex items-center gap-2 rounded-full border border-blood-600/40 bg-blood-950/60 px-3 py-1 transition-colors hover:border-blood-500/50">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
+            </span>
+            <span className="text-xs font-medium text-white">{liveCount} Live</span>
+          </Link>
+        )}
         <div className="flex items-center gap-3">
           <span className="text-sm text-cage-400">{userName}</span>
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-dark-700 text-xs font-bold text-white">
