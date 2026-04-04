@@ -110,9 +110,9 @@ export default function SpotCalculatorPage() {
       </div>
 
       {/* Top row: Product Costs + Spots + Platform */}
-      <div className="grid gap-4 mb-6 sm:grid-cols-4">
+      <div className="grid gap-4 mb-6 sm:grid-cols-[2fr_1fr_1.5fr]">
         {/* Product Costs */}
-        <div className="sm:col-span-2 rounded-xl border border-blood-900/40 bg-black/60 backdrop-blur-md p-4">
+        <div className="rounded-xl border border-blood-900/40 bg-black/60 backdrop-blur-md p-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-cage-400">
               Product Costs
