@@ -396,6 +396,28 @@ export default function PYTCalculatorPage() {
             </button>
           ))}
         </div>
+
+        {/* Target summary footer */}
+        {targetRevenue > 0 && sport !== 'UFC' && (
+          <div className="border-t border-blood-900/20 pt-3 mt-4">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-cage-400">Target Revenue:</span>
+                <span className="text-sm font-bold tabular-nums text-white">{fmt(targetRevenue)}</span>
+              </div>
+              <span className="hidden sm:inline text-cage-700">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-cage-400">Base:</span>
+                <span className="text-sm font-bold tabular-nums text-white">{fmt(basePrice)}/team</span>
+              </div>
+              <span className="hidden sm:inline text-cage-700">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-cage-400">Teams:</span>
+                <span className="text-sm font-bold text-white">{teamCount}</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* UFC message */}
@@ -410,40 +432,27 @@ export default function PYTCalculatorPage() {
         </div>
       )}
 
-      {/* Step 2: Auto-calculated target */}
-      {targetRevenue > 0 && sport !== 'UFC' && (
-        <div className="rounded-xl border border-blood-900/40 bg-black/60 p-6 backdrop-blur-md mb-6">
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-cage-400">
-            Target
-          </h2>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <div>
-              <span className="text-xs text-cage-500">Target Revenue</span>
-              <p className="text-xl font-bold tabular-nums text-white">{fmt(targetRevenue)}</p>
-            </div>
-            <div className="hidden sm:block text-cage-700">|</div>
-            <div>
-              <span className="text-xs text-cage-500">Base Price</span>
-              <p className="text-xl font-bold tabular-nums text-white">
-                {fmt(basePrice)} <span className="text-sm font-normal text-cage-400">per team</span>
-              </p>
-            </div>
-            <div className="hidden sm:block text-cage-700">|</div>
-            <div>
-              <span className="text-xs text-cage-500">Teams</span>
-              <p className="text-xl font-bold text-white">{teamCount}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Step 3: Team Price Grid */}
       {teamsWithPrices.length > 0 && targetRevenue > 0 && (
         <div className="rounded-xl border border-blood-900/40 bg-black/60 p-6 backdrop-blur-md mb-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-cage-400">
-              Team Prices
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-cage-400">
+                Team Prices
+              </h2>
+              <div className="group relative">
+                <button
+                  type="button"
+                  className="flex h-4 w-4 items-center justify-center rounded-full border border-cage-600 text-[10px] font-medium leading-none text-cage-500 transition-colors hover:border-cage-400 hover:text-cage-300"
+                  aria-label="How team pricing works"
+                >
+                  ?
+                </button>
+                <div className="pointer-events-none absolute left-0 top-full z-20 mt-1.5 w-64 rounded-lg border border-cage-700 bg-dark-800 p-3 text-xs leading-relaxed text-cage-400 opacity-0 shadow-lg transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
+                  Set individual team prices by clicking on a team&apos;s price field. When you change a price and click away, it locks automatically. Locked teams keep their price while unlocked teams auto-balance to hit your target revenue. Click the lock icon to unlock a team.
+                </div>
+              </div>
+            </div>
             <span className="text-xs text-cage-500">
               {teams.filter((t) => t.locked).length} locked
             </span>
