@@ -599,6 +599,15 @@ export default function SubmitStreamPage() {
         return
       }
 
+      // Inventory is mandatory — must report what's left in hand
+      const validInv = inventory.filter((i) => i.productId)
+      if (validInv.length === 0) {
+        setSubmitError('Please add your Inventory In Hand before submitting. Report what product you have remaining after this stream.')
+        setSubmitting(false)
+        setInventoryOpen(true)
+        return
+      }
+
       const res = await fetch('/api/streamdata/streams', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
