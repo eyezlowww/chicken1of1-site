@@ -22,9 +22,6 @@ function fmt(n: number): string {
 
 const PLATFORMS = [
   { key: 'whatnot', label: 'Whatnot (10.9%)', rate: 0.109 },
-  { key: 'fanatics', label: 'Fanatics (12.5%)', rate: 0.125 },
-  { key: 'ebay', label: 'eBay (13.2%)', rate: 0.132 },
-  { key: 'tiktok', label: 'TikTok (8%)', rate: 0.08 },
   { key: 'none', label: 'No Fee', rate: 0 },
   { key: 'custom', label: 'Custom', rate: 0 },
 ]
