@@ -15,7 +15,7 @@ const TEAM_ABBRS: Record<string, Record<string, string>> = {
     'New Orleans Pelicans': 'no', 'New York Knicks': 'ny', 'Oklahoma City Thunder': 'okc',
     'Orlando Magic': 'orl', 'Philadelphia 76ers': 'phi', 'Phoenix Suns': 'phx',
     'Portland Trail Blazers': 'por', 'Sacramento Kings': 'sac', 'San Antonio Spurs': 'sa',
-    'Toronto Raptors': 'tor', 'Utah Jazz': 'uta', 'Washington Wizards': 'wsh',
+    'Toronto Raptors': 'tor', 'Utah Jazz': 'utah', 'Washington Wizards': 'wsh',
   },
   NFL: {
     'Arizona Cardinals': 'ari', 'Atlanta Falcons': 'atl', 'Baltimore Ravens': 'bal',
@@ -69,6 +69,7 @@ const SPORT_SUB_CATEGORIES: Record<string, string> = {
   NFL: 'Football Breaks',
   MLB: 'Baseball Breaks',
   NHL: 'Hockey Breaks',
+  UFC: 'UFC Breaks',
 }
 
 const SHIPPING_PROFILES = [
@@ -118,6 +119,10 @@ const TEAMS: Record<string, string[]> = {
     'Ottawa Senators', 'Philadelphia Flyers', 'Pittsburgh Penguins', 'San Jose Sharks',
     'Seattle Kraken', 'St. Louis Blues', 'Tampa Bay Lightning', 'Toronto Maple Leafs',
     'Utah Hockey Club', 'Vancouver Canucks', 'Vegas Golden Knights', 'Washington Capitals',
+  ],
+  UFC: [
+    'Strawweight (W)', 'Flyweight', 'Bantamweight', 'Featherweight',
+    'Lightweight', 'Welterweight', 'Middleweight', 'Light Heavyweight', 'Heavyweight',
   ],
 }
 
@@ -192,7 +197,7 @@ export default function PYTCalculatorPage() {
   const totalOrderFees = teamCount * perOrderFee
 
   const targetRevenue = useMemo(() => {
-    if (cogsNum <= 0 || !sport || sport === 'UFC' || feeRate >= 1) return 0
+    if (cogsNum <= 0 || !sport || feeRate >= 1) return 0
     return ((cogsNum + totalOrderFees) / (1 - feeRate)) * (1 + margin / 100)
   }, [cogsNum, sport, feeRate, margin, totalOrderFees])
 
@@ -206,7 +211,7 @@ export default function PYTCalculatorPage() {
   const handleSportChange = useCallback(
     (newSport: Sport | '') => {
       setSport(newSport)
-      if (!newSport || newSport === 'UFC') {
+      if (!newSport) {
         setTeams([])
         return
       }
@@ -474,7 +479,7 @@ export default function PYTCalculatorPage() {
         </div>
 
         {/* Target summary footer */}
-        {targetRevenue > 0 && sport !== 'UFC' && (
+        {targetRevenue > 0 && (
           <div className="border-t border-blood-900/20 pt-3 mt-4">
             <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
               <div className="flex items-center gap-1.5">
@@ -484,11 +489,11 @@ export default function PYTCalculatorPage() {
               <span className="hidden sm:inline text-cage-700">|</span>
               <div className="flex items-center gap-1.5">
                 <span className="text-xs text-cage-400">Base:</span>
-                <span className="text-sm font-bold tabular-nums text-white">{fmt(basePrice)}/team</span>
+                <span className="text-sm font-bold tabular-nums text-white">{fmt(basePrice)}/{sport === 'UFC' ? 'class' : 'team'}</span>
               </div>
               <span className="hidden sm:inline text-cage-700">|</span>
               <div className="flex items-center gap-1.5">
-                <span className="text-xs text-cage-400">Teams:</span>
+                <span className="text-xs text-cage-400">{sport === 'UFC' ? 'Weight Classes:' : 'Teams:'}</span>
                 <span className="text-sm font-bold text-white">{teamCount}</span>
               </div>
             </div>
@@ -496,15 +501,8 @@ export default function PYTCalculatorPage() {
         )}
       </div>
 
-      {/* UFC message */}
-      {sport === 'UFC' && (
-        <div className="rounded-xl border border-gold-500/30 bg-gold-500/5 p-6 mb-6 text-center">
-          <p className="text-sm font-medium text-gold-400">
-            UFC breaks don&apos;t use PYT format
-          </p>
-          <p className="mt-1 text-xs text-cage-400">
-            Use the regular Spot Calculator for UFC random or personal breaks
-          </p>
+      {false && (
+        <div className="hidden">
         </div>
       )}
 
@@ -514,7 +512,7 @@ export default function PYTCalculatorPage() {
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold uppercase tracking-wider text-cage-400">
-                Team Prices
+                {sport === 'UFC' ? 'Weight Class Prices' : 'Team Prices'}
               </h2>
               <div className="group relative">
                 <button
@@ -708,7 +706,7 @@ export default function PYTCalculatorPage() {
           </button>
         )}
 
-        {teamsWithPrices.length > 0 && targetRevenue > 0 && sport && sport !== 'UFC' && (
+        {teamsWithPrices.length > 0 && targetRevenue > 0 && sport && (
           <button
             onClick={() => setShowExportModal(true)}
             className="inline-flex items-center gap-2 rounded-lg border border-gold-500/40 bg-gold-500/10 px-4 py-2 text-sm font-medium text-gold-400 transition-colors hover:bg-gold-500/20 hover:text-gold-300"
@@ -724,7 +722,7 @@ export default function PYTCalculatorPage() {
       </div>
 
       {/* Whatnot Export Modal */}
-      {showExportModal && sport && sport !== 'UFC' && (
+      {showExportModal && sport && (
         <WhatnotExportModal
           sport={sport}
           teams={teamsWithPrices}
