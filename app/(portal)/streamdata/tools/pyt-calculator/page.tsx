@@ -769,7 +769,7 @@ function WhatnotExportModal({
   }
 
   const downloadCSV = () => {
-    const sorted = [...teams].sort((a, b) => b.price - a.price)
+    const sorted = [...teams].sort((a, b) => a.name.localeCompare(b.name))
     const subCategory = SPORT_SUB_CATEGORIES[sport] || 'Sports Card Breaks'
 
     const headers = [
