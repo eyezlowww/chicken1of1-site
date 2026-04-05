@@ -577,13 +577,17 @@ export default function SubmitStreamPage() {
     }
   }
 
+  const showError = (msg: string) => {
+    setSubmitError(msg)
+  }
+
   const handleSubmit = async () => {
     if (!streamDate || !streamSales) {
-      setSubmitError('Please fill in Stream Date and Stream Sales.')
+      showError('Please fill in Stream Date and Stream Sales.')
       return
     }
     if (!selectedWeekId) {
-      setSubmitError('No weekly period available. Please try again.')
+      showError('No weekly period available. Please try again.')
       return
     }
     setSubmitting(true)
@@ -594,7 +598,7 @@ export default function SubmitStreamPage() {
       const body = buildRequestBody('submitted')
 
       if (body.productsSold.length === 0) {
-        setSubmitError('Please add at least one product with cost and quantity.')
+        showError('Please add at least one product with cost and quantity.')
         setSubmitting(false)
         return
       }
@@ -602,7 +606,7 @@ export default function SubmitStreamPage() {
       // Inventory is mandatory — must report what's left in hand
       const validInv = inventory.filter((i) => i.productId)
       if (validInv.length === 0) {
-        setSubmitError('Please add your Inventory In Hand before submitting. Report what product you have remaining after this stream.')
+        showError('Please add your Inventory In Hand before submitting. Report what product you have remaining after this stream.')
         setSubmitting(false)
         setInventoryOpen(true)
         return
@@ -882,7 +886,7 @@ export default function SubmitStreamPage() {
         {/* ───────────────────── Section 2: Products Sold ────────────── */}
         <section className="relative z-10 bg-black/60 backdrop-blur-md border border-blood-900/40 rounded-xl p-6 overflow-visible">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="font-heading text-lg font-semibold text-white">Products Sold</h2>
+            <h2 className="font-heading text-lg font-semibold text-white">Products Sold <span className="text-xs font-normal text-red-400 ml-2">* Required</span></h2>
             <button
               type="button"
               onClick={addProduct}
@@ -1081,7 +1085,7 @@ export default function SubmitStreamPage() {
         {/* ───────────────────── Section 3b: Show Adjustments ─────── */}
         <section className="bg-black/60 backdrop-blur-md border border-blood-900/40 rounded-xl p-6">
           <h2 className="font-heading text-lg font-semibold text-white mb-1">
-            Show Adjustments
+            Show Adjustments <span className="text-xs font-normal text-cage-500 ml-2">Optional</span>
           </h2>
           <p className="text-xs text-cage-500 mb-4">
             Add any extra costs or credits for this show (e.g. priority shipping, card sales)
@@ -1137,7 +1141,7 @@ export default function SubmitStreamPage() {
             aria-expanded={inventoryOpen}
           >
             <h2 className="font-heading text-lg font-semibold text-white">
-              Inventory In Hand
+              Inventory In Hand <span className="text-xs font-normal text-red-400 ml-2">* Required</span>
             </h2>
             {inventoryOpen ? (
               <ChevronUpIcon className="w-5 h-5 text-cage-400" />
@@ -1295,6 +1299,21 @@ export default function SubmitStreamPage() {
           </button>
         </div>
       </div>
+      {/* Fixed toast for errors */}
+      {submitError && (
+        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 w-[90%] max-w-lg animate-[slideUp_0.3s_ease-out]">
+          <div className="bg-red-950/95 border border-red-500/40 rounded-xl px-5 py-4 flex items-center gap-3 shadow-2xl backdrop-blur-sm">
+            <XIcon className="w-5 h-5 text-red-400 flex-shrink-0" />
+            <p className="text-red-300 text-sm font-medium flex-1">{submitError}</p>
+            <button
+              onClick={() => setSubmitError(null)}
+              className="text-red-400/60 hover:text-red-300 flex-shrink-0"
+            >
+              <XIcon className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
