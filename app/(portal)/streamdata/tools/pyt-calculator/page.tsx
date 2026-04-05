@@ -1,6 +1,80 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+
+// ─── Team Logo Abbreviations ──────────────────────────────────────────
+
+const TEAM_ABBRS: Record<string, Record<string, string>> = {
+  NBA: {
+    'Atlanta Hawks': 'atl', 'Boston Celtics': 'bos', 'Brooklyn Nets': 'bkn',
+    'Charlotte Hornets': 'cha', 'Chicago Bulls': 'chi', 'Cleveland Cavaliers': 'cle',
+    'Dallas Mavericks': 'dal', 'Denver Nuggets': 'den', 'Detroit Pistons': 'det',
+    'Golden State Warriors': 'gs', 'Houston Rockets': 'hou', 'Indiana Pacers': 'ind',
+    'LA Clippers': 'lac', 'Los Angeles Lakers': 'lal', 'Memphis Grizzlies': 'mem',
+    'Miami Heat': 'mia', 'Milwaukee Bucks': 'mil', 'Minnesota Timberwolves': 'min',
+    'New Orleans Pelicans': 'no', 'New York Knicks': 'ny', 'Oklahoma City Thunder': 'okc',
+    'Orlando Magic': 'orl', 'Philadelphia 76ers': 'phi', 'Phoenix Suns': 'phx',
+    'Portland Trail Blazers': 'por', 'Sacramento Kings': 'sac', 'San Antonio Spurs': 'sa',
+    'Toronto Raptors': 'tor', 'Utah Jazz': 'uta', 'Washington Wizards': 'wsh',
+  },
+  NFL: {
+    'Arizona Cardinals': 'ari', 'Atlanta Falcons': 'atl', 'Baltimore Ravens': 'bal',
+    'Buffalo Bills': 'buf', 'Carolina Panthers': 'car', 'Chicago Bears': 'chi',
+    'Cincinnati Bengals': 'cin', 'Cleveland Browns': 'cle', 'Dallas Cowboys': 'dal',
+    'Denver Broncos': 'den', 'Detroit Lions': 'det', 'Green Bay Packers': 'gb',
+    'Houston Texans': 'hou', 'Indianapolis Colts': 'ind', 'Jacksonville Jaguars': 'jax',
+    'Kansas City Chiefs': 'kc', 'Las Vegas Raiders': 'lv', 'Los Angeles Chargers': 'lac',
+    'Los Angeles Rams': 'lar', 'Miami Dolphins': 'mia', 'Minnesota Vikings': 'min',
+    'New England Patriots': 'ne', 'New Orleans Saints': 'no', 'New York Giants': 'nyg',
+    'New York Jets': 'nyj', 'Philadelphia Eagles': 'phi', 'Pittsburgh Steelers': 'pit',
+    'San Francisco 49ers': 'sf', 'Seattle Seahawks': 'sea', 'Tampa Bay Buccaneers': 'tb',
+    'Tennessee Titans': 'ten', 'Washington Commanders': 'wsh',
+  },
+  MLB: {
+    'Arizona Diamondbacks': 'ari', 'Atlanta Braves': 'atl', 'Baltimore Orioles': 'bal',
+    'Boston Red Sox': 'bos', 'Chicago Cubs': 'chc', 'Chicago White Sox': 'chw',
+    'Cincinnati Reds': 'cin', 'Cleveland Guardians': 'cle', 'Colorado Rockies': 'col',
+    'Detroit Tigers': 'det', 'Houston Astros': 'hou', 'Kansas City Royals': 'kc',
+    'Los Angeles Angels': 'laa', 'Los Angeles Dodgers': 'lad', 'Miami Marlins': 'mia',
+    'Milwaukee Brewers': 'mil', 'Minnesota Twins': 'min', 'New York Mets': 'nym',
+    'New York Yankees': 'nyy', 'Oakland Athletics': 'oak', 'Philadelphia Phillies': 'phi',
+    'Pittsburgh Pirates': 'pit', 'San Diego Padres': 'sd', 'San Francisco Giants': 'sf',
+    'Seattle Mariners': 'sea', 'St. Louis Cardinals': 'stl', 'Tampa Bay Rays': 'tb',
+    'Texas Rangers': 'tex', 'Toronto Blue Jays': 'tor', 'Washington Nationals': 'wsh',
+  },
+  NHL: {
+    'Anaheim Ducks': 'ana', 'Arizona Coyotes': 'ari', 'Boston Bruins': 'bos',
+    'Buffalo Sabres': 'buf', 'Calgary Flames': 'cgy', 'Carolina Hurricanes': 'car',
+    'Chicago Blackhawks': 'chi', 'Colorado Avalanche': 'col', 'Columbus Blue Jackets': 'cbj',
+    'Dallas Stars': 'dal', 'Detroit Red Wings': 'det', 'Edmonton Oilers': 'edm',
+    'Florida Panthers': 'fla', 'Los Angeles Kings': 'la', 'Minnesota Wild': 'min',
+    'Montreal Canadiens': 'mtl', 'Nashville Predators': 'nsh', 'New Jersey Devils': 'nj',
+    'New York Islanders': 'nyi', 'New York Rangers': 'nyr', 'Ottawa Senators': 'ott',
+    'Philadelphia Flyers': 'phi', 'Pittsburgh Penguins': 'pit', 'San Jose Sharks': 'sj',
+    'Seattle Kraken': 'sea', 'St. Louis Blues': 'stl', 'Tampa Bay Lightning': 'tb',
+    'Toronto Maple Leafs': 'tor', 'Utah Hockey Club': 'uta', 'Vancouver Canucks': 'van',
+    'Vegas Golden Knights': 'vgk', 'Washington Capitals': 'wsh',
+  },
+}
+
+function getTeamLogoUrl(sport: string, teamName: string): string {
+  const abbr = TEAM_ABBRS[sport]?.[teamName]
+  if (!abbr) return ''
+  const league = sport.toLowerCase()
+  return `https://a.espncdn.com/i/teamlogos/${league}/500/${abbr}.png`
+}
+
+const SPORT_SUB_CATEGORIES: Record<string, string> = {
+  NBA: 'Basketball Breaks',
+  NFL: 'Football Breaks',
+  MLB: 'Baseball Breaks',
+  NHL: 'Hockey Breaks',
+}
+
+const SHIPPING_PROFILES = [
+  '0-1 oz', '1-3 oz', '4-7 oz', '8-11 oz', '12-15 oz',
+  '1 lb', '1-2 lbs', '2-3 lbs', '3-4 lbs', '4-6 lbs',
+]
 
 // ─── Team Data ─────────────────────────────────────────────────────────
 
@@ -102,6 +176,7 @@ export default function PYTCalculatorPage() {
   const [customFeeRate, setCustomFeeRate] = useState('')
   const [teams, setTeams] = useState<TeamEntry[]>([])
   const [copied, setCopied] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
 
   const cogsNum = parseFloat(cogs) || 0
   const margin = activeMargin ?? (parseFloat(marginInput) || 0)
@@ -254,6 +329,7 @@ export default function PYTCalculatorPage() {
     setCustomFeeRate('')
     setTeams([])
     setCopied(false)
+    setShowExportModal(false)
   }, [])
 
   // ── Render ────────────────────────────────────────────────────────────
@@ -476,6 +552,14 @@ export default function PYTCalculatorPage() {
                     : 'border-cage-700/50 bg-dark-800/50'
                 }`}
               >
+                {sport && getTeamLogoUrl(sport, team.name) && (
+                  <img
+                    src={getTeamLogoUrl(sport, team.name)}
+                    alt=""
+                    className="h-4 w-4 object-contain flex-shrink-0"
+                    loading="lazy"
+                  />
+                )}
                 <span className="min-w-0 flex-1 truncate text-xs font-medium text-white" title={team.name}>
                   {team.name}
                 </span>
@@ -623,6 +707,226 @@ export default function PYTCalculatorPage() {
             )}
           </button>
         )}
+
+        {teamsWithPrices.length > 0 && targetRevenue > 0 && sport && sport !== 'UFC' && (
+          <button
+            onClick={() => setShowExportModal(true)}
+            className="inline-flex items-center gap-2 rounded-lg border border-gold-500/40 bg-gold-500/10 px-4 py-2 text-sm font-medium text-gold-400 transition-colors hover:bg-gold-500/20 hover:text-gold-300"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Export to Whatnot
+          </button>
+        )}
+      </div>
+
+      {/* Whatnot Export Modal */}
+      {showExportModal && sport && sport !== 'UFC' && (
+        <WhatnotExportModal
+          sport={sport}
+          teams={teamsWithPrices}
+          onClose={() => setShowExportModal(false)}
+        />
+      )}
+    </div>
+  )
+}
+
+// ─── Whatnot Export Modal ──────────────────────────────────────────────
+
+function WhatnotExportModal({
+  sport,
+  teams,
+  onClose,
+}: {
+  sport: string
+  teams: TeamEntry[]
+  onClose: () => void
+}) {
+  const [description, setDescription] = useState(`${sport} PYT Break`)
+  const [shippingProfile, setShippingProfile] = useState('1-3 oz')
+  const [listingType, setListingType] = useState('Buy it Now')
+  const [offerable, setOfferable] = useState('FALSE')
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  // Close on Escape
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [onClose])
+
+  // Close on backdrop click
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+      onClose()
+    }
+  }
+
+  const downloadCSV = () => {
+    const sorted = [...teams].sort((a, b) => b.price - a.price)
+    const subCategory = SPORT_SUB_CATEGORIES[sport] || 'Sports Card Breaks'
+
+    const headers = [
+      'Category', 'Sub Category', 'Title', 'Description', 'Quantity', 'Type',
+      'Price', 'Shipping Profile', 'Offerable', 'Hazmat', 'Condition',
+      'Cost Per Item', 'SKU', 'Image URL 1',
+    ]
+
+    const rows = sorted.map((team) => {
+      const logoUrl = getTeamLogoUrl(sport, team.name)
+      return [
+        'Sports Cards',
+        subCategory,
+        team.name,
+        description,
+        '1',
+        listingType,
+        String(Math.round(team.price)),
+        shippingProfile,
+        offerable,
+        'Not Hazmat',
+        '',
+        '',
+        '',
+        logoUrl,
+      ]
+    })
+
+    const csvContent = [headers, ...rows]
+      .map((row) =>
+        row.map((cell) => {
+          // Escape cells that contain commas or quotes
+          if (cell.includes(',') || cell.includes('"') || cell.includes('\n')) {
+            return `"${cell.replace(/"/g, '""')}"`
+          }
+          return cell
+        }).join(',')
+      )
+      .join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    const today = new Date().toISOString().split('T')[0]
+    link.href = url
+    link.download = `${sport}_PYT_whatnot_${today}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    onClose()
+  }
+
+  const selectClass =
+    'w-full rounded-lg border border-cage-600 bg-dark-700 px-3 py-2.5 text-sm text-white focus:border-gold-500 focus:outline-none focus:ring-1 focus:ring-gold-500'
+  const labelClass = 'mb-1.5 block text-xs font-medium text-cage-400'
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/70 backdrop-blur-sm"
+      onClick={handleBackdropClick}
+    >
+      <div
+        ref={modalRef}
+        className="mt-20 w-full max-w-md rounded-xl border border-blood-900/40 bg-dark-950 p-6 shadow-2xl"
+      >
+        <div className="mb-5 flex items-center justify-between">
+          <h3 className="text-lg font-bold text-white">Export to Whatnot CSV</h3>
+          <button
+            onClick={onClose}
+            className="rounded p-1 text-cage-400 transition-colors hover:text-white"
+            aria-label="Close modal"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {/* Description */}
+          <div>
+            <label htmlFor="export-desc" className={labelClass}>Description</label>
+            <input
+              id="export-desc"
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full rounded-lg border border-cage-600 bg-dark-700 px-3 py-2.5 text-sm text-white placeholder-cage-500 focus:border-gold-500 focus:outline-none focus:ring-1 focus:ring-gold-500"
+            />
+          </div>
+
+          {/* Shipping Profile */}
+          <div>
+            <label htmlFor="export-shipping" className={labelClass}>Shipping Profile</label>
+            <select
+              id="export-shipping"
+              value={shippingProfile}
+              onChange={(e) => setShippingProfile(e.target.value)}
+              className={selectClass}
+            >
+              {SHIPPING_PROFILES.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Type */}
+          <div>
+            <label htmlFor="export-type" className={labelClass}>Type</label>
+            <select
+              id="export-type"
+              value={listingType}
+              onChange={(e) => setListingType(e.target.value)}
+              className={selectClass}
+            >
+              <option value="Buy it Now">Buy it Now</option>
+              <option value="Auction">Auction</option>
+            </select>
+          </div>
+
+          {/* Offerable */}
+          <div>
+            <label htmlFor="export-offerable" className={labelClass}>Offerable</label>
+            <select
+              id="export-offerable"
+              value={offerable}
+              onChange={(e) => setOfferable(e.target.value)}
+              className={selectClass}
+            >
+              <option value="FALSE">FALSE</option>
+              <option value="TRUE">TRUE</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Preview */}
+        <p className="mt-4 text-xs text-cage-400">
+          Exporting {teams.length} team spots
+        </p>
+
+        {/* Actions */}
+        <div className="mt-5 flex items-center justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="rounded-lg px-4 py-2 text-sm font-medium text-cage-400 transition-colors hover:text-white"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={downloadCSV}
+            className="rounded-lg bg-gold-500 px-4 py-2 text-sm font-bold text-dark-950 transition-colors hover:bg-gold-400"
+          >
+            Download CSV
+          </button>
+        </div>
       </div>
     </div>
   )
