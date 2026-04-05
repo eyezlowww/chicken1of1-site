@@ -313,6 +313,10 @@ export default function LiveTrackerPage() {
     totalProfit: number
     avgMargin: number
     duration: string
+    sessionId: string
+    platform: string
+    startedAt: string
+    breaks: BreakEntry[]
   } | null>(null)
 
   // ── Derived values ──────────────────────────────────────────────────
@@ -399,6 +403,69 @@ export default function LiveTrackerPage() {
     init()
   }, [])
 
+  // ── Convert session to stream submission ────────────────────────────
+
+  const handleConvertToSubmission = useCallback((
+    sessionId: string,
+    sessionPlatform: string,
+    startedAt: string,
+    breaks: BreakEntry[],
+  ) => {
+    // Aggregate products across all breaks — combine duplicates by name, sum quantities and costs
+    const productMap = new Map<string, { productName: string; costPerUnit: number; amountSold: number; totalCost: number }>()
+    let totalCogs = 0
+    let totalSpots = 0
+    let totalBreakRevenue = 0
+
+    for (const b of breaks) {
+      totalCogs += b.totalCogs
+      totalSpots += b.spotsSold
+      totalBreakRevenue += b.revenue
+
+      for (const p of b.products) {
+        const key = p.name.trim().toLowerCase()
+        if (!key) continue
+        const existing = productMap.get(key)
+        if (existing) {
+          existing.amountSold += p.qty
+          existing.totalCost += p.costPerUnit * p.qty
+        } else {
+          productMap.set(key, {
+            productName: p.name.trim(),
+            costPerUnit: p.costPerUnit,
+            amountSold: p.qty,
+            totalCost: p.costPerUnit * p.qty,
+          })
+        }
+      }
+    }
+
+    // Build product array, recalculating costPerUnit as weighted average for duplicates
+    const products = Array.from(productMap.values()).map((p) => ({
+      productName: p.productName,
+      unitType: 'box' as const,
+      costPerUnit: p.amountSold > 0 ? p.totalCost / p.amountSold : p.costPerUnit,
+      amountSold: p.amountSold,
+    }))
+
+    // Format date as YYYY-MM-DD
+    const dateObj = new Date(startedAt)
+    const streamDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`
+
+    const prefillData = {
+      sessionId,
+      platform: sessionPlatform,
+      streamDate,
+      products,
+      totalCogs,
+      totalSpots,
+      totalBreakRevenue,
+    }
+
+    sessionStorage.setItem('streamdata_live_prefill', JSON.stringify(prefillData))
+    window.location.href = `/streamdata/submit?from=live&sessionId=${sessionId}`
+  }, [])
+
   // ── Actions ─────────────────────────────────────────────────────────
 
   const handleGoLive = useCallback(async () => {
@@ -481,6 +548,7 @@ export default function LiveTrackerPage() {
       const totalCogsVal = runningTotals.cogs
       const totalProfit = runningTotals.profit
       const avgMargin = runningTotals.margin
+      const endedSession = activeSession
       setSummaryData({
         totalBreaks: runningTotals.breaks,
         totalSales,
@@ -488,6 +556,10 @@ export default function LiveTrackerPage() {
         totalProfit,
         avgMargin,
         duration: elapsed,
+        sessionId: endedSession.id,
+        platform: endedSession.platform,
+        startedAt: endedSession.startedAt,
+        breaks: endedSession.breaks || [],
       })
       setShowSummary(true)
       setActiveSession(null)
@@ -581,12 +653,33 @@ export default function LiveTrackerPage() {
             </div>
           </div>
 
-          <button
-            onClick={() => setShowSummary(false)}
-            className="mt-8 rounded-lg bg-gold-500 px-8 py-3 text-sm font-bold text-black transition-colors hover:bg-gold-400"
-          >
-            Done
-          </button>
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <button
+              onClick={() => {
+                if (summaryData) {
+                  handleConvertToSubmission(
+                    summaryData.sessionId,
+                    summaryData.platform,
+                    summaryData.startedAt,
+                    summaryData.breaks,
+                  )
+                }
+              }}
+              className="w-full rounded-lg bg-indigo-600 px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-indigo-500 flex items-center justify-center gap-2"
+            >
+              Convert to Stream Submission
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setShowSummary(false)}
+              className="rounded-lg bg-gold-500 px-8 py-3 text-sm font-bold text-black transition-colors hover:bg-gold-400 w-full"
+            >
+              Done
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -1013,6 +1106,27 @@ export default function LiveTrackerPage() {
                           <MarginBadge margin={b.margin} />
                         </div>
                       ))}
+                    </div>
+                    {/* Convert to Submission button */}
+                    <div className="mt-3 flex justify-end">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleConvertToSubmission(
+                            session.id,
+                            session.platform,
+                            session.startedAt,
+                            expandedBreaks,
+                          )
+                        }}
+                        className="inline-flex items-center gap-2 rounded-lg bg-indigo-600/80 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-indigo-500"
+                      >
+                        Convert to Submission
+                        <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 )}

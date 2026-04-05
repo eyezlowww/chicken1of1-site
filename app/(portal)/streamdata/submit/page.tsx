@@ -4,7 +4,8 @@
 // Sections: Stream Info, Products Sold, Real-Time Calculations, Inventory In Hand
 // Fetches products and fees from API, submits to /api/streamdata/streams
 
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { calculateStreamPayout, type FeeConfig } from '@/lib/calculations'
 import { getCurrentWeekNumber } from '@/lib/week-utils'
 import Link from 'next/link'
@@ -284,8 +285,24 @@ function SearchableProductSelect({
   )
 }
 
-// ─── Page Component ─────────────────────────────────────────────────────
-export default function SubmitStreamPage() {
+// ─── Page Component (wrapped with Suspense for useSearchParams) ─────────
+export default function SubmitStreamPageWrapper() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-center py-16">
+          <SpinnerIcon className="w-8 h-8 text-gold-500" />
+        </div>
+      </div>
+    }>
+      <SubmitStreamPage />
+    </Suspense>
+  )
+}
+
+function SubmitStreamPage() {
+  const searchParams = useSearchParams()
+
   // ─── Data loading state ───────────────────────────────────────────────
   const [productList, setProductList] = useState<Product[]>([])
   const [availableInventory, setAvailableInventory] = useState<AvailableProduct[]>([])
@@ -294,6 +311,7 @@ export default function SubmitStreamPage() {
   const [selectedWeekId, setSelectedWeekId] = useState('')
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [prefillBanner, setPrefillBanner] = useState(false)
 
   // Section 1: Stream Info
   const [streamDate, setStreamDate] = useState('')
@@ -388,6 +406,57 @@ export default function SubmitStreamPage() {
 
     loadData()
   }, [])
+
+  // ─── Pre-fill from live session ───────────────────────────────────────
+  const prefillApplied = useRef(false)
+  useEffect(() => {
+    if (loading || prefillApplied.current) return
+    if (searchParams.get('from') !== 'live') return
+
+    const raw = sessionStorage.getItem('streamdata_live_prefill')
+    if (!raw) return
+
+    try {
+      const data = JSON.parse(raw)
+      prefillApplied.current = true
+
+      // Pre-fill stream date
+      if (data.streamDate) setStreamDate(data.streamDate)
+
+      // Pre-fill platform
+      if (data.platform) setPlatform(data.platform)
+
+      // Pre-fill products — try to match by name to existing product list
+      if (data.products && data.products.length > 0) {
+        const prefillRows: ProductRow[] = data.products.map((p: { productName: string; unitType: string; costPerUnit: number; amountSold: number }) => {
+          // Try to find a matching product by name (case-insensitive)
+          const matchedProduct = productList.find(
+            (pl) => pl.name.toLowerCase() === p.productName.toLowerCase()
+          )
+          return {
+            id: nextId(),
+            productId: matchedProduct?.id || '',
+            unitType: (p.unitType as 'case' | 'box' | 'pack') || 'box',
+            costPerUnit: String(p.costPerUnit || ''),
+            amountSold: String(p.amountSold || ''),
+          }
+        })
+        setProducts(prefillRows)
+      }
+
+      // Stream Sales and Order Count are intentionally left empty
+      // The breaker must enter them from the platform
+
+      // Show the info banner
+      setPrefillBanner(true)
+
+      // Clear sessionStorage after reading
+      sessionStorage.removeItem('streamdata_live_prefill')
+    } catch {
+      // Invalid data — silently ignore
+      sessionStorage.removeItem('streamdata_live_prefill')
+    }
+  }, [loading, searchParams, productList])
 
   // Use loaded fees or fallback
   const activeFees: FeeConfig = fees ?? {
@@ -791,6 +860,32 @@ export default function SubmitStreamPage() {
           Enter your stream sales data below. Calculations update in real time.
         </p>
       </div>
+
+      {/* Pre-fill info banner */}
+      {prefillBanner && (
+        <div className="mb-6 bg-indigo-500/10 border border-indigo-500/30 rounded-xl px-5 py-4 flex items-start gap-3">
+          <svg className="w-5 h-5 text-indigo-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+          <div>
+            <p className="text-indigo-300 font-medium text-sm">
+              Pre-filled from your live session.
+            </p>
+            <p className="text-indigo-400/70 text-xs mt-1">
+              Please enter your final Stream Sales and Order Count from the platform, then add your Inventory In Hand.
+            </p>
+          </div>
+          <button
+            onClick={() => setPrefillBanner(false)}
+            className="ml-auto text-cage-500 hover:text-cage-300"
+            aria-label="Dismiss info banner"
+          >
+            <XIcon className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Error banner */}
       {submitError && (
