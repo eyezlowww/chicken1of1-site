@@ -304,6 +304,29 @@ export const liveBreakProducts = pgTable('live_break_products', {
   totalCost: decimal('total_cost', { precision: 10, scale: 2 }).notNull(),
 })
 
+// ── FC Pro Orders ────────────────────────────────────────────────────────────
+// Fanatics Collecting Pro order history, imported from CSV exports.
+// Used to generate monthly Topps/Fanatics Direct breaker reports.
+
+export const fcProOrders = pgTable(
+  'fc_pro_orders',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    orderNumber: varchar('order_number', { length: 20 }).notNull(),
+    orderDate: date('order_date').notNull(),
+    productName: varchar('product_name', { length: 300 }).notNull(),
+    productType: varchar('product_type', { length: 50 }),
+    caseQuantity: integer('case_quantity').notNull().default(0),
+    subtotal: decimal('subtotal', { precision: 12, scale: 2 }),
+    shipping: decimal('shipping', { precision: 10, scale: 2 }),
+    discounts: decimal('discounts', { precision: 10, scale: 2 }),
+    totalPrice: decimal('total_price', { precision: 12, scale: 2 }),
+    paymentMethod: varchar('payment_method', { length: 50 }),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [uniqueIndex('fc_pro_orders_order_number_idx').on(table.orderNumber)]
+)
+
 // ── Relations ──────────────────────────────────────────────────────────────────
 
 export const usersRelations = relations(users, ({ many }) => ({
