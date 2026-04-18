@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
+import SubmissionAdminActions from '@/components/portal/SubmissionAdminActions'
 import {
   streamEntries,
   streamCalculations,
@@ -190,7 +191,7 @@ export default async function SubmissionDetailPage({
       </div>
 
       {/* Header */}
-      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">
             Stream Submission &mdash; {entry.user.displayName}
@@ -198,14 +199,19 @@ export default async function SubmissionDetailPage({
           <p className="mt-1 text-sm text-cage-400">
             {entry.streamDate} &middot; {entry.platform ?? 'Whatnot'}
           </p>
+          <span
+            className={`mt-2 inline-flex rounded-full px-3 py-1 text-xs font-medium ${
+              statusBadge[entry.status] ?? 'bg-dark-700 text-cage-300'
+            }`}
+          >
+            {statusLabel[entry.status] ?? entry.status}
+          </span>
         </div>
-        <span
-          className={`inline-flex self-start rounded-full px-3 py-1 text-xs font-medium ${
-            statusBadge[entry.status] ?? 'bg-dark-700 text-cage-300'
-          }`}
-        >
-          {statusLabel[entry.status] ?? entry.status}
-        </span>
+        <SubmissionAdminActions
+          submissionId={entry.id}
+          breakerName={entry.user.displayName}
+          streamDate={entry.streamDate}
+        />
       </div>
 
       <div className="space-y-6">

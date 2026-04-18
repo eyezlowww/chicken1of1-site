@@ -160,6 +160,8 @@ export const streamCalculations = pgTable(
     orderAmountCost: decimal('order_amount_cost', { precision: 10, scale: 2 }).notNull(),
     grossProfit: decimal('gross_profit', { precision: 10, scale: 2 }).notNull(),
     supportFee: decimal('support_fee', { precision: 10, scale: 2 }).notNull(),
+    adjustmentAmount: decimal('adjustment_amount', { precision: 10, scale: 2 }).default('0'),
+    adjustmentNote: text('adjustment_note'),
     breakerPayout: decimal('breaker_payout', { precision: 10, scale: 2 }).notNull(),
     chickenPayout: decimal('chicken_payout', { precision: 10, scale: 2 }).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),

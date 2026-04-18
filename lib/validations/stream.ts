@@ -24,6 +24,8 @@ export const streamEntrySchema = z.object({
   inventory: z.array(inventoryItemSchema).max(50).optional(),
   weeklyPeriodId: z.string().uuid(),
   status: z.enum(['draft', 'submitted']).default('draft'),
+  adjustmentAmount: z.number().min(-99999.99).max(99999.99).optional(),
+  adjustmentNote: z.string().max(500).optional(),
 })
 
 export const loginSchema = z.object({

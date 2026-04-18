@@ -596,6 +596,9 @@ function SubmitStreamPage() {
         packs: parseInt(i.packs, 10) || 0,
       }))
 
+    const adjAmt = parseFloat(adjustmentAmount) || 0
+    const signedAdj = adjAmt > 0 ? (adjustmentType === '+' ? adjAmt : -adjAmt) : 0
+
     return {
       streamDate,
       platform: platform || 'Whatnot',
@@ -605,6 +608,8 @@ function SubmitStreamPage() {
       inventory: validInventory.length > 0 ? validInventory : undefined,
       weeklyPeriodId: selectedWeekId,
       status,
+      adjustmentAmount: signedAdj !== 0 ? signedAdj : undefined,
+      adjustmentNote: adjustmentNote.trim() || undefined,
     }
   }
 

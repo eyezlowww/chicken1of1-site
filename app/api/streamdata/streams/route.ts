@@ -169,6 +169,8 @@ export async function POST(request: NextRequest) {
       inventory,
       weeklyPeriodId,
       status,
+      adjustmentAmount,
+      adjustmentNote,
     } = parsed.data
 
     const userId = session!.user.id
@@ -239,6 +241,9 @@ export async function POST(request: NextRequest) {
         fees
       )
 
+      const adj = adjustmentAmount ?? 0
+      const adjustedBreakerPayout = Math.round((calcResult.breakerPayout + adj) * 100) / 100
+
       const [calcRow] = await db
         .insert(streamCalculations)
         .values({
@@ -249,7 +254,9 @@ export async function POST(request: NextRequest) {
           orderAmountCost: calcResult.orderAmountCost.toFixed(2),
           grossProfit: calcResult.grossProfit.toFixed(2),
           supportFee: calcResult.supportFee.toFixed(2),
-          breakerPayout: calcResult.breakerPayout.toFixed(2),
+          adjustmentAmount: adj.toFixed(2),
+          adjustmentNote: adjustmentNote ?? null,
+          breakerPayout: adjustedBreakerPayout.toFixed(2),
           chickenPayout: calcResult.chickenPayout.toFixed(2),
         })
         .returning()

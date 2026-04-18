@@ -52,14 +52,14 @@ function formatFeeValue(fee: GlobalFee): string {
   if (fee.feeType === 'flat_per_order') {
     return `$${parseFloat(fee.flatAmount ?? '0').toFixed(2)}`
   }
-  return `${parseFloat(fee.rate ?? '0')}%`
+  return `${(parseFloat(fee.rate ?? '0') * 100).toFixed(2)}%`
 }
 
 function getEditableValue(fee: GlobalFee): string {
   if (fee.feeType === 'flat_per_order') {
     return String(parseFloat(fee.flatAmount ?? '0'))
   }
-  return String(parseFloat(fee.rate ?? '0'))
+  return String(parseFloat(fee.rate ?? '0') * 100)
 }
 
 /* ---------- icons ---------- */
@@ -141,7 +141,7 @@ export default function FeesPage() {
       if (fee.feeType === 'flat_per_order') {
         body.flatAmount = parsed
       } else {
-        body.rate = parsed
+        body.rate = parsed / 100
       }
 
       const res = await fetch('/api/streamdata/admin/fees', {
