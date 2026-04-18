@@ -6,11 +6,16 @@
 // Create a new streamer account
 // Body: { username, displayName, email, password, supportFeeRate }
 // Admin only — hashes password with bcrypt
+//
+// PATCH /api/streamdata/admin/streamers
+// Update a streamer's displayName, email, or isActive status
+// Body: { id, displayName?, email?, isActive? }
+// Admin only
 
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { users, streamerFeeConfig, streamEntries, inviteTokens } from '@/lib/db/schema'
-import { eq, count } from 'drizzle-orm'
+import { eq, count, sql } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
@@ -164,6 +169,72 @@ export async function POST(request: NextRequest) {
       { error: 'Failed to create streamer' },
       { status: 500 }
     )
+  }
+}
+
+const patchStreamerSchema = z.object({
+  id: z.string().uuid(),
+  displayName: z.string().min(1).max(100).optional(),
+  email: z.string().email().optional(),
+  isActive: z.boolean().optional(),
+})
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const { error } = await requireAdmin()
+    if (error) return error
+
+    const ip = getClientIp(request)
+    const limit = rateLimit(ip, { maxRequests: 20, windowMs: 60000 })
+    if (!limit.success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    const body = await request.json()
+    const parsed = patchStreamerSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid request data' }, { status: 400 })
+    }
+
+    const { id, displayName, email, isActive } = parsed.data
+
+    const user = await db.query.users.findFirst({ where: eq(users.id, id) })
+    if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    if (user.role === 'admin' && isActive === false) {
+      return NextResponse.json({ error: 'Cannot deactivate admin accounts' }, { status: 403 })
+    }
+
+    // Check email uniqueness if changing email
+    if (email && email !== user.email) {
+      const existing = await db.query.users.findFirst({ where: eq(users.email, email) })
+      if (existing) {
+        return NextResponse.json({ error: 'Email already in use' }, { status: 409 })
+      }
+    }
+
+    const updates: Record<string, unknown> = { updatedAt: sql`now()` }
+    if (displayName !== undefined) updates.displayName = displayName
+    if (email !== undefined) updates.email = email
+    if (isActive !== undefined) updates.isActive = isActive
+
+    const [updated] = await db
+      .update(users)
+      .set(updates)
+      .where(eq(users.id, id))
+      .returning({
+        id: users.id,
+        username: users.username,
+        displayName: users.displayName,
+        email: users.email,
+        role: users.role,
+        isActive: users.isActive,
+      })
+
+    return NextResponse.json({ streamer: updated })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error('PATCH /api/streamdata/admin/streamers error:', message)
+    return NextResponse.json({ error: 'Failed to update streamer' }, { status: 500 })
   }
 }
 

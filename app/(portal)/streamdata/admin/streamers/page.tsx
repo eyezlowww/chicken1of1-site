@@ -99,6 +99,9 @@ export default function StreamersPage() {
   const [editName, setEditName] = useState('')
   const [editEmail, setEditEmail] = useState('')
 
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
   /* add streamer form state */
   const [showAddForm, setShowAddForm] = useState(false)
   const [newUsername, setNewUsername] = useState('')
@@ -134,31 +137,72 @@ export default function StreamersPage() {
     setEditEmail(streamer.email)
   }
 
-  function saveEdit(id: string) {
-    // Note: The current API doesn't have a PUT/PATCH for updating streamer details.
-    // For now, just update local state. A PUT endpoint can be added later.
+  async function saveEdit(id: string) {
     if (!editName.trim() || !editEmail.trim()) return
-    setStreamers((prev) =>
-      prev.map((s) =>
-        s.id === id ? { ...s, displayName: editName.trim(), email: editEmail.trim() } : s
-      )
-    )
-    setEditingId(null)
+    setSubmitting(true)
+    setError(null)
+    try {
+      const res = await fetch('/api/streamdata/admin/streamers', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, displayName: editName.trim(), email: editEmail.trim() }),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error ?? 'Failed to save changes')
+      }
+      await fetchStreamers()
+      setEditingId(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save changes')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   function cancelEdit() {
     setEditingId(null)
   }
 
-  /* toggle status — local only until API endpoint exists */
-  function toggleStatus(id: string) {
-    setStreamers((prev) =>
-      prev.map((s) =>
-        s.id === id
-          ? { ...s, isActive: !s.isActive }
-          : s
-      )
-    )
+  async function toggleStatus(id: string, currentActive: boolean) {
+    setError(null)
+    try {
+      const res = await fetch('/api/streamdata/admin/streamers', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, isActive: !currentActive }),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error ?? 'Failed to update status')
+      }
+      await fetchStreamers()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update status')
+    }
+  }
+
+  async function deleteStreamer(id: string) {
+    setDeletingId(id)
+    setError(null)
+    try {
+      const res = await fetch('/api/streamdata/admin/streamers', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error ?? 'Failed to delete breaker')
+      }
+      setConfirmDeleteId(null)
+      await fetchStreamers()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete breaker')
+      setConfirmDeleteId(null)
+    } finally {
+      setDeletingId(null)
+    }
   }
 
   /* invite streamer (magic link) */
@@ -489,16 +533,36 @@ export default function StreamersPage() {
                           <div className="flex gap-2">
                             <button
                               onClick={() => saveEdit(s.id)}
-                              className="inline-flex items-center gap-1 rounded-lg bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-indigo-500"
+                              disabled={submitting}
+                              className="inline-flex items-center gap-1 rounded-lg bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-indigo-500 disabled:opacity-50"
                             >
                               <CheckIcon className="h-3.5 w-3.5" />
-                              Save
+                              {submitting ? 'Saving...' : 'Save'}
                             </button>
                             <button
                               onClick={cancelEdit}
-                              className="inline-flex items-center gap-1 rounded-lg border border-cage-600 px-2.5 py-1 text-xs font-medium text-cage-400 transition-colors hover:border-cage-600 hover:text-cage-300"
+                              disabled={submitting}
+                              className="inline-flex items-center gap-1 rounded-lg border border-cage-600 px-2.5 py-1 text-xs font-medium text-cage-400 transition-colors hover:border-cage-600 hover:text-cage-300 disabled:opacity-50"
                             >
                               <XIcon className="h-3.5 w-3.5" />
+                              Cancel
+                            </button>
+                          </div>
+                        ) : confirmDeleteId === s.id ? (
+                          <div className="flex items-center gap-2 rounded-lg border border-red-500/40 bg-red-950/40 px-3 py-1.5">
+                            <span className="text-xs text-red-300">Delete {s.displayName}?</span>
+                            <button
+                              onClick={() => deleteStreamer(s.id)}
+                              disabled={deletingId === s.id}
+                              className="rounded bg-red-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-red-500 disabled:opacity-50"
+                            >
+                              {deletingId === s.id ? 'Deleting...' : 'Confirm'}
+                            </button>
+                            <button
+                              onClick={() => setConfirmDeleteId(null)}
+                              disabled={deletingId === s.id}
+                              className="rounded bg-dark-700 px-2.5 py-1 text-xs font-medium text-cage-300 hover:text-white disabled:opacity-50"
+                            >
                               Cancel
                             </button>
                           </div>
@@ -513,7 +577,7 @@ export default function StreamersPage() {
                             </button>
                             {s.role !== 'admin' && (
                               <button
-                                onClick={() => toggleStatus(s.id)}
+                                onClick={() => toggleStatus(s.id, s.isActive)}
                                 className={`text-sm font-medium transition-colors ${
                                   s.isActive
                                     ? 'text-red-400 hover:text-red-300'
@@ -536,10 +600,19 @@ export default function StreamersPage() {
                             ) : (
                               <button
                                 className="inline-flex items-center gap-1 text-sm font-medium text-cage-400 transition-colors hover:text-cage-300"
-                                title="Reset password"
+                                title="Reset password (not yet implemented)"
                               >
                                 <KeyIcon className="h-3.5 w-3.5" />
                                 Reset PW
+                              </button>
+                            )}
+                            {s.role !== 'admin' && (
+                              <button
+                                onClick={() => setConfirmDeleteId(s.id)}
+                                className="text-sm font-medium text-red-500/70 transition-colors hover:text-red-400"
+                                title="Delete breaker (only if no submissions)"
+                              >
+                                Delete
                               </button>
                             )}
                           </div>
