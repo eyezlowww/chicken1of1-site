@@ -1,3 +1,6 @@
+// GET /api/streamdata/admin/submissions/[id]
+// Admin-only fetch of a single stream entry with full relations.
+//
 // DELETE /api/streamdata/admin/submissions/[id]
 // Admin-only hard delete of any stream entry regardless of status.
 // Cascades to stream_products_sold, stream_inventory, stream_calculations.
@@ -31,6 +34,46 @@ const editSchema = z.object({
 
 interface RouteContext {
   params: Promise<{ id: string }>
+}
+
+export async function GET(request: NextRequest, context: RouteContext) {
+  try {
+    const { error } = await requireAdmin()
+    if (error) return error
+
+    const ip = getClientIp(request)
+    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
+    if (!limit.success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    const { id } = await context.params
+
+    const entry = await db.query.streamEntries.findFirst({
+      where: eq(streamEntries.id, id),
+      with: {
+        user: true,
+        calculation: true,
+        productsSold: {
+          with: { product: true },
+        },
+        inventory: {
+          with: { product: true },
+        },
+        weeklyPeriod: true,
+      },
+    })
+
+    if (!entry) {
+      return NextResponse.json({ error: 'Stream entry not found' }, { status: 404 })
+    }
+
+    return NextResponse.json({ stream: entry })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error('GET /api/streamdata/admin/submissions/[id] error:', message)
+    return NextResponse.json({ error: 'Failed to fetch stream entry' }, { status: 500 })
+  }
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {

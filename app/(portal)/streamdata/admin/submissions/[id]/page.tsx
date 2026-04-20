@@ -158,6 +158,8 @@ export default async function SubmissionDetailPage({
         orderAmountCost: parseFloat(entry.calculation.orderAmountCost),
         grossProfit: parseFloat(entry.calculation.grossProfit),
         supportFee: parseFloat(entry.calculation.supportFee),
+        adjustmentAmount: parseFloat(entry.calculation.adjustmentAmount ?? '0'),
+        adjustmentNote: entry.calculation.adjustmentNote ?? null,
         breakerPayout: parseFloat(entry.calculation.breakerPayout),
         chickenPayout: parseFloat(entry.calculation.chickenPayout),
       }
@@ -358,6 +360,15 @@ export default async function SubmissionDetailPage({
                   label={`Support Fee (${pct(supportFeeRate)})`}
                   value={`- ${fmt(calc.supportFee)}`}
                 />
+
+                {calc.adjustmentAmount !== 0 && (
+                  <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 px-3 py-2">
+                    <CalcRow
+                      label={`Adjustment${calc.adjustmentNote ? ` — ${calc.adjustmentNote}` : ''}`}
+                      value={`${calc.adjustmentAmount >= 0 ? '+' : ''}${fmt(calc.adjustmentAmount)}`}
+                    />
+                  </div>
+                )}
 
                 {/* Breaker Payout */}
                 <div className="rounded-lg border border-green-500/30 bg-green-500/10 p-4">

@@ -59,7 +59,7 @@ export default function EditSubmissionPage() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch(`/api/streamdata/streams/${id}`)
+        const res = await fetch(`/api/streamdata/admin/submissions/${id}`)
         if (!res.ok) throw new Error('Failed to load submission')
         const data = await res.json()
         const s: StreamData = data.stream
