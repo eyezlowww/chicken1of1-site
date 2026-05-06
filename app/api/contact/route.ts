@@ -6,9 +6,9 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting: 5 requests per minute per IP
+    // Rate limiting: 3 requests per 10 minutes per IP
     const ip = getClientIp(request)
-    const rateLimitResult = rateLimit(ip, { maxRequests: 5, windowMs: 60000 })
+    const rateLimitResult = rateLimit(ip, { maxRequests: 3, windowMs: 10 * 60 * 1000 })
 
     if (!rateLimitResult.success) {
       return NextResponse.json(
@@ -23,7 +23,12 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, email, subject, message } = body
+    const { name, email, subject, message, website } = body
+
+    // Honeypot: bots fill hidden fields, humans don't. Silently succeed so bots don't adapt.
+    if (website) {
+      return NextResponse.json({ message: 'Message sent successfully!' }, { status: 200 })
+    }
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
@@ -38,6 +43,40 @@ export async function POST(request: NextRequest) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
+        { status: 400 }
+      )
+    }
+
+    // Subject must be one of the valid dropdown options — blocks bots using custom values
+    const validSubjects = ['Break Inquiry', 'Product Request', 'Partnership', 'Technical Issue', 'General Question']
+    if (!validSubjects.includes(subject)) {
+      return NextResponse.json(
+        { error: 'Invalid subject selection' },
+        { status: 400 }
+      )
+    }
+
+    // Block email header injection attempts in name/message fields
+    const injectionPattern = /email:|subject:|cc:|bcc:|content-type:|to:|from:/i
+    if (injectionPattern.test(name) || injectionPattern.test(message)) {
+      return NextResponse.json(
+        { error: 'Invalid content detected' },
+        { status: 400 }
+      )
+    }
+
+    // Message must contain at least 3 words — catches random-character spam
+    if (message.trim().split(/\s+/).length < 3) {
+      return NextResponse.json(
+        { error: 'Please provide a more detailed message (at least a few words).' },
+        { status: 400 }
+      )
+    }
+
+    // Name must be at least 2 characters and not contain URLs
+    if (name.trim().length < 2 || /https?:\/\//i.test(name)) {
+      return NextResponse.json(
+        { error: 'Please enter a valid name.' },
         { status: 400 }
       )
     }

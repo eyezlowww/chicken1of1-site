@@ -1,13 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import LoadingSpinner from './LoadingSpinner'
+
+const COOLDOWN_KEY = 'c1o1_contact_last_sent'
+const COOLDOWN_MS = 10 * 60 * 1000 // 10 minutes
 
 interface FormData {
   name: string
   email: string
   subject: string
   message: string
+  website: string // honeypot — hidden from real users, bots fill it
 }
 
 interface FormState {
@@ -18,12 +22,25 @@ interface FormState {
 }
 
 export default function ContactForm() {
+  const [cooldownUntil, setCooldownUntil] = useState<number | null>(null)
+
+  useEffect(() => {
+    const stored = localStorage.getItem(COOLDOWN_KEY)
+    if (stored) {
+      const end = parseInt(stored, 10) + COOLDOWN_MS
+      if (Date.now() < end) {
+        setCooldownUntil(end)
+      }
+    }
+  }, [])
+
   const [formState, setFormState] = useState<FormState>({
     data: {
       name: '',
       email: '',
       subject: '',
       message: '',
+      website: '',
     },
     loading: false,
     success: false,
@@ -58,11 +75,14 @@ export default function ContactForm() {
       const result = await response.json()
 
       if (response.ok) {
+        const now = Date.now()
+        localStorage.setItem(COOLDOWN_KEY, String(now))
+        setCooldownUntil(now + COOLDOWN_MS)
         setFormState(prev => ({
           ...prev,
           loading: false,
           success: true,
-          data: { name: '', email: '', subject: '', message: '' }, // Reset form
+          data: { name: '', email: '', subject: '', message: '', website: '' },
         }))
       } else {
         setFormState(prev => ({
@@ -80,7 +100,13 @@ export default function ContactForm() {
     }
   }
 
-  if (formState.success) {
+  const isCoolingDown = cooldownUntil !== null && Date.now() < cooldownUntil
+
+  if (formState.success || isCoolingDown) {
+    const cooldownMinutes = cooldownUntil
+      ? Math.ceil((cooldownUntil - Date.now()) / 60000)
+      : 0
+
     return (
       <div className="card">
         <div className="text-center py-8">
@@ -108,11 +134,21 @@ export default function ContactForm() {
           <p className="text-sm text-gray-500 mb-6">
             You should also receive a confirmation email shortly.
           </p>
+          {isCoolingDown && (
+            <p className="text-xs text-cage-500 mb-4">
+              To prevent spam, you can send another message in ~{cooldownMinutes} minute{cooldownMinutes !== 1 ? 's' : ''}.
+            </p>
+          )}
           <button
-            onClick={() => setFormState(prev => ({ ...prev, success: false }))}
-            className="btn-outline"
+            onClick={() => {
+              if (!isCoolingDown) {
+                setFormState(prev => ({ ...prev, success: false }))
+              }
+            }}
+            disabled={isCoolingDown}
+            className="btn-outline disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            Send Another Message
+            {isCoolingDown ? `Wait ${cooldownMinutes} min to send again` : 'Send Another Message'}
           </button>
         </div>
       </div>
@@ -135,6 +171,20 @@ export default function ContactForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Honeypot field — hidden from real users via CSS, bots fill it and get silently rejected */}
+        <div style={{ position: 'absolute', left: '-9999px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input
+            type="text"
+            id="website"
+            name="website"
+            value={formState.data.website}
+            onChange={handleInputChange}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
+
         <div>
           <label
             htmlFor="name"
