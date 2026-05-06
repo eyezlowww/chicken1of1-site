@@ -8,11 +8,11 @@ import Link from 'next/link'
 import ScrollToTopLink from '@/components/ScrollToTopLink'
 
 export const metadata: Metadata = {
-  title: 'Sell Your UFC Boxes | Chicken1of1',
+  title: 'Sell Your Combat Sports & Wrestling Cards | Chicken1of1',
   description:
-    'Sell your sealed UFC, MMA, and combat sports boxes to Chicken1of1. Fair offers, fast payment, no games. Submit your products and get an offer within 24 hours.',
+    'Sell your sealed UFC, MMA, WWE, AEW, and wrestling boxes to Chicken1of1. Fair offers, fast payment, no games. Submit your products and get an offer within 24 hours.',
   keywords:
-    'sell UFC boxes, sell sealed boxes, UFC Prizm, Topps Chrome UFC, sell sports cards, Chicken1of1',
+    'sell UFC boxes, sell WWE boxes, sell sealed boxes, UFC Prizm, Topps Chrome UFC, WWE Topps Chrome, sell sports cards, Chicken1of1',
   openGraph: {
     type: 'website',
     title: 'Sell Your UFC Sealed Boxes - Chicken1of1',
@@ -41,10 +41,10 @@ export default function SellToUsPage() {
         <Container className="relative z-10">
           <div className="text-center max-w-3xl mx-auto animate-fade-in-up">
             <h1 className="font-heading text-4xl md:text-6xl font-bold text-white uppercase tracking-tight mb-4">
-              Sell Your UFC Boxes To Us
+              Combat Sports &amp; Wrestling
             </h1>
             <p className="text-lg text-cage-300 mb-4">
-              We buy sealed UFC, MMA, boxing, and combat sports product. Fair offers based on real market data, with no runaround.
+              We buy sealed UFC, MMA, WWE, AEW, and wrestling product. Fair offers based on real market data, with no runaround.
             </p>
             <p className="text-cage-400">
               Tell us what you have and we will make you an honest offer within 24 hours.
@@ -63,10 +63,10 @@ export default function SellToUsPage() {
             <div className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)]">
               <h3 className="font-heading text-lg font-bold text-gold-400 uppercase mb-3">What We Buy</h3>
               <ul className="space-y-2 text-cage-300 text-sm">
-                <li>Factory sealed hobby boxes & cases</li>
+                <li>Factory sealed hobby boxes &amp; cases</li>
                 <li>Retail, blaster, mega, and hanger boxes</li>
-                <li>UFC, MMA, Boxing, Wrestling products</li>
-                <li>Topps and Panini brands</li>
+                <li>UFC, MMA, WWE, AEW, and wrestling products</li>
+                <li>Topps, Panini, Fleer, and Upper Deck</li>
               </ul>
             </div>
             <div className="bg-black rounded-xl border border-cage-700/50 p-6 transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)]">

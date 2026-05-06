@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import mmaProducts from '@/content/mma-products.json'
+import wweProducts from '@/content/wwe-products.json'
 
 const FORMATS = [
   { value: 'hobby-box', label: 'Hobby Box' },
@@ -11,7 +12,18 @@ const FORMATS = [
   { value: 'case', label: 'Case' },
 ]
 
+const SPORTS = [
+  { value: 'ufc-mma', label: 'UFC / MMA' },
+  { value: 'wwe-wrestling', label: 'WWE / Wrestling' },
+]
+
+const PRODUCT_CATALOG = {
+  'ufc-mma': mmaProducts.products,
+  'wwe-wrestling': wweProducts.products,
+}
+
 interface ProductItem {
+  sport: string
   year: string
   product: string
   format: string
@@ -31,7 +43,7 @@ interface FormData {
   instagram: string
 }
 
-const EMPTY_PRODUCT: ProductItem = { year: '', product: '', format: 'hobby-box', quantity: 1, boxesPerCase: null }
+const EMPTY_PRODUCT: ProductItem = { sport: '', year: '', product: '', format: 'hobby-box', quantity: 1, boxesPerCase: null }
 
 export default function ProductSubmissionForm() {
   const [step, setStep] = useState(1)
@@ -50,16 +62,19 @@ export default function ProductSubmissionForm() {
     instagram: '',
   })
 
-  // Get unique years sorted descending (newest first)
-  const years = useMemo(() => {
-    const uniqueYears = Array.from(new Set(mmaProducts.products.map((p) => p.year)))
+  // Get unique years for a given sport, sorted descending
+  const getYearsForSport = useMemo(() => (sport: string) => {
+    if (!sport) return []
+    const catalog = PRODUCT_CATALOG[sport as keyof typeof PRODUCT_CATALOG] || []
+    const uniqueYears = Array.from(new Set(catalog.map((p) => p.year)))
     return uniqueYears.sort((a, b) => b - a)
   }, [])
 
-  // Get products filtered by selected year
-  const getProductsForYear = (year: string) => {
-    if (!year) return []
-    return mmaProducts.products.filter((p) => p.year === parseInt(year))
+  // Get products filtered by sport + year
+  const getProductsForSportAndYear = (sport: string, year: string) => {
+    if (!sport || !year) return []
+    const catalog = PRODUCT_CATALOG[sport as keyof typeof PRODUCT_CATALOG] || []
+    return catalog.filter((p) => p.year === parseInt(year))
   }
 
   const addProduct = () => {
@@ -78,7 +93,10 @@ export default function ProductSubmissionForm() {
 
   const updateProduct = (index: number, field: keyof ProductItem, value: string | number | null) => {
     const updated = [...formData.products]
-    if (field === 'year') {
+    if (field === 'sport') {
+      // Reset year and product when sport changes
+      updated[index] = { ...updated[index], sport: value as string, year: '', product: '' }
+    } else if (field === 'year') {
       // Reset product when year changes
       updated[index] = { ...updated[index], year: value as string, product: '' }
     } else if (field === 'format') {
@@ -196,6 +214,22 @@ export default function ProductSubmissionForm() {
           {formData.products.map((item, index) => (
             <div key={index} className="mb-4 p-4 bg-dark-900 rounded-lg border border-cage-700">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+                {/* Sport Dropdown */}
+                <div className="md:col-span-2">
+                  <label className="block text-xs text-cage-400 mb-1">Sport</label>
+                  <select
+                    value={item.sport}
+                    onChange={(e) => updateProduct(index, 'sport', e.target.value)}
+                    className="input"
+                    aria-label={`Sport for product ${index + 1}`}
+                  >
+                    <option value="">Sport...</option>
+                    {SPORTS.map((s) => (
+                      <option key={s.value} value={s.value}>{s.label}</option>
+                    ))}
+                  </select>
+                </div>
+
                 {/* Year Dropdown */}
                 <div className="md:col-span-2">
                   <label className="block text-xs text-cage-400 mb-1">Year</label>
@@ -203,27 +237,30 @@ export default function ProductSubmissionForm() {
                     value={item.year}
                     onChange={(e) => updateProduct(index, 'year', e.target.value)}
                     className="input"
+                    disabled={!item.sport}
                     aria-label={`Year for product ${index + 1}`}
                   >
                     <option value="">Year...</option>
-                    {years.map((y) => (
+                    {getYearsForSport(item.sport).map((y) => (
                       <option key={y} value={y}>{y}</option>
                     ))}
                   </select>
                 </div>
 
-                {/* Product Dropdown (filtered by year) */}
-                <div className="md:col-span-4">
+                {/* Product Dropdown (filtered by sport + year) */}
+                <div className="md:col-span-3">
                   <label className="block text-xs text-cage-400 mb-1">Product</label>
                   <select
                     value={item.product}
                     onChange={(e) => updateProduct(index, 'product', e.target.value)}
                     className="input"
-                    disabled={!item.year}
+                    disabled={!item.sport || !item.year}
                     aria-label={`Product ${index + 1}`}
                   >
-                    <option value="">{item.year ? 'Select a product...' : 'Select year first...'}</option>
-                    {getProductsForYear(item.year).map((p) => (
+                    <option value="">
+                      {!item.sport ? 'Select sport first...' : !item.year ? 'Select year first...' : 'Select a product...'}
+                    </option>
+                    {getProductsForSportAndYear(item.sport, item.year).map((p) => (
                       <option key={p.name} value={p.name}>{p.name}</option>
                     ))}
                     <option value="other">Other (describe in notes)</option>
@@ -246,7 +283,7 @@ export default function ProductSubmissionForm() {
                 </div>
 
                 {/* Quantity */}
-                <div className="md:col-span-2">
+                <div className="md:col-span-1">
                   <label className="block text-xs text-cage-400 mb-1">Qty</label>
                   <input
                     type="number"
