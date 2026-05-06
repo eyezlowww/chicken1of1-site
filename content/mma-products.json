@@ -1,7 +1,7 @@
 {
   "source": "sportscardchecklist.com",
   "sport": "MMA",
-  "lastUpdated": "2026-02-04",
+  "lastUpdated": "2026-05-06",
   "products": [
     { "year": 2009, "name": "2009 Topps Round 1", "brand": "Topps" },
     { "year": 2009, "name": "2009 Topps UFC", "brand": "Topps" },
@@ -76,10 +76,17 @@
     { "year": 2024, "name": "2024 Topps Royalty UFC", "brand": "Topps" },
     { "year": 2024, "name": "2024 Topps UFC Midnight", "brand": "Topps" },
     { "year": 2025, "name": "2025 Panini Contenders PFL", "brand": "Panini" },
+    { "year": 2025, "name": "2025 Topps Chrome Sapphire Edition UFC", "brand": "Topps" },
     { "year": 2025, "name": "2025 Topps Chrome UFC", "brand": "Topps" },
+    { "year": 2025, "name": "2025 Topps Chrome UFC Breakers Delight", "brand": "Topps" },
     { "year": 2025, "name": "2025 Topps Finest UFC", "brand": "Topps" },
     { "year": 2025, "name": "2025 Topps Knockout", "brand": "Topps" },
     { "year": 2025, "name": "2025 Topps Midnight UFC", "brand": "Topps" },
-    { "year": 2025, "name": "2025 Topps Stadium Club UFC", "brand": "Topps" }
+    { "year": 2025, "name": "2025 Topps Royalty UFC", "brand": "Topps" },
+    { "year": 2025, "name": "2025 Topps Stadium Club UFC", "brand": "Topps" },
+    { "year": 2026, "name": "2026 Panini Contenders PFL", "brand": "Panini" },
+    { "year": 2026, "name": "2026 Topps Chrome UFC", "brand": "Topps" },
+    { "year": 2026, "name": "2026 Topps Chrome UFC Breakers Delight", "brand": "Topps" },
+    { "year": 2026, "name": "2026 Topps Midnight UFC", "brand": "Topps" }
   ]
 }
