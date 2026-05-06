@@ -127,7 +127,14 @@
     { "year": 2024, "name": "2024 WWE Panini Prizm", "brand": "Panini" },
     { "year": 2024, "name": "2024 WWE Panini Revolution", "brand": "Panini" },
     { "year": 2024, "name": "2024 WWE Panini Select", "brand": "Panini" },
-    { "year": 2025, "name": "2025 WWE Topps Chrome", "brand": "Topps" },
-    { "year": 2025, "name": "2025 WWE Topps Heritage", "brand": "Topps" }
+    { "year": 2025, "name": "2025 WWE Topps Heritage", "brand": "Topps" },
+    { "year": 2025, "name": "2025 Topps Chrome Sapphire Edition WWE", "brand": "Topps" },
+    { "year": 2025, "name": "2025 Topps Chrome WWE", "brand": "Topps" },
+    { "year": 2025, "name": "2025 Topps Chrome WWE x Cactus Jack", "brand": "Topps" },
+    { "year": 2025, "name": "2025 Topps Exalted WWE", "brand": "Topps" },
+    { "year": 2025, "name": "2025 Topps Finest WWE", "brand": "Topps" },
+    { "year": 2025, "name": "2025 Topps Royalty WWE", "brand": "Topps" },
+    { "year": 2026, "name": "2026 Topps Chrome WWE", "brand": "Topps" },
+    { "year": 2026, "name": "2026 Topps Chrome WWE Breakers Delight", "brand": "Topps" }
   ]
 }
