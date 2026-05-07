@@ -12,7 +12,6 @@ import { weeklyPeriods } from '@/lib/db/schema'
 import { eq, and, asc } from 'drizzle-orm'
 import { requireAuth } from '@/lib/auth-helpers'
 import { z } from 'zod'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 import { getWeeksForMonth } from '@/lib/week-utils'
 
 const updateWeekSchema = z.object({
@@ -25,12 +24,6 @@ export async function GET(request: NextRequest) {
   try {
     const { error, session } = await requireAuth()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const { searchParams } = new URL(request.url)
     const yearParam = searchParams.get('year')
@@ -125,12 +118,6 @@ export async function POST(request: NextRequest) {
   try {
     const { error, session } = await requireAuth()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const body = await request.json()
     const parsed = updateWeekSchema.safeParse(body)

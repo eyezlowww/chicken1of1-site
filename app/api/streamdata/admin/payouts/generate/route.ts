@@ -14,18 +14,11 @@ import {
 } from '@/lib/db/schema'
 import { eq, and, sql, notExists } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     // Find all weekly periods that:
     //  1. Have at least one submitted stream entry

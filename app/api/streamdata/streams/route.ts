@@ -21,7 +21,6 @@ import { eq, and } from 'drizzle-orm'
 import { requireAuth } from '@/lib/auth-helpers'
 import { streamEntrySchema } from '@/lib/validations/stream'
 import { calculateStreamPayout, type FeeConfig } from '@/lib/calculations'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 // Helper: fetch fee config for a user
 async function getFeeConfig(userId: string): Promise<FeeConfig> {
@@ -60,12 +59,6 @@ export async function GET(request: NextRequest) {
   try {
     const { error, session } = await requireAuth()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const { searchParams } = new URL(request.url)
     const weeklyPeriodId = searchParams.get('weeklyPeriodId')
@@ -133,12 +126,6 @@ export async function POST(request: NextRequest) {
   try {
     const { error, session } = await requireAuth()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     // Reject oversized payloads (100KB limit)
     const contentLength = request.headers.get('content-length')

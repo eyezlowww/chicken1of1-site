@@ -8,7 +8,6 @@ import { users, streamerFeeConfig, inviteTokens } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
 import { z } from 'zod'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 import { Resend } from 'resend'
 import crypto from 'crypto'
 
@@ -29,12 +28,6 @@ export async function POST(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const body = await request.json()
     const parsed = inviteSchema.safeParse(body)

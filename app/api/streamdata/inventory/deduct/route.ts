@@ -10,7 +10,6 @@ import { inventoryLots, inventoryTransactions, products } from '@/lib/db/schema'
 import { eq, gt, asc, and } from 'drizzle-orm'
 import { requireAuth } from '@/lib/auth-helpers'
 import { z } from 'zod'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 const deductSchema = z.object({
   productId: z.string().uuid('Invalid product ID'),
@@ -45,12 +44,6 @@ export async function POST(request: NextRequest) {
     const { error, session } = await requireAuth()
     if (error) return error
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const body = await request.json()
     const parsed = deductSchema.safeParse(body)

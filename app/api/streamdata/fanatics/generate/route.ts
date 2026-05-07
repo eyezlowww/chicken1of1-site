@@ -15,7 +15,6 @@ import {
 } from '@/lib/db/schema'
 import { and, eq, gte, lte, sql, desc } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 import { productMatchScore, inferProductType } from '@/lib/fanatics/product-match'
 import { z } from 'zod'
 
@@ -68,15 +67,6 @@ export async function POST(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 5, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json(
-        { error: 'Too many requests. Try again in a minute.' },
-        { status: 429 }
-      )
-    }
 
     const body = await request.json()
     const parsed = generateSchema.safeParse(body)

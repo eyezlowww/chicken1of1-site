@@ -18,7 +18,6 @@ import { products } from '@/lib/db/schema'
 import { eq, desc, asc, sql } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
 import { z } from 'zod'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 const createProductSchema = z.object({
   name: z.string().min(1, 'Product name is required').max(200),
@@ -47,12 +46,6 @@ export async function GET(request: NextRequest) {
     const { error } = await requireAdmin()
     if (error) return error
 
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
-
     const allProducts = await db
       .select({
         id: products.id,
@@ -80,12 +73,6 @@ export async function POST(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const body = await request.json()
     const parsed = createProductSchema.safeParse(body)
@@ -131,12 +118,6 @@ export async function PATCH(request: NextRequest) {
     const { error } = await requireAdmin()
     if (error) return error
 
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
-
     const body = await request.json()
     const parsed = toggleProductSchema.safeParse(body)
 
@@ -179,12 +160,6 @@ export async function PUT(request: NextRequest) {
     const { error } = await requireAdmin()
     if (error) return error
 
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
-
     const body = await request.json()
     const parsed = updateProductSchema.safeParse(body)
 
@@ -225,12 +200,6 @@ export async function DELETE(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const body = await request.json()
     const parsed = deleteProductSchema.safeParse(body)

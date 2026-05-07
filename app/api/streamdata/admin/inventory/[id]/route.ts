@@ -12,7 +12,6 @@ import { inventoryLots, inventoryTransactions } from '@/lib/db/schema'
 import { eq, count } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
 import { z } from 'zod'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 const updateInventoryLotSchema = z.object({
   quantityCases: z.number().int().min(1).optional(),
@@ -37,12 +36,6 @@ export async function PUT(
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const { id } = await params
     const idSchema = z.string().uuid()
@@ -130,12 +123,6 @@ export async function DELETE(
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const { id } = await params
     const idSchema = z.string().uuid()

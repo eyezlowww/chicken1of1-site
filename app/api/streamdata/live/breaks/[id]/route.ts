@@ -8,7 +8,6 @@ import { liveBreaks, liveSessions } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { requireAuth } from '@/lib/auth-helpers'
 import { z } from 'zod'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 export async function DELETE(
   request: NextRequest,
@@ -17,12 +16,6 @@ export async function DELETE(
   try {
     const { error, session } = await requireAuth()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const { id } = await params
     const idParsed = z.string().uuid().safeParse(id)

@@ -7,19 +7,12 @@ import { db } from '@/lib/db'
 import { streamEntries, streamCalculations, weeklyPeriods, payoutRecords } from '@/lib/db/schema'
 import { eq, desc, and, sql } from 'drizzle-orm'
 import { requireAuth } from '@/lib/auth-helpers'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 export async function GET(request: NextRequest) {
   try {
     const { error, session } = await requireAuth()
     if (error) return error
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 5, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const userId = session.user.id
 

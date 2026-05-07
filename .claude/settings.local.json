@@ -81,12 +81,15 @@
       "Bash(ls \"C:/Users/nstas/OneDrive/Documents/chicken1of1-site/app/\\(portal\\)/streamdata/admin/inventory-mgmt/\")",
       "Bash(ls \"C:/Users/nstas/OneDrive/Documents/chicken1of1-site/app/\\(portal\\)/streamdata/admin/\")",
       "Bash(mkdir -p \"C:\\\\Users\\\\nstas\\\\OneDrive\\\\Documents\\\\chicken1of1-site\\\\app\\\\api\\\\streamdata\\\\live\\\\sessions\\\\[id]\")",
-      "Bash(mkdir -p \"C:\\\\Users\\\\nstas\\\\OneDrive\\\\Documents\\\\chicken1of1-site\\\\app\\\\api\\\\streamdata\\\\live\\\\breaks\\\\[id]\")"
+      "Bash(mkdir -p \"C:\\\\Users\\\\nstas\\\\OneDrive\\\\Documents\\\\chicken1of1-site\\\\app\\\\api\\\\streamdata\\\\live\\\\breaks\\\\[id]\")",
+      "WebFetch(domain:wrestlingtradingcards.com)",
+      "WebFetch(domain:thecrazycardcollector.com)"
     ],
     "deny": [],
     "ask": []
   },
   "enabledPlugins": {
-    "ui-ux-pro-max@ui-ux-pro-max-skill": true
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
+    "voltagent-data-ai@voltagent-subagents": true
   }
 }

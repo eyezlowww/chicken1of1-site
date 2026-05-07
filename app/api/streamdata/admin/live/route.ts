@@ -7,18 +7,11 @@ import { db } from '@/lib/db'
 import { liveSessions, liveBreaks, users } from '@/lib/db/schema'
 import { desc, eq, sql } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 export async function GET(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     // Fetch all sessions with aggregated break data and user info
     const sessions = await db

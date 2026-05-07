@@ -12,7 +12,6 @@ import { inventoryLots, products } from '@/lib/db/schema'
 import { desc, eq } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
 import { z } from 'zod'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 const costEntryTypeEnum = z.enum(['per_box', 'per_case'])
 
@@ -56,12 +55,6 @@ export async function GET(request: NextRequest) {
     const { error } = await requireAdmin()
     if (error) return error
 
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
-
     const lots = await db
       .select({
         id: inventoryLots.id,
@@ -102,12 +95,6 @@ export async function POST(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const body = await request.json()
     const parsed = createInventoryLotSchema.safeParse(body)

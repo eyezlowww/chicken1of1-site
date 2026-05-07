@@ -13,7 +13,6 @@ import { payoutRecords, weeklyPeriods, users } from '@/lib/db/schema'
 import { eq, and, desc, sql } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
 import { z } from 'zod'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 const markPaidSchema = z.union([
   z.object({ payoutIds: z.array(z.string().uuid()).min(1) }),
@@ -24,12 +23,6 @@ export async function GET(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const payouts = await db
       .select({
@@ -75,12 +68,6 @@ export async function POST(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const body = await request.json()
     const parsed = markPaidSchema.safeParse(body)

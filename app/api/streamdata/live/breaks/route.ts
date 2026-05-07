@@ -8,18 +8,11 @@ import { liveSessions, liveBreaks, liveBreakProducts } from '@/lib/db/schema'
 import { eq, and, count } from 'drizzle-orm'
 import { requireAuth } from '@/lib/auth-helpers'
 import { createBreakSchema } from '@/lib/validations/live-break'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   try {
     const { error, session } = await requireAuth()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     // Reject oversized payloads (50KB limit)
     const contentLength = request.headers.get('content-length')

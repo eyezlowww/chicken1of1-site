@@ -8,7 +8,6 @@ import { db } from '@/lib/db'
 import { fcProOrders } from '@/lib/db/schema'
 import { and, gte, lte, sql } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 import { z } from 'zod'
 
 const querySchema = z.object({
@@ -20,15 +19,6 @@ export async function GET(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 15, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json(
-        { error: 'Too many requests. Try again in a minute.' },
-        { status: 429 }
-      )
-    }
 
     const params = Object.fromEntries(request.nextUrl.searchParams)
     const parsed = querySchema.safeParse(params)

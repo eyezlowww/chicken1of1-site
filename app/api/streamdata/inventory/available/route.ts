@@ -8,7 +8,6 @@ import { db } from '@/lib/db'
 import { inventoryLots, products } from '@/lib/db/schema'
 import { eq, gt, or, asc } from 'drizzle-orm'
 import { requireAuth } from '@/lib/auth-helpers'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 interface AvailableProduct {
   productId: string
@@ -25,12 +24,6 @@ export async function GET(request: NextRequest) {
   try {
     const { error } = await requireAuth()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     // Fetch all lots with remaining stock > 0
     const lots = await db

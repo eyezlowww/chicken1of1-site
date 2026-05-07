@@ -19,7 +19,6 @@ import {
 } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 import { calculateStreamPayout } from '@/lib/calculations'
 import { z } from 'zod'
 
@@ -40,12 +39,6 @@ export async function GET(request: NextRequest, context: RouteContext) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const { id } = await context.params
 
@@ -81,12 +74,6 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     const { error } = await requireAdmin()
     if (error) return error
 
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
-
     const { id } = await context.params
 
     const existing = await db.query.streamEntries.findFirst({
@@ -112,12 +99,6 @@ export async function PUT(request: NextRequest, context: RouteContext) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const { id } = await context.params
 

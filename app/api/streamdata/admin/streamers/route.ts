@@ -19,7 +19,6 @@ import { eq, count, sql } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 const createStreamerSchema = z.object({
   username: z
@@ -37,12 +36,6 @@ export async function GET(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const allUsers = await db.query.users.findMany({
       columns: {
@@ -89,12 +82,6 @@ export async function POST(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const body = await request.json()
     const parsed = createStreamerSchema.safeParse(body)
@@ -184,12 +171,6 @@ export async function PATCH(request: NextRequest) {
     const { error } = await requireAdmin()
     if (error) return error
 
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 20, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
-
     const body = await request.json()
     const parsed = patchStreamerSchema.safeParse(body)
     if (!parsed.success) {
@@ -242,12 +223,6 @@ export async function DELETE(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 10, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const body = await request.json()
     const id = body?.id

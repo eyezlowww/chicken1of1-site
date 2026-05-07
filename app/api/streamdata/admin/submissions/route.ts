@@ -8,18 +8,11 @@ import { db } from '@/lib/db'
 import { streamEntries, users } from '@/lib/db/schema'
 import { eq, and, desc, type SQL } from 'drizzle-orm'
 import { requireAdmin } from '@/lib/auth-helpers'
-import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 export async function GET(request: NextRequest) {
   try {
     const { error } = await requireAdmin()
     if (error) return error
-
-    const ip = getClientIp(request)
-    const limit = rateLimit(ip, { maxRequests: 30, windowMs: 60000 })
-    if (!limit.success) {
-      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
-    }
 
     const { searchParams } = new URL(request.url)
     const streamerFilter = searchParams.get('streamer')
