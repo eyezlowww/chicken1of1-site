@@ -13,6 +13,7 @@ import { db } from '@/lib/db'
 import {
   streamEntries,
   streamCalculations,
+  streamProductsSold,
   globalFeeConfig,
   streamerFeeConfig,
   weeklyPeriods,
@@ -29,6 +30,9 @@ const editSchema = z.object({
   orderCount: z.number().int().min(0).max(10000),
   adjustmentAmount: z.number().min(-99999.99).max(99999.99).optional(),
   adjustmentNote: z.string().max(500).optional(),
+  productAmounts: z
+    .array(z.object({ id: z.string().uuid(), amountSold: z.number().int().min(0).max(100000) }))
+    .optional(),
 })
 
 interface RouteContext {
@@ -117,7 +121,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Invalid request data' }, { status: 400 })
     }
 
-    const { streamDate, platform, streamSales, orderCount, adjustmentAmount, adjustmentNote } =
+    const { streamDate, platform, streamSales, orderCount, adjustmentAmount, adjustmentNote, productAmounts } =
       parsed.data
 
     // Update the stream entry core fields
@@ -125,6 +129,21 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       .update(streamEntries)
       .set({ streamDate, platform, streamSales: streamSales.toFixed(2), orderCount, updatedAt: new Date() })
       .where(eq(streamEntries.id, id))
+
+    // Update individual product amounts if provided
+    if (productAmounts && productAmounts.length > 0) {
+      for (const { id: productSoldId, amountSold } of productAmounts) {
+        await db
+          .update(streamProductsSold)
+          .set({ amountSold })
+          .where(
+            and(
+              eq(streamProductsSold.id, productSoldId),
+              eq(streamProductsSold.streamEntryId, id)
+            )
+          )
+      }
+    }
 
     // Recalculate payout if submitted
     if (existing.status === 'submitted') {
@@ -151,9 +170,11 @@ export async function PUT(request: NextRequest, context: RouteContext) {
         supportFeeRate: parseFloat(streamerFees.find((f) => f.feeName === 'support_fee')?.rate ?? '0'),
       }
 
+      // Merge existing amounts with any updates from this request
+      const updatedAmountsMap = new Map(productAmounts?.map((p) => [p.id, p.amountSold]) ?? [])
       const productsSoldForCalc = existing.productsSold.map((p) => ({
         costPerUnit: parseFloat(p.costPerUnit),
-        amountSold: p.amountSold,
+        amountSold: updatedAmountsMap.has(p.id) ? updatedAmountsMap.get(p.id)! : p.amountSold,
       }))
 
       const calcResult = calculateStreamPayout(streamSales, orderCount, productsSoldForCalc, feeConfig)

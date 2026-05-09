@@ -1,8 +1,7 @@
 'use client'
 
 // Admin edit page for a stream submission.
-// Allows editing core stream fields and adjustment, then recalculates payout.
-// Products sold are not editable here — delete and resubmit for that.
+// Allows editing core stream fields, product amounts sold, and adjustment, then recalculates payout.
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
@@ -21,6 +20,13 @@ function SpinnerIcon({ className }: { className?: string }) {
   )
 }
 
+interface ProductSold {
+  id: string
+  amountSold: number
+  costPerUnit: string
+  product: { name: string }
+}
+
 interface StreamData {
   id: string
   streamDate: string
@@ -36,6 +42,7 @@ interface StreamData {
     adjustmentAmount: string | null
     adjustmentNote: string | null
   } | null
+  productsSold: ProductSold[]
 }
 
 export default function EditSubmissionPage() {
@@ -55,6 +62,7 @@ export default function EditSubmissionPage() {
   const [adjustmentType, setAdjustmentType] = useState<'+' | '-'>('+')
   const [adjustmentAmount, setAdjustmentAmount] = useState('')
   const [adjustmentNote, setAdjustmentNote] = useState('')
+  const [productAmounts, setProductAmounts] = useState<Record<string, number>>({})
 
   useEffect(() => {
     async function load() {
@@ -75,6 +83,11 @@ export default function EditSubmissionPage() {
           setAdjustmentAmount(String(Math.abs(existingAdj)))
         }
         setAdjustmentNote(s.calculation?.adjustmentNote ?? '')
+
+        // Pre-fill product amounts
+        const amounts: Record<string, number> = {}
+        s.productsSold.forEach((p) => { amounts[p.id] = p.amountSold })
+        setProductAmounts(amounts)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load')
       } finally {
@@ -101,6 +114,10 @@ export default function EditSubmissionPage() {
           orderCount: parseInt(orderCount, 10) || 0,
           adjustmentAmount: signedAdj !== 0 ? signedAdj : undefined,
           adjustmentNote: adjustmentNote.trim() || undefined,
+          productAmounts: Object.entries(productAmounts).map(([pid, amountSold]) => ({
+            id: pid,
+            amountSold,
+          })),
         }),
       })
 
@@ -158,7 +175,6 @@ export default function EditSubmissionPage() {
         </h1>
         <p className="mt-1 text-sm text-cage-400">
           Changes here recalculate the breaker payout immediately.
-          To change products sold, delete this submission and have the breaker resubmit.
         </p>
       </div>
 
@@ -218,6 +234,35 @@ export default function EditSubmissionPage() {
             </div>
           </div>
         </section>
+
+        {/* Products Sold */}
+        {stream.productsSold.length > 0 && (
+          <section className="rounded-xl border border-blood-900/40 bg-black/60 p-6 backdrop-blur-md">
+            <h2 className="mb-1 text-lg font-semibold text-white">Products Sold</h2>
+            <p className="text-xs text-cage-500 mb-4">Adjust how many units were sold for each product.</p>
+            <div className="space-y-3">
+              {stream.productsSold.map((p) => (
+                <div key={p.id} className="flex items-center gap-4">
+                  <span className="flex-1 text-sm text-cage-300 truncate">{p.product.name}</span>
+                  <span className="text-xs text-cage-500 shrink-0">{fmt(parseFloat(p.costPerUnit))}/unit</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={productAmounts[p.id] ?? p.amountSold}
+                    onChange={(e) =>
+                      setProductAmounts((prev) => ({
+                        ...prev,
+                        [p.id]: parseInt(e.target.value, 10) || 0,
+                      }))
+                    }
+                    className="w-24 shrink-0 bg-dark-700 border border-cage-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 tabular-nums"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Adjustment */}
         <section className="rounded-xl border border-blood-900/40 bg-black/60 p-6 backdrop-blur-md">
