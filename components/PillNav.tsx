@@ -300,9 +300,8 @@ const PillNav: React.FC<PillNavProps> = ({
         {/* Logo */}
         <Link
           href="/"
-          aria-label="Home"
+          aria-label="Chicken1of1 home"
           onMouseEnter={handleLogoEnter}
-          role="menuitem"
           ref={logoRef}
           className="rounded-full p-1 inline-flex items-center justify-center overflow-hidden flex-shrink-0"
           style={{
@@ -408,6 +407,7 @@ const PillNav: React.FC<PillNavProps> = ({
           onClick={toggleMobileMenu}
           aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-nav-menu"
           className="md:hidden rounded-full border-0 flex flex-col items-center justify-center gap-1 cursor-pointer p-0 relative"
           style={{
             width: 'var(--nav-h)',
@@ -428,7 +428,9 @@ const PillNav: React.FC<PillNavProps> = ({
 
       {/* Mobile dropdown */}
       <div
+        id="mobile-nav-menu"
         ref={mobileMenuRef}
+        aria-hidden={!isMobileMenuOpen}
         className="md:hidden absolute top-full left-4 right-4 mt-2 rounded-[27px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-[998] origin-top"
         style={{
           ...cssVars,

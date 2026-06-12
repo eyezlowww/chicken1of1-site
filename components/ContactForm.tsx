@@ -110,12 +110,13 @@ export default function ContactForm() {
     return (
       <div className="card">
         <div className="text-center py-8">
-          <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
             <svg
               className="w-8 h-8 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -165,7 +166,10 @@ export default function ContactForm() {
       </p>
 
       {formState.error && (
-        <div className="mb-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+        <div
+          role="alert"
+          className="mb-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg"
+        >
           <p className="text-red-400 text-sm">{formState.error}</p>
         </div>
       )}

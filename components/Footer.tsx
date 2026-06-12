@@ -106,7 +106,7 @@ export default function Footer() {
           </div>
 
           <div className="mt-8 pt-8 border-t border-gold-500/20 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm" role="contentinfo">
+            <p className="text-gray-400 text-sm">
               © {currentYear} Chicken1of1. All rights reserved.
             </p>
             <p className="text-gray-500 text-xs mt-2 md:mt-0">

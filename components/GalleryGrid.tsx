@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 
 interface GalleryItem {
@@ -16,7 +16,67 @@ interface GalleryGridProps {
 }
 
 export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
-  const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const selectedImage = selectedIndex !== null ? items[selectedIndex] : null
+  const triggerRefs = useRef<Array<HTMLButtonElement | null>>([])
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null)
+  const modalId = 'gallery-lightbox'
+  const modalTitleId = 'gallery-lightbox-title'
+
+  const openModal = useCallback((index: number) => {
+    setSelectedIndex(index)
+  }, [])
+
+  const closeModal = useCallback(() => {
+    const idx = selectedIndex
+    setSelectedIndex(null)
+    if (idx !== null) {
+      setTimeout(() => triggerRefs.current[idx]?.focus(), 0)
+    }
+  }, [selectedIndex])
+
+  useEffect(() => {
+    if (selectedImage === null) return
+
+    const previouslyFocused = document.activeElement as HTMLElement
+    setTimeout(() => closeButtonRef.current?.focus(), 0)
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeModal()
+      if (e.key === 'ArrowRight' && selectedIndex !== null) {
+        setSelectedIndex((selectedIndex + 1) % items.length)
+      }
+      if (e.key === 'ArrowLeft' && selectedIndex !== null) {
+        setSelectedIndex((selectedIndex - 1 + items.length) % items.length)
+      }
+
+      // Focus trap
+      if (e.key === 'Tab') {
+        const modal = document.getElementById(modalId)
+        if (!modal) return
+        const focusable = modal.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [selectedImage, selectedIndex, items.length, closeModal])
 
   const gridClasses = {
     2: 'grid-cols-1 md:grid-cols-2',
@@ -28,10 +88,12 @@ export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
     <>
       <div className={`grid ${gridClasses[columns]} gap-6`}>
         {items.map((item, index) => (
-          <div
+          <button
             key={index}
-            className="group cursor-pointer bg-black rounded-xl border border-cage-700/50 overflow-hidden hover:border-gold-500/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)]"
-            onClick={() => setSelectedImage(item)}
+            ref={(el) => { triggerRefs.current[index] = el }}
+            className="group text-left bg-black rounded-xl border border-cage-700/50 overflow-hidden hover:border-gold-500/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(185,28,28,0.1)] focus:outline-none focus:ring-2 focus:ring-gold-500 focus:ring-offset-2 focus:ring-offset-dark-950"
+            onClick={() => openModal(index)}
+            aria-label={`View ${item.title || item.alt} in full size`}
           >
             {/* Card Image */}
             <div className="relative aspect-square overflow-hidden">
@@ -42,12 +104,16 @@ export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <div
+                className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                aria-hidden="true"
+              >
                 <svg
                   className="w-8 h-8 text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -72,24 +138,56 @@ export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
                 )}
               </div>
             )}
-          </div>
+          </button>
         ))}
       </div>
 
       {/* Lightbox Modal */}
-      {selectedImage && (
+      {selectedImage && selectedIndex !== null && (
         <div
+          id={modalId}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={selectedImage.title ? modalTitleId : undefined}
+          aria-label={!selectedImage.title ? selectedImage.alt : undefined}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-          onClick={() => setSelectedImage(null)}
+          onClick={closeModal}
         >
-          <div className="relative max-w-4xl max-h-full">
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-10 right-0 text-white hover:text-gray-300 text-2xl font-bold z-10"
-              aria-label="Close modal"
-            >
-              ×
-            </button>
+          <div
+            className="relative max-w-4xl max-h-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-2">
+              {items.length > 1 && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setSelectedIndex((selectedIndex - 1 + items.length) % items.length)}
+                    className="text-white hover:text-gray-300 bg-black/60 rounded-full px-3 py-1 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    aria-label="Previous image"
+                  >
+                    ‹ Prev
+                  </button>
+                  <span className="text-gray-400 text-sm self-center">
+                    {selectedIndex + 1} / {items.length}
+                  </span>
+                  <button
+                    onClick={() => setSelectedIndex((selectedIndex + 1) % items.length)}
+                    className="text-white hover:text-gray-300 bg-black/60 rounded-full px-3 py-1 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-gold-500"
+                    aria-label="Next image"
+                  >
+                    Next ›
+                  </button>
+                </div>
+              )}
+              <button
+                ref={closeButtonRef}
+                onClick={closeModal}
+                className="ml-auto text-white hover:text-gray-300 bg-black/60 rounded-full w-9 h-9 flex items-center justify-center text-xl font-bold focus:outline-none focus:ring-2 focus:ring-gold-500"
+                aria-label="Close image viewer"
+              >
+                ×
+              </button>
+            </div>
             <Image
               src={selectedImage.image}
               alt={selectedImage.alt}
@@ -99,7 +197,10 @@ export default function GalleryGrid({ items, columns = 3 }: GalleryGridProps) {
             />
             {selectedImage.title && (
               <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-4 rounded-b-lg">
-                <h3 className="text-white font-heading font-bold uppercase tracking-wide">
+                <h3
+                  id={modalTitleId}
+                  className="text-white font-heading font-bold uppercase tracking-wide"
+                >
                   {selectedImage.title}
                 </h3>
                 {selectedImage.description && (
