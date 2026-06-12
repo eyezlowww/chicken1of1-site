@@ -4,7 +4,7 @@
 //
 // POST /api/streamdata/admin/products
 // Create a new product
-// Body: { name, manufacturer?, year? }
+// Body: { name, sku?, streetDate?, manufacturer?, year? }
 // Admin only
 //
 // PATCH /api/streamdata/admin/products
@@ -21,6 +21,8 @@ import { z } from 'zod'
 
 const createProductSchema = z.object({
   name: z.string().min(1, 'Product name is required').max(200),
+  sku: z.string().max(50).optional(),
+  streetDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Street date must be YYYY-MM-DD').optional(),
   manufacturer: z.string().max(50).optional(),
   year: z.number().int().min(1900).max(2100).optional(),
 })
@@ -33,6 +35,8 @@ const toggleProductSchema = z.object({
 const updateProductSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(200),
+  sku: z.string().max(50).optional(),
+  streetDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Street date must be YYYY-MM-DD').optional(),
   manufacturer: z.string().max(50).optional(),
   year: z.number().int().min(1900).max(2100).optional(),
 })
@@ -50,6 +54,8 @@ export async function GET(request: NextRequest) {
       .select({
         id: products.id,
         name: products.name,
+        sku: products.sku,
+        streetDate: products.streetDate,
         manufacturer: products.manufacturer,
         year: products.year,
         isActive: products.isActive,
@@ -84,18 +90,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { name, manufacturer, year } = parsed.data
+    const { name, sku, streetDate, manufacturer, year } = parsed.data
 
     const [newProduct] = await db
       .insert(products)
       .values({
         name,
+        sku: sku || null,
+        streetDate: streetDate || null,
         manufacturer: manufacturer || null,
         year: year || null,
       })
       .returning({
         id: products.id,
         name: products.name,
+        sku: products.sku,
+        streetDate: products.streetDate,
         manufacturer: products.manufacturer,
         year: products.year,
         isActive: products.isActive,
@@ -170,15 +180,23 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    const { id, name, manufacturer, year } = parsed.data
+    const { id, name, sku, streetDate, manufacturer, year } = parsed.data
 
     const [updated] = await db
       .update(products)
-      .set({ name, manufacturer: manufacturer || null, year: year || null })
+      .set({
+        name,
+        sku: sku || null,
+        streetDate: streetDate || null,
+        manufacturer: manufacturer || null,
+        year: year || null,
+      })
       .where(eq(products.id, id))
       .returning({
         id: products.id,
         name: products.name,
+        sku: products.sku,
+        streetDate: products.streetDate,
         manufacturer: products.manufacturer,
         year: products.year,
         isActive: products.isActive,

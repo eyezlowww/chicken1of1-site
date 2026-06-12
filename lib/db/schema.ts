@@ -48,6 +48,8 @@ export const users = pgTable('portal_users', {
 export const products = pgTable('products', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: varchar('name', { length: 200 }).notNull(),
+  sku: varchar('sku', { length: 50 }),
+  streetDate: date('street_date'),
   manufacturer: varchar('manufacturer', { length: 50 }),
   year: integer('year'),
   isActive: boolean('is_active').default(true).notNull(),
