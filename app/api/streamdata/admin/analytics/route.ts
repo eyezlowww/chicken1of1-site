@@ -91,13 +91,12 @@ async function getLifetimeData() {
   const totalSupportFees = parseNum(row?.totalSupportFees)
   const totalAdjustments = parseNum(adjRow?.totalAdjustments)
 
-  const netProfit =
-    totalRevenue -
-    totalCogs -
-    totalPlatformFees -
-    totalProductFees -
-    totalOrderFees -
-    totalBreakerPayouts
+  // Platform costs = Whatnot % fee + Whatnot per-order fee (both go to the platform)
+  const totalPlatformCosts = totalPlatformFees + totalOrderFees
+
+  // Net profit = what Chicken keeps = productFee + supportFee (i.e. chickenPayout)
+  // NOT subtracted from revenue separately — productFee is Chicken's income, not an outgoing cost
+  const netProfit = totalChickenPayouts
 
   return {
     totalRevenue,
@@ -105,6 +104,7 @@ async function getLifetimeData() {
     totalPlatformFees,
     totalProductFees,
     totalOrderFees,
+    totalPlatformCosts,
     totalBreakerPayouts,
     totalChickenPayouts,
     totalSupportFees,
@@ -156,9 +156,10 @@ async function getMonthlyData() {
     const supportFees = parseNum(row.supportFees)
     const breakerPayouts = parseNum(row.breakerPayouts)
     const chickenPayouts = parseNum(row.chickenPayouts)
+    const platformCosts = platformFees + orderFees
 
-    const netProfit =
-      revenue - cogs - platformFees - productFees - orderFees - breakerPayouts
+    // Net profit = what Chicken keeps (chickenPayout = productFee + supportFee)
+    const netProfit = chickenPayouts
 
     return {
       year: row.year,
@@ -169,6 +170,7 @@ async function getMonthlyData() {
       platformFees,
       productFees,
       orderFees,
+      platformCosts,
       supportFees,
       breakerPayouts,
       chickenPayouts,
@@ -223,6 +225,7 @@ async function getWeeklyTrend() {
       productFees: sum(streamCalculations.productFee),
       orderFees: sum(streamCalculations.orderAmountCost),
       breakerPayouts: sum(streamCalculations.breakerPayout),
+      chickenPayouts: sum(streamCalculations.chickenPayout),
     })
     .from(weeklyPeriods)
     .innerJoin(
@@ -251,14 +254,8 @@ async function getWeeklyTrend() {
   // Reverse to chronological order for line chart
   return rows.reverse().map((row) => {
     const revenue = parseNum(row.revenue)
-    const cogs = parseNum(row.cogs)
-    const platformFees = parseNum(row.platformFees)
-    const productFees = parseNum(row.productFees)
-    const orderFees = parseNum(row.orderFees)
-    const breakerPayouts = parseNum(row.breakerPayouts)
-
-    const profit =
-      revenue - cogs - platformFees - productFees - orderFees - breakerPayouts
+    // Net profit for the week = what Chicken kept (chickenPayout = productFee + supportFee)
+    const profit = parseNum(row.chickenPayouts)
 
     return {
       weekLabel: `W${row.weekNumber} ${MONTH_LABELS[row.month - 1]}`,
