@@ -25,6 +25,7 @@ interface LifetimeData {
   totalPlatformFees: number
   totalProductFees: number
   totalOrderFees: number
+  totalPlatformCosts: number
   totalBreakerPayouts: number
   totalChickenPayouts: number
   totalSupportFees: number
@@ -41,6 +42,7 @@ interface MonthlyRow {
   platformFees: number
   productFees: number
   orderFees: number
+  platformCosts: number
   supportFees: number
   breakerPayouts: number
   chickenPayouts: number
@@ -152,7 +154,7 @@ export default function AdminAnalyticsPage() {
           <div className="mt-2 h-4 w-64 animate-pulse rounded bg-dark-700" />
         </div>
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, i) => (
+          {Array.from({ length: 5 }).map((_, i) => (
             <SkeletonCard key={i} />
           ))}
         </div>
@@ -206,45 +208,41 @@ export default function AdminAnalyticsPage() {
 
   const { lifetime, monthly, byBreaker, weeklyTrend } = data
 
-  const totalFees =
-    lifetime.totalPlatformFees +
-    lifetime.totalProductFees +
-    lifetime.totalOrderFees
-
   /* ---- stat cards config ---- */
+  // Platform Costs = Whatnot % fee + Whatnot per-order fee (both go to the platform)
+  // Net Profit = Chicken's take = productFee + supportFee (stored as chickenPayout)
   const statCards = [
     {
       title: 'Total Revenue',
+      subtitle: 'Gross stream sales',
       value: fmt(lifetime.totalRevenue),
       color: 'text-green-400',
       highlight: false,
     },
     {
-      title: 'Total COGS',
+      title: 'Cost of Goods',
+      subtitle: 'Product purchase cost',
       value: `-${fmt(lifetime.totalCogs)}`,
       color: 'text-red-400',
       highlight: false,
     },
     {
-      title: 'Total Fees',
-      value: `-${fmt(totalFees)}`,
+      title: 'Platform Costs',
+      subtitle: 'Whatnot % fee + per-order fees',
+      value: `-${fmt(lifetime.totalPlatformCosts)}`,
       color: 'text-red-400',
       highlight: false,
     },
     {
       title: 'Breaker Payouts',
+      subtitle: 'Paid out to streamers',
       value: `-${fmt(lifetime.totalBreakerPayouts)}`,
-      color: 'text-white',
-      highlight: false,
-    },
-    {
-      title: 'Chicken Payouts',
-      value: fmt(lifetime.totalChickenPayouts),
-      color: 'text-green-400',
+      color: 'text-cage-300',
       highlight: false,
     },
     {
       title: 'Net Profit',
+      subtitle: "Chicken's take (product fee + support fee)",
       value: fmt(lifetime.netProfit),
       color: lifetime.netProfit >= 0 ? 'text-green-400' : 'text-red-400',
       highlight: true,
@@ -278,7 +276,7 @@ export default function AdminAnalyticsPage() {
             >
               <h3 className="text-lg font-bold text-white">{card.title}</h3>
               <p className="text-[11px] font-medium uppercase tracking-widest text-cage-500">
-                LIFETIME
+                {card.subtitle}
               </p>
               <p
                 className={`mt-4 tabular-nums font-bold ${card.color} ${
@@ -419,11 +417,8 @@ export default function AdminAnalyticsPage() {
                       'Month',
                       'Revenue',
                       'COGS',
-                      'Platform Fees',
-                      'Product Fees',
-                      'Order Fees',
-                      'Breaker',
-                      'Chicken',
+                      'Platform Costs',
+                      'Breaker Payout',
                       'Net Profit',
                     ].map((header) => (
                       <th
@@ -451,19 +446,10 @@ export default function AdminAnalyticsPage() {
                         {fmt(row.cogs)}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
-                        {fmt(row.platformFees)}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
-                        {fmt(row.productFees)}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
-                        {fmt(row.orderFees)}
+                        {fmt(row.platformCosts)}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
                         {fmt(row.breakerPayouts)}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3 text-xs sm:text-sm tabular-nums text-cage-300">
-                        {fmt(row.chickenPayouts)}
                       </td>
                       <td
                         className={`whitespace-nowrap px-3 py-3 text-xs sm:text-sm font-semibold tabular-nums ${
